@@ -1,0 +1,172 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int        @id @default(autoincrement())
+  first_name  String     @db.VarChar(30)
+  last_name   String     @db.VarChar(30)
+  email       String     @unique @db.VarChar(50)
+  passsword   String     @db.VarChar(25)
+  description String     @db.Text
+  url_avatar  String     @db.Text
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+  is_verify   Boolean    @default(false)
+  courses     Course[]
+  enrolleds   Enrolled[]
+  ratings     Rating[]
+  carts       Cart[]
+  feedbacks   Feedback[]
+  invoices    Invoice[]
+
+  @@index([email], name: "idx_email")
+}
+
+model Category {
+  id                Int              @id @default(autoincrement())
+  title             String           @unique
+  url_image         String           @db.Text
+  description       String           @db.Text
+  course_categories CourseCategory[]
+}
+
+model Course {
+  id                 Int      @id @default(autoincrement())
+  title              String   @unique @db.VarChar(100)
+  slug               String   @unique @db.VarChar(150)
+  status             Boolean  @default(false)
+  description        String   @db.Text
+  thumbnail          String   @db.Text
+  summary            String   @db.Text
+  is_delete          Boolean  @default(false)
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+  total_rating       Float
+  number_of_rating   Int
+  number_of_enrolled Int
+  author_id          Int
+  price              Float
+  sale_price         Float
+  sale_until         DateTime
+
+  user User @relation(fields: [author_id], references: [id])
+
+  enrolleds Enrolled[]
+
+  ratings Rating[]
+
+  sections Section[]
+
+  course_categories CourseCategory[]
+
+  carts Cart[]
+
+  invoice_detail InvoiceDetail[]
+
+  @@index([slug], name: "idx_slug")
+  @@index([title], name: "idx_title")
+}
+
+model CourseCategory {
+  id          Int       @id @default(autoincrement())
+  course_id   Int
+  category_id Int
+  created_at  DateTime  @default(now())
+  Course      Course?   @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  Category    Category? @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  @@map(name: "courses_categories")
+}
+
+model Section {
+  id         Int      @id @default(autoincrement())
+  title      String   @db.VarChar(100)
+  is_delete  Boolean  @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  course_id  Int
+  Course     Course?  @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  Lesson     Lesson[]
+}
+
+model Lesson {
+  id         Int      @id @default(autoincrement())
+  title      String   @db.VarChar(100)
+  is_delete  Boolean  @default(false)
+  url_video  String   @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  section_id Int
+  section    Section  @relation(fields: [section_id], references: [id], onDelete: Cascade)
+}
+
+model Rating {
+  id         Int      @id @default(autoincrement())
+  score      Float
+  content    String   @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime
+  user_id    Int
+  course_id  Int
+  Course     Course?  @relation(fields: [course_id], references: [id], onDelete: Cascade)
+
+  User User? @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Enrolled {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  user_id    Int
+  course_id  Int
+  Course     Course?  @relation(fields: [course_id], references: [id], onDelete: Cascade)
+
+  User User? @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Cart {
+  id              Int     @id @default(autoincrement())
+  user_id         Int
+  course_id       Int
+  saved_for_later Boolean @default(false)
+  Course          Course? @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  User            User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Invoice {
+  id             Int             @id @default(autoincrement())
+  user_id        Int
+  create_at      DateTime        @default(now())
+  total_money    Float
+  User           User?           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  invoice_detail InvoiceDetail[]
+}
+
+model InvoiceDetail {
+  id           Int      @id @default(autoincrement())
+  invoice_id   Int
+  course_id    Int
+  retail_price Float
+  paid_price   Float
+  Course       Course?  @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  Invoice      Invoice? @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+
+  @@index([invoice_id, course_id], name: "idx_invoice_course")
+  @@map(name: "invoice_detail")
+}
+
+model Feedback {
+  id         Int      @id @default(autoincrement())
+  content    String   @db.Text
+  user_id    Int
+  created_at DateTime @default(now())
+  User       User?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
