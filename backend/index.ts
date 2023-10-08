@@ -1,7 +1,8 @@
 import express, { Application } from "express";
 import configs from "./src/configs";
 import cors from "cors";
-import { text } from "stream/consumers";
+import routes from "./src/routes";
+// import { text } from "stream/consumers";
 
 const app: Application = express();
 const port: number = configs.general.PORT;
@@ -16,6 +17,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public")); //
+
+app.use("/api/auth", routes.authRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
