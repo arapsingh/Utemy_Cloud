@@ -15,12 +15,13 @@ model User {
   first_name  String     @db.VarChar(30)
   last_name   String     @db.VarChar(30)
   email       String     @unique @db.VarChar(50)
-  passsword   String     @db.VarChar(25)
-  description String     @db.Text
-  url_avatar  String     @db.Text
+  password    String     @db.Text
+  description String?    @db.Text
+  url_avatar  String?    @db.Text
   created_at  DateTime   @default(now())
   updated_at  DateTime   @updatedAt
   is_verify   Boolean    @default(false)
+  token       String?    @db.Text
   courses     Course[]
   enrolleds   Enrolled[]
   ratings     Rating[]
