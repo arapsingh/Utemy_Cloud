@@ -81,7 +81,7 @@ const login = async (req: Request): Promise<ResponseBase> => {
 };
 const refreshAccessToken = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        const refreshTokenRaw = req.headers.authorization as string;
+        const refreshTokenRaw = req.headers.rftoken as string;
         const refreshToken = refreshTokenRaw.split(" ")[1];
         if (!refreshToken) return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
         const isVerifyRefreshToken = jwt.verify(refreshToken, configs.general.JWT_SECRET_KEY) as JwtPayload;
