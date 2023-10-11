@@ -19,6 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public")); //
 
 app.use("/api/auth", routes.authRouter);
+app.use("/api/lesson", routes.lessonRouter);
+app.use("/api/user", routes.userRouter);
+app.use("/api/category", routes.categoryRouter);
+app.use("/api/course", routes.courseRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
