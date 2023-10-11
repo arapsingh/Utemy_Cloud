@@ -7,7 +7,7 @@ import { IRequestWithId } from "../types/request";
 import { Request } from "express";
 import { setResetEmail, setSignupEmail } from "../configs/nodemailer.config";
 import { MailOption } from "../types/sendmail";
-import constants from "../utils/constants";
+import constants from "../constants";
 
 const login = async (req: Request): Promise<ResponseBase> => {
     try {
@@ -20,12 +20,12 @@ const login = async (req: Request): Promise<ResponseBase> => {
         });
 
         if (!isFoundUser) {
-            return new ResponseError(404, constants.ERROR_USER_NOT_FOUND, false);
+            return new ResponseError(404, constants.error.ERROR_USER_NOT_FOUND, false);
         }
 
         const isUserPassword = await bcrpyt.compare(password, isFoundUser.password);
 
-        if (!isUserPassword) return new ResponseError(400, constants.ERROR_WRONG_PASSWORD, false);
+        if (!isUserPassword) return new ResponseError(400, constants.error.ERROR_WRONG_PASSWORD, false);
         if (!isFoundUser.is_verify) {
             const payload = {
                 email: isFoundUser.email,
@@ -46,14 +46,15 @@ const login = async (req: Request): Promise<ResponseBase> => {
             };
             const isSendEmailSuccess = sendMail(mailOptions);
             if (isSendEmailSuccess) {
-                return new ResponseSuccess(200, constants.SUCCESS_CHECK_MAIL, true);
+                return new ResponseSuccess(200, constants.success.SUCCESS_CHECK_MAIL, true);
             } else {
-                return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+                return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
             }
         } else {
             const accessToken = jwt.sign(
                 {
                     user_id: isFoundUser.id,
+                    is_admin: isFoundUser.is_admin,
                 },
                 configs.general.JWT_SECRET_KEY,
                 {
@@ -63,43 +64,45 @@ const login = async (req: Request): Promise<ResponseBase> => {
             const refreshToken = jwt.sign(
                 {
                     user_id: isFoundUser.id,
+                    is_admin: isFoundUser.is_admin,
                 },
                 configs.general.JWT_SECRET_KEY,
                 {
                     expiresIn: configs.general.TOKEN_REFRESH_EXPIRED_TIME,
                 },
             );
-            return new ResponseSuccess(200, constants.SUCCESS_LOGIN, true, {
+            return new ResponseSuccess(200, constants.success.SUCCESS_LOGIN, true, {
                 accessToken,
                 refreshToken,
             });
         }
     } catch (error) {
         console.log(error);
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const refreshAccessToken = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const refreshTokenRaw = req.headers.rftoken as string;
         const refreshToken = refreshTokenRaw.split(" ")[1];
-        if (!refreshToken) return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+        if (!refreshToken) return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         const isVerifyRefreshToken = jwt.verify(refreshToken, configs.general.JWT_SECRET_KEY) as JwtPayload;
         if (isVerifyRefreshToken) {
             const newAccessToken = jwt.sign(
                 {
                     user_id: isVerifyRefreshToken.user_id,
+                    is_admin: isVerifyRefreshToken.is_admin,
                 },
                 configs.general.JWT_SECRET_KEY,
                 {
                     expiresIn: configs.general.TOKEN_ACCESS_EXPIRED_TIME,
                 },
             );
-            return new ResponseSuccess(200, constants.SUCCESS_REFRESH_TOKEN, true, {
+            return new ResponseSuccess(200, constants.success.SUCCESS_REFRESH_TOKEN, true, {
                 accessToken: newAccessToken,
             });
         } else {
-            return new ResponseError(400, constants.ERROR_BAD_TOKEN, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_TOKEN, false);
         }
     } catch (error) {
         console.log(error);
@@ -109,14 +112,14 @@ const refreshAccessToken = async (req: IRequestWithId): Promise<ResponseBase> =>
 const signup = async (req: Request): Promise<ResponseBase> => {
     try {
         const { first_name, last_name, email, password, confirm_password }: any = req.body;
-        if (password !== confirm_password) return new ResponseError(400, constants.ERROR_CONFIRM_PASSWORD, false);
+        if (password !== confirm_password) return new ResponseError(400, constants.error.ERROR_CONFIRM_PASSWORD, false);
         const isExistUser = await configs.db.user.findUnique({
             where: {
                 email,
             },
         });
         if (isExistUser) {
-            return new ResponseError(400, constants.ERROR_EMAIL_USED, false);
+            return new ResponseError(400, constants.error.ERROR_EMAIL_USED, false);
         } else {
             const hashedPassword = await bcrpyt.hash(password, configs.general.HASH_SALT);
             const createUser = await configs.db.user.create({
@@ -148,16 +151,16 @@ const signup = async (req: Request): Promise<ResponseBase> => {
 
                 const isSendEmailSuccess = sendMail(mailOptions);
                 if (isSendEmailSuccess) {
-                    return new ResponseSuccess(200, constants.SUCCESS_SIGNUP, true);
+                    return new ResponseSuccess(200, constants.success.SUCCESS_SIGNUP, true);
                 } else {
-                    return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+                    return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
                 }
             } else {
-                return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+                return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
             }
         }
     } catch (error) {
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const verifyEmail = async (req: Request): Promise<ResponseBase> => {
@@ -171,7 +174,7 @@ const verifyEmail = async (req: Request): Promise<ResponseBase> => {
                 },
             });
             if (user?.is_verify) {
-                return new ResponseError(400, constants.ERROR_ALREADY_VERIFY, false);
+                return new ResponseError(400, constants.error.ERROR_ALREADY_VERIFY, false);
             } else {
                 const verifyUser = await configs.db.user.update({
                     where: {
@@ -182,16 +185,16 @@ const verifyEmail = async (req: Request): Promise<ResponseBase> => {
                     },
                 });
                 if (verifyUser) {
-                    return new ResponseSuccess(200, constants.SUCCESS_VERIFY_EMAIL, true);
+                    return new ResponseSuccess(200, constants.success.SUCCESS_VERIFY_EMAIL, true);
                 } else {
-                    return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+                    return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
                 }
             }
         } else {
-            return new ResponseError(400, constants.ERROR_BAD_TOKEN, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_TOKEN, false);
         }
     } catch (error) {
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const forgotPassword = async (req: Request): Promise<ResponseBase> => {
@@ -203,7 +206,7 @@ const forgotPassword = async (req: Request): Promise<ResponseBase> => {
             },
         });
         if (!user) {
-            return new ResponseError(404, constants.ERROR_USER_NOT_FOUND, false);
+            return new ResponseError(404, constants.error.ERROR_USER_NOT_FOUND, false);
         } else {
             const payload = {
                 email: user.email,
@@ -233,13 +236,13 @@ const forgotPassword = async (req: Request): Promise<ResponseBase> => {
                         token,
                     },
                 });
-                return new ResponseSuccess(200, constants.SUCCESS_FORGOT_PASSWORD, true);
+                return new ResponseSuccess(200, constants.success.SUCCESS_FORGOT_PASSWORD, true);
             } else {
-                return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+                return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
             }
         }
     } catch (error) {
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const resetPassword = async (req: Request): Promise<ResponseBase> => {
@@ -247,7 +250,7 @@ const resetPassword = async (req: Request): Promise<ResponseBase> => {
         const { new_password, confirm_password, token } = req.body;
         const isVerifyToken = jwt.verify(token, configs.general.JWT_SECRET_KEY) as JwtPayload;
         if (!isVerifyToken) {
-            return new ResponseError(400, constants.ERROR_BAD_TOKEN, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_TOKEN, false);
         } else {
             const hashedPassword = await bcrpyt.hash(new_password, configs.general.HASH_SALT);
             if (hashedPassword) {
@@ -256,7 +259,7 @@ const resetPassword = async (req: Request): Promise<ResponseBase> => {
                         email: isVerifyToken.email,
                     },
                 });
-                if (!isFoundUser) return new ResponseError(404, constants.ERROR_USER_NOT_FOUND, false);
+                if (!isFoundUser) return new ResponseError(404, constants.error.ERROR_USER_NOT_FOUND, false);
                 else if (isFoundUser.token === token) {
                     const changePassword = await configs.db.user.update({
                         where: {
@@ -268,21 +271,21 @@ const resetPassword = async (req: Request): Promise<ResponseBase> => {
                         },
                     });
                     if (changePassword) {
-                        return new ResponseSuccess(200, constants.SUCCESS_RESET_PASSWORD, true);
+                        return new ResponseSuccess(200, constants.success.SUCCESS_RESET_PASSWORD, true);
                     } else {
-                        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+                        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
                     }
                 } else {
-                    return new ResponseError(400, constants.ERROR_BAD_TOKEN, false);
+                    return new ResponseError(400, constants.error.ERROR_BAD_TOKEN, false);
                 }
             } else {
                 console.log("fail");
-                return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+                return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
             }
         }
     } catch (error) {
         console.log(error);
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const changePassword = async (req: IRequestWithId): Promise<ResponseBase> => {
@@ -295,7 +298,7 @@ const changePassword = async (req: IRequestWithId): Promise<ResponseBase> => {
             },
         });
         if (!isFoundUser) {
-            return new ResponseError(404, constants.ERROR_USER_NOT_FOUND, false);
+            return new ResponseError(404, constants.error.ERROR_USER_NOT_FOUND, false);
         } else {
             const isOldPasswordValid = await bcrpyt.compare(current_password, isFoundUser.password);
             if (isOldPasswordValid) {
@@ -309,17 +312,17 @@ const changePassword = async (req: IRequestWithId): Promise<ResponseBase> => {
                     },
                 });
                 if (changePassword) {
-                    return new ResponseSuccess(200, constants.SUCCESS_CHANGE_PASSWORD, true);
+                    return new ResponseSuccess(200, constants.success.SUCCESS_CHANGE_PASSWORD, true);
                 } else {
-                    return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+                    return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
                 }
             } else {
-                return new ResponseError(400, constants.ERROR_WRONG_CURRENT_PASSWORD, false);
+                return new ResponseError(400, constants.error.ERROR_WRONG_CURRENT_PASSWORD, false);
             }
         }
     } catch (error) {
         console.log(error);
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const getMe = async (req: IRequestWithId): Promise<ResponseBase> => {
@@ -339,12 +342,12 @@ const getMe = async (req: IRequestWithId): Promise<ResponseBase> => {
                 url_avatar: isFoundUser.url_avatar,
                 description: isFoundUser.description,
             };
-            return new ResponseSuccess(200, constants.SUCCESS_REQUEST, true, userInformation);
+            return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true, userInformation);
         } else {
-            return new ResponseError(404, constants.ERROR_USER_NOT_FOUND, false);
+            return new ResponseError(404, constants.error.ERROR_USER_NOT_FOUND, false);
         }
     } catch (error) {
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 
