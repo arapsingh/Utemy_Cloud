@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import dotenv from "dotenv";
+import path from "path";
 dotenv.config();
 
 export const general = {
@@ -13,4 +14,7 @@ export const general = {
     PAGE_SIZE: Number(process.env.PAGE_SIZE),
     EMAIL_SERVER: process.env.EMAIL_SERVER,
     PASSWORD_SERVER: process.env.PASSWORD_SERVER,
+
+    PATH_TO_PUBLIC_FOLDER_VIDEOS: path.join(process.cwd(), "videos"),
+    PATH_TO_IMAGES: path.join(process.cwd(), "images"),
 };

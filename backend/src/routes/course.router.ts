@@ -2,6 +2,7 @@ import { Router } from "express";
 import controllers from "../controllers/index";
 import { isLogin } from "../middlewares/isLogin";
 import { isAuthor } from "../middlewares/isAuthor";
+import { uploadAvatar } from "../middlewares/multer";
 
 const courseRouter: Router = Router();
 
@@ -46,5 +47,7 @@ courseRouter.get("/", isLogin, controllers.courseController.getAllCourse);
 
 //26. Get course detail
 courseRouter.get("/:slug", isLogin, controllers.courseController.getCourseDetail);
+
+courseRouter.post("/thumbnail", isLogin, uploadAvatar, controllers.courseController.changeThumbnail); //
 
 export default courseRouter;
