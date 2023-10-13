@@ -6,6 +6,7 @@ import { OutstandingCourse } from "src/types/course";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { ResponseBase, ResponseError, ResponseSuccess } from "../common/response";
 import constants from "../constants";
+import helper from "../helper";
 
 const getProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
@@ -23,13 +24,13 @@ const getProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
             },
         });
 
-        if (!user) return new ResponseError(404, constants.ERROR_USER_NOT_FOUND, false);
-        return new ResponseSuccess(200, constants.SUCCESS_REQUEST, true, user);
+        if (!user) return new ResponseError(404, constants.error.ERROR_USER_NOT_FOUND, false);
+        return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true, user);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 
@@ -42,7 +43,7 @@ const updateProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
                 is_verify: true,
             },
         });
-        if (!user) return new ResponseError(404, constants.ERROR_USER_NOT_FOUND, false);
+        if (!user) return new ResponseError(404, constants.error.ERROR_USER_NOT_FOUND, false);
         const isUpdate = await db.user.update({
             where: {
                 id: req.user_id,
@@ -53,13 +54,13 @@ const updateProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
                 description: description,
             },
         });
-        if (!isUpdate) return new ResponseSuccess(200, constants.SUCCESS_REQUEST, false); //Missing Request body
-        return new ResponseSuccess(200, constants.SUCCESS_REQUEST, true);
+        if (!isUpdate) return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, false); //Missing Request body
+        return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 
@@ -98,7 +99,7 @@ const getAuthorProfile = async (req: Request): Promise<ResponseBase> => {
                 },
             },
         });
-        if (!user) return new ResponseError(404, constants.ERROR_USER_NOT_FOUND, false);
+        if (!user) return new ResponseError(404, constants.error.ERROR_USER_NOT_FOUND, false);
 
         const courses: OutstandingCourse[] = [];
 
@@ -129,12 +130,12 @@ const getAuthorProfile = async (req: Request): Promise<ResponseBase> => {
             },
             courses: courses,
         };
-        return new ResponseSuccess(200, constants.SUCCESS_REQUEST, true, data);
+        return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true, data);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 

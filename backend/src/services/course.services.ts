@@ -4,9 +4,10 @@ import express, { Request, Response } from "express";
 import configs from "../configs";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { ResponseBase, ResponseError, ResponseSuccess } from "../common/response";
-import constants from "../utils/constants";
 import { generateUniqueSlug } from "../utils/helper";
 import { Prisma } from "@prisma/client";
+import constants from "../constants";
+import helper from "../helper";
 const getRightOfCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const user_id = req.user_id;
@@ -18,7 +19,7 @@ const getRightOfCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
             },
         });
         if (isAuthor) {
-            return new ResponseSuccess(200, constants.SUCCESS_GET_DATA, true, { role: "Author" });
+            return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, { role: "Author" });
         }
         const isEnrolled = await configs.db.enrolled.findFirst({
             where: {
@@ -27,14 +28,14 @@ const getRightOfCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
             },
         });
         if (isEnrolled) {
-            return new ResponseSuccess(200, constants.SUCCESS_GET_DATA, true, { role: "Enrolled" });
+            return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, { role: "Enrolled" });
         }
-        return new ResponseSuccess(200, constants.SUCCESS_GET_DATA, true, { role: "Unenrolled" });
+        return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, { role: "Unenrolled" });
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const createCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
@@ -78,15 +79,15 @@ const createCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
                 },
             });
             if (isCreateCourse) {
-                return new ResponseSuccess(201, constants.SUCCESS_CREATE_DATA, true);
+                return new ResponseSuccess(201, constants.success.SUCCESS_CREATE_DATA, true);
             }
         }
-        return new ResponseError(400, constants.ERROR_CREATE_COURSE_FAILED, false);
+        return new ResponseError(400, constants.error.ERROR_CREATE_COURSE_FAILED, false);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const editCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
@@ -101,7 +102,7 @@ const editCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
             },
         });
         if (!isFoundCourseById) {
-            return new ResponseError(404, constants.ERROR_COURSE_NOT_FOUND, false);
+            return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
         }
         const updatedCourse = await configs.db.course.update({
             where: {
@@ -118,7 +119,7 @@ const editCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
             },
         });
         if (!updatedCourse) {
-            return new ResponseError(400, constants.ERROR_MISSING_REQUEST_BODY, false);
+            return new ResponseError(400, constants.error.ERROR_MISSING_REQUEST_BODY, false);
         }
         await db.courseCategory.deleteMany({
             where: { course_id: courseid },
@@ -129,13 +130,13 @@ const editCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
                 category_id: category,
             })),
         });
-        if (!isUpdateCategory) return new ResponseError(400, constants.ERROR_MISSING_REQUEST_BODY, false);
-        return new ResponseSuccess(200, constants.SUCCESS_UPDATE_DATA, true);
+        if (!isUpdateCategory) return new ResponseError(400, constants.error.ERROR_MISSING_REQUEST_BODY, false);
+        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const deleteCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
@@ -150,7 +151,7 @@ const deleteCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
         });
 
         if (!existingCourse) {
-            return new ResponseError(404, constants.ERROR_COURSE_NOT_FOUND, false);
+            return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
         }
 
         // Set is_delete field to true to mark the course as deleted
@@ -162,62 +163,62 @@ const deleteCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
                 is_delete: true,
             },
         });
-        return new ResponseSuccess(200, constants.SUCCESS_UPDATE_DATA, true);
+        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const buyCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.SUCCESS_UPDATE_DATA, true);
+        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const ratingCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.SUCCESS_UPDATE_DATA, true);
+        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const editRatingCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.SUCCESS_UPDATE_DATA, true);
+        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const getListRatingOfCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.SUCCESS_UPDATE_DATA, true);
+        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const getUserRatingOfCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.SUCCESS_UPDATE_DATA, true);
+        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const getTop10Course = async (req: IRequestWithId): Promise<ResponseBase> => {
@@ -277,56 +278,56 @@ const getTop10Course = async (req: IRequestWithId): Promise<ResponseBase> => {
 
         // Đảm bảo top10Courses có dữ liệu
         if (top10Courses.length === 0) {
-            return new ResponseError(404, constants.ERROR_COURSE_NOT_FOUND, false);
+            return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
         }
         // Trả về danh sách top 10 khóa học
-        return new ResponseSuccess(200, constants.SUCCESS_REQUEST, true, formattedData);
+        return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true, formattedData);
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 
 const searchMyCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.SUCCESS_UPDATE_DATA, true);
+        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.SUCCESS_UPDATE_DATA, true);
+        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const getAllCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.SUCCESS_UPDATE_DATA, true);
+        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const getCourseDetail = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.SUCCESS_UPDATE_DATA, true);
+        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 

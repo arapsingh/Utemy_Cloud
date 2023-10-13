@@ -35,4 +35,3 @@ export default class UserController {
         return res.status(response.getStatusCode()).json(response);
     }
 }
-
