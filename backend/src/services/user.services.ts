@@ -5,7 +5,7 @@ import configs from "../configs";
 import { OutstandingCourse } from "src/types/course";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { ResponseBase, ResponseError, ResponseSuccess } from "../common/response";
-import constants from "../utils/constants";
+import constants from "../constants";
 
 const getProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
@@ -63,25 +63,6 @@ const updateProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
     }
 };
 
-const changeAvatar = async (req: IRequestWithId, res: Response) => {
-    try {
-        const { user_id } = req.body;
-        const userId = parseInt(user_id);
-        const isFoundUserById = await configs.db.user.findUnique({
-            where: {
-                id: userId,
-            },
-        });
-        if (!isFoundUserById) {
-            return res.status(400).json();
-        }
-        // Xu li upload anh toi cloudinary o day
-    } catch (error) {
-        return res.status(500).json({
-            message: error,
-        });
-    }
-};
 const getAuthorProfile = async (req: Request): Promise<ResponseBase> => {
     try {
         const { id } = req.params;
@@ -157,11 +138,45 @@ const getAuthorProfile = async (req: Request): Promise<ResponseBase> => {
     }
 };
 
-const UserService = {
-    getProfile,
-    updateProfile,
-    changeAvatar,
-    getAuthorProfile,
+const changeAvatar = async (req: IRequestWithId): Promise<ResponseBase> => {
+    try {
+        const file = req.file;
+        const isExistUser = await configs.db.user.findFirst({
+            where: {
+                id: req.user_id,
+            },
+        });
+        if (!isExistUser) return new ResponseError(404, constants.error.ERROR_USER_NOT_FOUND, false);
+        else {
+            const oldAvatarPath = isExistUser.url_avatar;
+            if (file) {
+                const changeAvatarUser = await configs.db.user.update({
+                    where: {
+                        id: req.user_id,
+                    },
+                    data: {
+                        url_avatar: file.path,
+                    },
+                });
+                if (changeAvatarUser) {
+                    await helper.FileHelper.destroyedFileIfFailed(oldAvatarPath as string);
+                    return new ResponseSuccess(200, constants.success.SUCCESS_CHANGE_AVATAR, true);
+                } else {
+                    return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+                }
+            } else {
+                return new ResponseError(500, constants.error.ERROR_BAD_REQUEST, false);
+            }
+        }
+    } catch (error) {
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
 };
 
-export default UserService;
+const UserServices = {
+    changeAvatar,
+    getProfile,
+    updateProfile,
+    getAuthorProfile,
+};
+export default UserServices;

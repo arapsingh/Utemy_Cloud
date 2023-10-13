@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
-import UserService, * as userService from "../services/user.services";
+import services from "../services";
 import { IRequestWithId } from "../types/request";
 import userSchema from "../validations/user.validation";
 import { ValidationError } from "joi";
 import { ResponseBase, convertJoiErrorToString } from "../common";
 export default class UserController {
     async getProfile(req: IRequestWithId, res: Response): Promise<Response> {
-        const response: ResponseBase = await UserService.getProfile(req);
+        const response: ResponseBase = await services.UserService.getProfile(req);
         return res.status(response.getStatusCode()).json(response);
     }
     async updateProfile(req: IRequestWithId, res: Response): Promise<Response> {
@@ -20,14 +20,19 @@ export default class UserController {
                 success: false,
             });
         }
-        const response: ResponseBase = await UserService.updateProfile(req);
+        const response: ResponseBase = await services.UserService.updateProfile(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async changeAvatar(req: IRequestWithId, res: Response): Promise<Response> {
+        const response: ResponseBase = await services.UserService.changeAvatar(req);
         return res.status(response.getStatusCode()).json(response);
     }
     // async changeAvatar(req: Request, res: Response) {
 
     // }
     async getAuthorProfile(req: Request, res: Response): Promise<Response> {
-        const response: ResponseBase = await UserService.getAuthorProfile(req);
+        const response: ResponseBase = await services.UserService.getAuthorProfile(req);
         return res.status(response.getStatusCode()).json(response);
     }
 }
+
