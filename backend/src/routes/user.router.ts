@@ -12,11 +12,9 @@ userRouter.get("/profile", isLogin, controllers.userController.getProfile);
 userRouter.patch("/update-profile", isLogin, controllers.userController.updateProfile);
 
 // 10. Change Avatar
-userRouter.put("/avatar");
+userRouter.post("/avatar", isLogin, uploadAvatar, controllers.userController.changeAvatar); //
 
 // 11. Get author profile
 userRouter.get("/:id", controllers.userController.getAuthorProfile);
-
-userRouter.post("/avatar", isLogin, uploadAvatar, controllers.userController.changeAvatar); //
 
 export default userRouter;
