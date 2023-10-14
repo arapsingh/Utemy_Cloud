@@ -55,13 +55,13 @@ export const signupSchema: ObjectSchema<Signup> = Joi.object({
 
     first_name: Joi.string().trim().required().max(30).messages({
         "string.base": constants.ERROR_FIRST_NAME_STRING,
-        "any.required": constants.ERROR_FIRST_NAME_REQURIED,
+        "any.required": constants.ERROR_FIRST_NAME_REQUIRED,
         "string.max": constants.ERROR_FIRST_NAME_MAX,
     }),
 
     last_name: Joi.string().trim().required().max(30).messages({
         "string.base": constants.ERROR_LAST_NAME_STRING,
-        "any.required": constants.ERROR_LAST_NAME_REQURIED,
+        "any.required": constants.ERROR_LAST_NAME_REQUIRED,
         "string.max": constants.ERROR_LAST_NAME_MAX,
     }),
 

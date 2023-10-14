@@ -1,5 +1,8 @@
 import { IRequestWithId } from "../types/request";
 import { Response, NextFunction } from "express";
+import { db } from "../configs/db.config";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
+import constants from "../utils/constants";
 import jwt, { JwtPayload, TokenExpiredError, JsonWebTokenError, NotBeforeError } from "jsonwebtoken";
 import configs from "../configs";
 
@@ -84,6 +87,6 @@ export const isAuthor = async (req: IRequestWithId, res: Response, next: NextFun
             return res.status(401).json({ message: error.message });
         }
 
-        return res.status(500).json({ message: "Internal Server" });
+        return res.status(500).json({ message: constants.ERROR_INTERNAL_SERVER });
     }
 };
