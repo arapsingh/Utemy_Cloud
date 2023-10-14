@@ -11,6 +11,10 @@ const success = {
     SUCCESS_CHANGE_AVATAR: "Change avatar successfully",
     SUCCESS_CHANGE_THUMBNAIL: "Change thumbnail of course successfully",
     SUCCESS_UPDATE_CATEGORY: "Update category successfully",
+    SUCCESS_GET_DATA: "Get Data successfully",
+    SUCCESS_CREATE_DATA: "Create data successfully",
+    SUCCESS_UPDATE_DATA: "Update data successfully",
+
     //lesson
     SUCCESS_CREATE_LESSON: "Create lesson successfully",
     SUCCESS_UPDATE_LESSON: "Update lesson successfully",
