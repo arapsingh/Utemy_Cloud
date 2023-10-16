@@ -92,10 +92,10 @@ const updateLesson = async (req: IRequestWithId): Promise<ResponseBase> => {
 };
 const getLessonById = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        const { lesson_id } = req.body;
+        const { lesson_id } = req.params;
         const isFoundLesson = await configs.db.lesson.findFirst({
             where: {
-                id: lesson_id,
+                id: parseInt(lesson_id),
             },
         });
         if (isFoundLesson) {
