@@ -80,6 +80,19 @@ const error = {
     ERROR_COURSE_PRICE_NUMBER: "Price must be number",
     ERROR_CREATE_COURSE_FAILED: "Create course failed",
 
+    //rating
+    ERROR_RATING_NOT_FOUND: "Rating doesn't exist",
+    ERROR_ALREADY_RATING: "You have already rated this course",
+    ERROR_RATING_SCORE_REQUIRED: "Rating score is required",
+    ERROR_RATING_SCORE_MAX: "Rating score must be lower than 5",
+    ERROR_RATING_SCORE_MIN: "Rating score must be higher than 0",
+    ERROR_RATING_SCORE_INT: "Rating score must be an integer",
+    ERROR_RATING_CONTENT_MAX: "Rating content must be lower than 300 chars",
+    ERROR_RATING_CONTENT_STRING: "Rating content must be a string",
+    ERROR_RATING_ID_REQUIRED: "Rating id is required",
+    ERROR_RATING_ID_INT: "Rating id must be an integer",
+    ERROR_RATING_ID_NUMBER: "Rating id must be a number",
+
     //section
     ERROR_SECTION_NOT_FOUND: "Section not found",
     ERROR_SECTION_ID_REQUIRED: "Section's ID is required",

@@ -20,5 +20,8 @@ const success = {
     SUCCESS_UPDATE_LESSON: "Update lesson successfully",
     SUCCESS_DELETE_LESSON: "Delete lesson successfully",
     SUCCESS_GET_LESSON: "Get lesson successfully",
+
+    //rating
+    SUCCESS_CREATE_RATING: "Create rating successfully",
 };
 export default success;
