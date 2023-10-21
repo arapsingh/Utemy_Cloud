@@ -4,7 +4,7 @@ import express, { Request, Response } from "express";
 import configs from "../configs";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { ResponseBase, ResponseError, ResponseSuccess } from "../common/response";
-import constants from "../utils/constants";
+import constants from "../constants";
 
 const addSection = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
@@ -16,7 +16,7 @@ const addSection = async (req: IRequestWithId): Promise<ResponseBase> => {
             },
         });
         if (isDeletedCourse) {
-            return new ResponseError(404, constants.ERROR_COURSE_NOT_FOUND, false);
+            return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
         }
         const addsection = await configs.db.section.create({
             data: {
@@ -24,13 +24,13 @@ const addSection = async (req: IRequestWithId): Promise<ResponseBase> => {
                 course_id: course_id,
             },
         });
-        if (addsection) return new ResponseSuccess(201, constants.SUCCESS_REQUEST, true);
-        return new ResponseError(400, constants.ERROR_VALIDATION_FAILED, false);
+        if (addsection) return new ResponseSuccess(201, constants.success.SUCCESS_REQUEST, true);
+        return new ResponseError(400, constants.error.ERROR_VALIDATION_FAILED, false);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 
@@ -52,13 +52,13 @@ const editSection = async (req: IRequestWithId): Promise<ResponseBase> => {
             },
         });
         if (!isAuthor) {
-            return new ResponseError(403, constants.ERROR_UNAUTHORIZED, false);
+            return new ResponseError(403, constants.error.ERROR_UNAUTHORIZED, false);
         }
         if (isAuthor.Course?.is_delete) {
-            return new ResponseError(404, constants.ERROR_COURSE_NOT_FOUND, false);
+            return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
         }
         if (isAuthor.is_delete) {
-            return new ResponseError(404, constants.ERROR_SECTION_NOT_FOUND, false);
+            return new ResponseError(404, constants.error.ERROR_SECTION_NOT_FOUND, false);
         }
         const editsection = await configs.db.section.update({
             where: {
@@ -68,13 +68,13 @@ const editSection = async (req: IRequestWithId): Promise<ResponseBase> => {
                 title: title,
             },
         });
-        if (editsection) return new ResponseSuccess(200, constants.SUCCESS_REQUEST, true);
-        return new ResponseError(400, constants.ERROR_VALIDATION_FAILED, false);
+        if (editsection) return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true);
+        return new ResponseError(400, constants.error.ERROR_VALIDATION_FAILED, false);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 
@@ -94,13 +94,13 @@ const deleteSection = async (req: IRequestWithId): Promise<ResponseBase> => {
             },
         });
         if (!isAuthor) {
-            return new ResponseError(403, constants.ERROR_UNAUTHORIZED, false);
+            return new ResponseError(403, constants.error.ERROR_UNAUTHORIZED, false);
         }
         if (isAuthor.Course?.is_delete) {
-            return new ResponseError(404, constants.ERROR_COURSE_NOT_FOUND, false);
+            return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
         }
         if (isAuthor.is_delete) {
-            return new ResponseError(404, constants.ERROR_SECTION_NOT_FOUND, false);
+            return new ResponseError(404, constants.error.ERROR_SECTION_NOT_FOUND, false);
         }
         const lessonDeleteList = await configs.db.lesson.findMany({
             where: {
@@ -124,14 +124,14 @@ const deleteSection = async (req: IRequestWithId): Promise<ResponseBase> => {
                     is_delete: true,
                 },
             });
-            if (isDeleteLesson) return new ResponseSuccess(200, constants.SUCCESS_REQUEST, true);
+            if (isDeleteLesson) return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true);
         }
-        return new ResponseError(400, constants.ERROR_VALIDATION_FAILED, false);
+        return new ResponseError(400, constants.error.ERROR_VALIDATION_FAILED, false);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.ERROR_BAD_REQUEST, false);
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
-        return new ResponseError(500, constants.ERROR_INTERNAL_SERVER, false);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 

@@ -7,16 +7,16 @@ import { uploadAvatar } from "../middlewares/multer";
 const courseRouter: Router = Router();
 
 //13. Get right of course
-courseRouter.get("/right/:course_id", isLogin, isAuthor, controllers.courseController.getRightOfCourse);
+courseRouter.get("/right/:course_id", isLogin, controllers.courseController.getRightOfCourse);
 
 //14. Create course
 courseRouter.post("/", isLogin, controllers.courseController.createCourse);
 
 //15. Edit course
-courseRouter.patch("/:course_id", isLogin, isAuthor, controllers.courseController.editCourse);
+courseRouter.patch("/:course_id", isLogin, controllers.courseController.editCourse);
 
 //16. Delete course
-courseRouter.delete("/:course_id", isLogin, isAuthor, controllers.courseController.deleteCourse);
+courseRouter.delete("/:course_id", isLogin, controllers.courseController.deleteCourse);
 
 //17. Buy course
 courseRouter.post("/buy", isLogin, isAuthor, controllers.courseController.buyCourse);

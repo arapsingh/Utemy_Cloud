@@ -4,6 +4,8 @@ const error = {
     ERROR_BAD_REQUEST: " Bad request",
     ERROR_UNAUTHORZIED: "Unauthorized",
     ERROR_MISSING_REQUEST_BODY: "Missing request body",
+    ERROR_VALIDATION_FAILED: "Validation failed",
+    ERROR_UNAUTHORIZED: "Unauthorized",
     //confirm password
     ERROR_CONFIRM_PASSWORD: "Confirm password and password must be the same",
     ERROR_CONFIRM_NEW_PASSWORD: "Confirm password and new password must be the same",

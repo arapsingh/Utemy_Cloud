@@ -16,6 +16,7 @@ const getProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
                 is_verify: true,
             },
             select: {
+                id: true,
                 first_name: true,
                 last_name: true,
                 url_avatar: true,
