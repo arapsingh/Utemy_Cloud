@@ -4,6 +4,7 @@ const error = {
     ERROR_BAD_REQUEST: " Bad request",
     ERROR_UNAUTHORZIED: "Unauthorized",
     ERROR_MISSING_REQUEST_BODY: "Missing request body",
+    ERROR_DATA_NOT_FOUND: "Data not found",
     //confirm password
     ERROR_CONFIRM_PASSWORD: "Confirm password and password must be the same",
     ERROR_CONFIRM_NEW_PASSWORD: "Confirm password and new password must be the same",
@@ -98,5 +99,13 @@ const error = {
     ERROR_SECTION_ID_REQUIRED: "Section's ID is required",
     ERROR_SECTION_ID_NUMBER: "Section's ID must be a number",
     ERROR_SECTION_ID_INTEGER: "Section's ID must be integer",
+
+    //category
+    ERROR_CATEGORY_ID_NUMBER: "Category id must be an integer",
+    ERROR_CATEGORY_ID_REQUIRED: "Category id is required",
+    ERROR_TITLE_STRING: "Title must be string",
+    ERROR_TITLE_REQUIRED: "Title is required",
+    ERROR_TITLE_MAX: "Title must be under 50 chars",
+    ERROR_CATEGORY_ALREADY_EXISTS: "Category is already existed",
 };
 export default error;
