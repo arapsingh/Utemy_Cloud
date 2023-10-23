@@ -155,7 +155,7 @@ const editRatingSchema: ObjectSchema<editRating> = Joi.object({
     }),
     content: Joi.string().trim().max(300).messages({
         "string.base": constants.error.ERROR_RATING_CONTENT_STRING,
-        "string.max": constants.error.ERROR_RATING_CONTENT_STRING,
+        "string.max": constants.error.ERROR_RATING_CONTENT_MAX,
     }),
 });
 type deleteRating = {

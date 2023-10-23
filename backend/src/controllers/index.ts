@@ -4,6 +4,7 @@ import LessonController from "./lesson.controller";
 import CategoryController from "./category.controller";
 import CourseController from "./course.controller";
 import UserController from "./user.controller";
+import FeedbackController from "./feedback.controller";
 
 export default {
     authController: new AuthController(),
@@ -12,4 +13,5 @@ export default {
     userController: new UserController(),
     categoryController: new CategoryController(),
     courseController: new CourseController(),
+    feedbackController: new FeedbackController(),
 };

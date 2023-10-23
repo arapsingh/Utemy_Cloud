@@ -170,5 +170,5 @@ model Feedback {
   content    String   @db.Text
   user_id    Int
   created_at DateTime @default(now())
-  User       User?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  User       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
