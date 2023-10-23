@@ -1,10 +1,14 @@
 import { Router } from "express";
 import controllers from "../controllers/index";
 import { isLogin } from "../middlewares/isLogin";
-import { uploadAvatar } from "../middlewares/multer";
+import { uploadAvatar, uploadCategory } from "../middlewares/multer";
 
 const categoryRouter: Router = Router();
 
-categoryRouter.post("/image", isLogin, uploadAvatar, controllers.categoryController.updateCategory); //
+categoryRouter.post("/", isLogin, uploadCategory, controllers.categoryController.createCategory); //
+categoryRouter.patch("/", isLogin, uploadCategory, controllers.categoryController.updateCategory); //
+categoryRouter.delete("/", isLogin, controllers.categoryController.deleteCategory); //
+categoryRouter.get("/all", controllers.categoryController.getCategories); //
+categoryRouter.get("/", isLogin, controllers.categoryController.getCategory); //
 
 export default categoryRouter;
