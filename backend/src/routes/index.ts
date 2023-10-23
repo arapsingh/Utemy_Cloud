@@ -4,6 +4,7 @@ import sectionRouter from "./section.router";
 import lessonRouter from "./lesson.router";
 import categoryRouter from "./category.router";
 import courseRouter from "./course.router";
+import feedbackRouter from "./feedback.router";
 export default {
     authRouter,
     userRouter,
@@ -11,4 +12,5 @@ export default {
     lessonRouter,
     categoryRouter,
     courseRouter,
+    feedbackRouter,
 };
