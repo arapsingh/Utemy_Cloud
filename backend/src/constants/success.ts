@@ -27,5 +27,8 @@ const success = {
     SUCCESS_CREATE_CATEGORY: "Create category successfully",
     SUCCESS_UPDATE_CATEGORY: "Update category successfully",
     SUCCESS_DELETE_CATEGORY: "Delete category successfully",
+
+    //feedback
+    SUCCESS_CREATE_FEEDBACK: "Create feedback successfully",
 };
 export default success;
