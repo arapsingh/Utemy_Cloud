@@ -10,8 +10,7 @@ const success = {
     SUCCESS_REQUEST: "Request successfully",
     SUCCESS_CHANGE_AVATAR: "Change avatar successfully",
     SUCCESS_CHANGE_THUMBNAIL: "Change thumbnail of course successfully",
-    SUCCESS_UPDATE_CATEGORY: "Update category successfully",
-    SUCCESS_GET_DATA: "Get Data successfully",
+    SUCCESS_GET_DATA: "Get data successfully",
     SUCCESS_CREATE_DATA: "Create data successfully",
     SUCCESS_UPDATE_DATA: "Update data successfully",
 
@@ -23,5 +22,10 @@ const success = {
 
     //rating
     SUCCESS_CREATE_RATING: "Create rating successfully",
+
+    //category
+    SUCCESS_CREATE_CATEGORY: "Create category successfully",
+    SUCCESS_UPDATE_CATEGORY: "Update category successfully",
+    SUCCESS_DELETE_CATEGORY: "Delete category successfully",
 };
 export default success;
