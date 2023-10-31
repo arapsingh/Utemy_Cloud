@@ -23,7 +23,7 @@ export default {
     ERROR_PASSWORD_STRING: "Password must be string",
     ERROR_PASSWORD_REQUIRED: "Password is required",
     ERROR_PASSWORD_MAX: "Password must be under 20 chars",
-    ERROR_PASSWORD_MIN: "Password must be more than 20 chars",
+    ERROR_PASSWORD_MIN: "Password must be more than 8 chars",
     // current passsword
     ERROR_CURRENT_PASSWORD_STRING: "Current password must be string",
     ERROR_CURRENT_PASSWORD_REQUIRED: "Current password is required",

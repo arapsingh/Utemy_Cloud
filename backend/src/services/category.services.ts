@@ -34,13 +34,14 @@ const updateCategory = async (req: IRequestWithId): Promise<ResponseBase> => {
                 if (!isAdmin) {
                     return new ResponseError(401, constants.error.ERROR_UNAUTHORZIED, false);
                 } else {
-                    const oldCategoryImagePath = isCategoryExist.url_image;
+                    const oldCategoryImagePath = helper.ConvertHelper.deConvertFilePath(isCategoryExist.url_image);
+                    const fullpathConverted = helper.ConvertHelper.convertFilePath(file.path);
                     const changeThumbnailCategory = await configs.db.category.update({
                         where: {
                             id: parseInt(category_id),
                         },
                         data: {
-                            url_image: file.path,
+                            url_image: fullpathConverted,
                             title,
                             description,
                         },
@@ -75,11 +76,12 @@ const createCategory = async (req: IRequestWithId): Promise<ResponseBase> => {
             if (!isAdmin) {
                 return new ResponseError(401, constants.error.ERROR_UNAUTHORZIED, false);
             } else {
+                const fullpathConverted = helper.ConvertHelper.convertFilePath(file.path);
                 const createCategory = await configs.db.category.create({
                     data: {
                         title,
                         description,
-                        url_image: file.path,
+                        url_image: fullpathConverted,
                     },
                 });
 
@@ -118,7 +120,7 @@ const deleteCategory = async (req: IRequestWithId): Promise<ResponseBase> => {
             if (!isAdmin) {
                 return new ResponseError(401, constants.error.ERROR_UNAUTHORZIED, false);
             } else {
-                const oldCategoryImagePath = isCategoryExist.url_image;
+                const oldCategoryImagePath = helper.ConvertHelper.deConvertFilePath(isCategoryExist.url_image);
                 const deleteCategoty = await configs.db.category.delete({
                     where: {
                         id: cateIdConvert,
