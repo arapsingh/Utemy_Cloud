@@ -1,14 +1,22 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
+import authSlice from "./slices/auth.slice";
+import userSlice from "./slices/user.slice";
+import sectionSlice from "./slices/section.slice";
+import courseSlice from "./slices/course.slice";
+import lessonSlice from "./slices/lesson.slice";
+import feedbackSlice from "./slices/feedback.slice";
 
-const store: ToolkitStore = configureStore({
+// import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
+
+const store = configureStore({
     reducer: {
-        // authSlice: authSlice,
-        // userSlice: userSlice,
-        // sectionSlice: sectionSlice,
-        // courseSlice: courseSlice,
+        authSlice: authSlice,
+        userSlice: userSlice,
+        sectionSlice: sectionSlice,
+        courseSlice: courseSlice,
+        lessonSlice: lessonSlice,
+        feedbackSlice: feedbackSlice,
         // fileStorageSlice: fileStorageSlice,
-        // lessonSlice: lessonSlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

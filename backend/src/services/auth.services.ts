@@ -105,7 +105,13 @@ const refreshAccessToken = async (req: IRequestWithId): Promise<ResponseBase> =>
             return new ResponseError(400, constants.error.ERROR_BAD_TOKEN, false);
         }
     } catch (error) {
-        console.log(error);
+        if (error instanceof TokenExpiredError) {
+            return new ResponseError(400, constants.error.ERROR_LOGIN_AGAIN, false);
+        } else if (error instanceof JsonWebTokenError) {
+            return new ResponseError(400, constants.error.ERROR_LOGIN_AGAIN, false);
+        } else if (error instanceof NotBeforeError) {
+            return new ResponseError(400, constants.error.ERROR_LOGIN_AGAIN, false);
+        }
         return new ResponseError(400, error as string, false);
     }
 };
@@ -194,6 +200,7 @@ const verifyEmail = async (req: Request): Promise<ResponseBase> => {
             return new ResponseError(400, constants.error.ERROR_BAD_TOKEN, false);
         }
     } catch (error) {
+        console.log(error);
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
