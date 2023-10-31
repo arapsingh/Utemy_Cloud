@@ -5,6 +5,7 @@ dotenv.config();
 
 export const general = {
     DOMAIN_NAME: process.env.DOMAIN_NAME,
+    BACKEND_DOMAIN_NAME: process.env.BACKEND_DOMAIN_NAME,
     PORT: parseInt(process.env.PORT || "3001"),
     DATABASE_URL: process.env.DATABASE_URL,
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY as string,
@@ -15,6 +16,6 @@ export const general = {
     EMAIL_SERVER: process.env.EMAIL_SERVER,
     PASSWORD_SERVER: process.env.PASSWORD_SERVER,
 
-    PATH_TO_PUBLIC_FOLDER_VIDEOS: path.join(process.cwd(), "videos"),
-    PATH_TO_IMAGES: path.join(process.cwd(), "images"),
+    PATH_TO_PUBLIC_FOLDER_VIDEOS: path.join(process.cwd(), "/public/videos"),
+    PATH_TO_IMAGES: path.join(process.cwd(), "/public/images"),
 };

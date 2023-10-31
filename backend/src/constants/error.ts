@@ -5,6 +5,7 @@ const error = {
     ERROR_UNAUTHORZIED: "Unauthorized",
     ERROR_MISSING_REQUEST_BODY: "Missing request body",
     ERROR_DATA_NOT_FOUND: "Data not found",
+    ERROR_LOGIN_AGAIN: "Please login again",
     //confirm password
     ERROR_CONFIRM_PASSWORD: "Confirm password and password must be the same",
     ERROR_CONFIRM_NEW_PASSWORD: "Confirm password and new password must be the same",
