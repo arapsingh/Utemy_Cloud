@@ -82,7 +82,7 @@ const uploadCategory = multer({
             return cb(new Error("Invalid file type: Only .png, .jpeg or .jpg is allowed"));
         }
     },
-}).single("category");
+}).single("category_image");
 
 //video
 const storageVideo = multer.diskStorage({

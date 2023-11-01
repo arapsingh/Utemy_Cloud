@@ -35,7 +35,7 @@ model User {
 
 model Category {
   id                Int              @id @default(autoincrement())
-  title             String           @unique
+  title             String           @unique @db.VarChar(50)
   url_image         String           @db.Text
   description       String           @db.Text
   course_categories CourseCategory[]
@@ -170,5 +170,5 @@ model Feedback {
   content    String   @db.Text
   user_id    Int
   created_at DateTime @default(now())
-  User       User?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  User       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

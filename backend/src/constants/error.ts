@@ -4,6 +4,8 @@ const error = {
     ERROR_BAD_REQUEST: " Bad request",
     ERROR_UNAUTHORZIED: "Unauthorized",
     ERROR_MISSING_REQUEST_BODY: "Missing request body",
+    ERROR_DATA_NOT_FOUND: "Data not found",
+    ERROR_LOGIN_AGAIN: "Please login again",
     //confirm password
     ERROR_CONFIRM_PASSWORD: "Confirm password and password must be the same",
     ERROR_CONFIRM_NEW_PASSWORD: "Confirm password and new password must be the same",
@@ -84,12 +86,12 @@ const error = {
     //rating
     ERROR_RATING_NOT_FOUND: "Rating doesn't exist",
     ERROR_ALREADY_RATING: "You have already rated this course",
-    ERROR_RATING_SCORE_REQUIRED: "Rating score is required",
-    ERROR_RATING_SCORE_MAX: "Rating score must be lower than 5",
-    ERROR_RATING_SCORE_MIN: "Rating score must be higher than 0",
-    ERROR_RATING_SCORE_INT: "Rating score must be an integer",
-    ERROR_RATING_CONTENT_MAX: "Rating content must be lower than 300 chars",
-    ERROR_RATING_CONTENT_STRING: "Rating content must be a string",
+    ERROR_RATING_SCORE_REQUIRED: "Score is required",
+    ERROR_RATING_SCORE_MAX: "Score must be lower than 5",
+    ERROR_RATING_SCORE_MIN: "Score must be higher than 0",
+    ERROR_RATING_SCORE_INT: "Score must be an integer",
+    ERROR_RATING_CONTENT_MAX: "Content must be lower than 300 chars",
+    ERROR_RATING_CONTENT_STRING: "Content must be a string",
     ERROR_RATING_ID_REQUIRED: "Rating id is required",
     ERROR_RATING_ID_INT: "Rating id must be an integer",
     ERROR_RATING_ID_NUMBER: "Rating id must be a number",
@@ -99,5 +101,13 @@ const error = {
     ERROR_SECTION_ID_REQUIRED: "Section's ID is required",
     ERROR_SECTION_ID_NUMBER: "Section's ID must be a number",
     ERROR_SECTION_ID_INTEGER: "Section's ID must be integer",
+
+    //category
+    ERROR_CATEGORY_ID_NUMBER: "Category id must be an integer",
+    ERROR_CATEGORY_ID_REQUIRED: "Category id is required",
+    ERROR_TITLE_STRING: "Title must be string",
+    ERROR_TITLE_REQUIRED: "Title is required",
+    ERROR_TITLE_MAX: "Title must be under 50 chars",
+    ERROR_CATEGORY_ALREADY_EXISTS: "Category is already existed",
 };
 export default error;

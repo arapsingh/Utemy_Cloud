@@ -7,6 +7,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { ResponseBase, ResponseError, ResponseSuccess } from "../common/response";
 import constants from "../constants";
 import helper from "../helper";
+import path from "path";
 
 const getProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
@@ -142,6 +143,7 @@ const getAuthorProfile = async (req: Request): Promise<ResponseBase> => {
 const changeAvatar = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const file = req.file;
+
         const isExistUser = await configs.db.user.findFirst({
             where: {
                 id: req.user_id,
@@ -149,20 +151,23 @@ const changeAvatar = async (req: IRequestWithId): Promise<ResponseBase> => {
         });
         if (!isExistUser) return new ResponseError(404, constants.error.ERROR_USER_NOT_FOUND, false);
         else {
-            const oldAvatarPath = isExistUser.url_avatar;
+            let oldAvatarPath = "";
+            if (isExistUser.url_avatar) oldAvatarPath = helper.ConvertHelper.deConvertFilePath(isExistUser.url_avatar);
             if (file) {
+                const fullpathConverted = helper.ConvertHelper.convertFilePath(file.path);
                 const changeAvatarUser = await configs.db.user.update({
                     where: {
                         id: req.user_id,
                     },
                     data: {
-                        url_avatar: file.path,
+                        url_avatar: fullpathConverted,
                     },
                 });
                 if (changeAvatarUser) {
                     await helper.FileHelper.destroyedFileIfFailed(oldAvatarPath as string);
                     return new ResponseSuccess(200, constants.success.SUCCESS_CHANGE_AVATAR, true);
                 } else {
+                    await helper.FileHelper.destroyedFileIfFailed(file.path);
                     return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
                 }
             } else {

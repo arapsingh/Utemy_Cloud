@@ -17,11 +17,12 @@ const createLesson = async (req: IRequestWithId): Promise<ResponseBase> => {
             configs.general.PATH_TO_PUBLIC_FOLDER_VIDEOS,
             `${user_id}_${uuid}`,
         );
+        const fullpathConverted = helper.ConvertHelper.convertFilePath(createFile);
         const createLesson = await configs.db.lesson.create({
             data: {
                 title,
                 section_id,
-                url_video: createFile,
+                url_video: fullpathConverted,
             },
         });
         if (!createLesson) {
@@ -54,23 +55,25 @@ const updateLesson = async (req: IRequestWithId): Promise<ResponseBase> => {
                 configs.general.PATH_TO_PUBLIC_FOLDER_VIDEOS,
                 `${user_id}_${uuid}`,
             );
-            const deleteOldVideo = await helper.FileHelper.destroyedVideoIfFailed(isFoundLesson.url_video);
+            const fullPathConverted = helper.ConvertHelper.convertFilePath(createFile);
+            const oldFullPathConverted = helper.ConvertHelper.deConvertFilePath(isFoundLesson.url_video);
             const updateLesson = await configs.db.lesson.update({
                 where: {
                     id: lesson_id,
                 },
                 data: {
                     title,
-                    url_video: createFile,
+                    url_video: fullPathConverted,
                 },
             });
             if (updateLesson) {
+                await helper.FileHelper.destroyedVideoIfFailed(oldFullPathConverted);
                 return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_LESSON, true);
             } else {
+                await helper.FileHelper.destroyedVideoIfFailed(createFile);
                 return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
             }
         } else {
-            console.log("tới đây");
             const updateLesson = await configs.db.lesson.update({
                 where: {
                     id: lesson_id,
@@ -130,7 +133,9 @@ const deleteLesson = async (req: IRequestWithId): Promise<ResponseBase> => {
                     },
                 });
                 if (deleteLesson) {
-                    helper.FileHelper.destroyedVideoIfFailed(deleteLesson.url_video);
+                    helper.FileHelper.destroyedVideoIfFailed(
+                        helper.ConvertHelper.deConvertFilePath(deleteLesson.url_video),
+                    );
                     return new ResponseSuccess(200, constants.success.SUCCESS_DELETE_LESSON, true);
                 } else {
                     return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
