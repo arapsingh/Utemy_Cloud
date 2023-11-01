@@ -46,7 +46,7 @@ courseRouter.get("/my", isLogin, controllers.courseController.searchMyCourse);
 courseRouter.get("/enrolled", isLogin, controllers.courseController.searchMyEnrolledCourse);
 
 //25. Get all course
-courseRouter.get("/", isLogin, controllers.courseController.getAllCourse);
+courseRouter.get("/all", isLogin, controllers.courseController.getAllCourse);
 
 //26. Get course detail
 courseRouter.get("/:slug", isLogin, controllers.courseController.getCourseDetail);

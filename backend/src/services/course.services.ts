@@ -9,6 +9,18 @@ import { Prisma } from "@prisma/client";
 import constants from "../constants";
 import helper from "../helper";
 import { RatingResponse } from "../types/rating.type";
+import {
+    CourseDetail,
+    Category,
+    CourseEdit,
+    OutstandingCourse,
+    CourseInfo,
+    CourseCard,
+    CourseOrderByWithRelationInput,
+} from "../types/course";
+import { PagingResponse } from "../types/response";
+import { title } from "process";
+import { Section } from "../types/section";
 const getRightOfCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const user_id = req.user_id;
@@ -578,27 +590,324 @@ const getTop10Course = async (req: IRequestWithId): Promise<ResponseBase> => {
 
 const searchMyCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
+        const { page_index: pageIndex, searchItem } = req.query;
+        const { user_id: userId } = req;
+
+        // const pageIndex: number | undefined = req.query.pageIndex
+        //     ? parseInt(req.query.pageIndex as string, 10)
+        //     : undefined;
+        // const searchItem: string | undefined = req.query.searchItem ? (req.query.searchItem as string) : undefined;
+        const parsePageIndex = Number(pageIndex);
+        const parsedPageIndex = isNaN(parsePageIndex) ? 1 : parsePageIndex;
+        const parsedSearchItem = searchItem as string;
+
+        const skip = (parsedPageIndex - 1) * 10;
+        const take = 10;
+
+        const courses = await configs.db.course.findMany({
+            skip,
+            take,
+            orderBy: {
+                created_at: "desc",
+            },
+            where: {
+                title: {
+                    contains: parsedSearchItem,
+                },
+                author_id: userId,
+                is_delete: false,
+            },
+            include: {
+                user: true,
+                course_categories: {
+                    include: {
+                        Category: true,
+                    },
+                },
+                ratings: {
+                    include: {
+                        User: true,
+                    },
+                },
+                sections: true,
+                enrolleds: {
+                    include: {
+                        User: true,
+                    },
+                },
+            },
+        });
+
+        const totalRecord = await db.course.count({
+            where: {
+                title: {
+                    contains: parsedSearchItem,
+                },
+                author_id: userId,
+                is_delete: false,
+            },
+        });
+
+        const totalPage = Math.ceil(totalRecord / take);
+
+        const courseCard: CourseInfo[] = (courses as any).map((data: any) => {
+            let averageRating: number = 0;
+            if (data.ratings.length > 0) {
+                const ratingsSum = data.ratings.reduce(
+                    (total: any, total_rating: { score: any }) => total + total_rating.score,
+                    0,
+                );
+                averageRating = Number((ratingsSum / data.ratings.length).toFixed(1));
+            }
+            return {
+                course_id: data.id,
+                title: data.title,
+                summary: data.summary,
+                thumbnail: data.thumbnail,
+                total_rating: data.average_rating,
+                number_of_rating: data.number_of_rating,
+                number_of_enrolled: data.number_of_enrolled,
+                // author: {
+                //     id: data.user.id,
+                //     first_name: data.user.first_name,
+                //     last_name: data.user.last_name,
+                // },
+                slug: data.slug,
+                category: (data.course_categories as any).map((cc: any) => {
+                    return {
+                        id: cc.Category?.id,
+                        title: cc.Category?.title,
+                        url_image: cc.Category?.url_image,
+                    };
+                }),
+            };
+        });
+
+        const responseData: PagingResponse<CourseInfo[]> = {
+            total_page: totalPage,
+            total_record: totalRecord,
+            data: courseCard,
+        };
+        return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, responseData);
     } catch (error) {
+        console.error("Lỗi xảy ra:", error);
         if (error instanceof PrismaClientKnownRequestError) {
             return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
+
 const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
+        const { page_index: pageIndex, searchItem } = req.query;
+        const { user_id: userId } = req;
+        const parsePageIndex = Number(pageIndex);
+        const parsedPageIndex = isNaN(parsePageIndex) ? 1 : parsePageIndex;
+        const parsedSearchItem = searchItem as string;
+
+        const skip = (parsedPageIndex - 1) * 10;
+        const take = 10;
+
+        const enrolledCourses = await configs.db.enrolled.findMany({
+            skip,
+            take,
+            orderBy: {
+                created_at: "desc",
+            },
+            where: {
+                Course: {
+                    title: {
+                        contains: parsedSearchItem,
+                    },
+                    is_delete: false,
+                },
+                user_id: userId,
+            },
+            include: {
+                Course: {
+                    include: {
+                        user: true,
+                        course_categories: {
+                            include: {
+                                Category: true,
+                            },
+                        },
+                        sections: true,
+                        enrolleds: true,
+                    },
+                },
+            },
+        });
+        if (!enrolledCourses) {
+            // Xử lý trường hợp enrolledCourses là undefined hoặc null
+            return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
+        }
+        const totalRecord = await db.enrolled.count({
+            where: {
+                Course: {
+                    title: {
+                        contains: parsedSearchItem,
+                    },
+                },
+                user_id: userId,
+            },
+        });
+
+        const totalPage = Math.ceil(totalRecord / take);
+
+        const courseCard: CourseInfo[] = (enrolledCourses as any).map((enroll: any) => {
+            return {
+                course_id: enroll.Course?.id,
+                title: enroll.Course?.title,
+                summary: enroll.Course?.summary,
+                thumbnail: enroll.Course?.thumbnail,
+                total_rating: enroll.Course?.average_rating,
+                number_of_rating: enroll.Course?.number_of_rating,
+                number_of_enrolled: enroll.Course?.number_of_enrolled,
+                author: {
+                    id: enroll.Course?.user.id,
+                    first_name: enroll.Course?.user.first_name,
+                    last_name: enroll.Course?.user.last_name,
+                },
+                slug: enroll.Course?.slug,
+                category: (enroll.Course?.course_categories as any).map((cc: any) => {
+                    return {
+                        id: cc.Category?.id,
+                        title: cc.Category?.title,
+                        url_image: cc.Category?.url_image,
+                    };
+                }),
+            };
+        });
+
+        const responseData: PagingResponse<CourseInfo[]> = {
+            total_page: totalPage,
+            total_record: totalRecord,
+            data: courseCard,
+        };
+        return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, responseData);
     } catch (error) {
+        console.error("Lỗi xảy ra:", error);
         if (error instanceof PrismaClientKnownRequestError) {
             return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
-const getAllCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
+const getAllCourse = async (
+    req: IRequestWithId,
+    // pageIndex?: number,
+    // searchItem?: string,
+    // sortBy?: string,
+    // evaluate?: number,
+    // category?: string[],
+): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
+        const pageIndex: number | undefined = req.query.pageIndex
+            ? parseInt(req.query.pageIndex as string, 10)
+            : undefined;
+        const searchItem: string | undefined = req.query.searchItem ? (req.query.searchItem as string) : undefined;
+        const category: string[] | undefined = req.query.categoriy
+            ? Array.isArray(req.query.categories)
+                ? (req.query.categories as string[])
+                : [req.query.categories as string]
+            : undefined;
+        const sortBy: string | undefined = req.query.sortBy ? (req.query.sortBy as string) : undefined;
+        const evaluate: number | undefined = req.query.evaluate ? parseFloat(req.query.evaluate as string) : undefined;
+        const take = configs.general.PAGE_SIZE;
+        const skip = ((pageIndex ?? 1) - 1) * take;
+        const categoriesConvert = category?.map((item: string) => Number(item));
+        const orderBy: CourseOrderByWithRelationInput = {};
+        if (sortBy === "newest") {
+            orderBy.created_at = "desc";
+        } else if (sortBy === "attendees") {
+            orderBy.enrolleds = { _count: "desc" };
+        }
+
+        const categoriesFilter = categoriesConvert?.map((item: number) => {
+            return {
+                courses_categories: {
+                    some: {
+                        category: {
+                            id: item,
+                        },
+                    },
+                },
+            };
+        });
+
+        const baseFilter: any = {
+            is_delete: false,
+        };
+
+        if (searchItem) {
+            baseFilter.title = {
+                contains: searchItem.toLowerCase(),
+            };
+        }
+
+        if (categoriesConvert) {
+            baseFilter.AND = categoriesFilter;
+        }
+
+        if (evaluate) {
+            baseFilter.average_rating = {
+                gte: evaluate,
+                lt: (evaluate as number) + 1, // nếu rating truyền vào là 3, thì login ở đây sẽ filter rating >=3 và bé hơn 4
+            };
+        }
+
+        const totalRecord = await db.course.count({
+            where: baseFilter,
+        });
+        const courseCardData = await configs.db.course.findMany({
+            include: {
+                user: true,
+                course_categories: {
+                    include: {
+                        Category: true,
+                    },
+                },
+            },
+            skip,
+            take,
+            orderBy,
+        });
+        const totalPage = Math.ceil(totalRecord / take);
+        if (!courseCardData) {
+            return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
+        }
+
+        const courseCard: CourseCard[] = (courseCardData as any).map((data: any) => {
+            return {
+                course_id: data.id,
+                title: data.title,
+                summary: data.summary,
+                thumbnail: data.thumbnail,
+                total_rating: data.number_of_rating,
+                number_of_enrolled: data.number_of_enrolled,
+                author: {
+                    id: data.user.id,
+                    first_name: data.user.first_name,
+                    last_name: data.user.last_name,
+                },
+                slug: data.slug,
+                category: (data.course_categories as any).map((cc: any) => {
+                    return {
+                        id: cc.Category?.id,
+                        title: cc.Category?.title,
+                        url_image: cc.Category?.url_image,
+                    };
+                }),
+            };
+        });
+        const responseData: PagingResponse<CourseCard[]> = {
+            total_page: totalPage,
+            total_record: totalRecord,
+            data: courseCard,
+        };
+        return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, responseData);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
             return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
@@ -606,13 +915,86 @@ const getAllCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
+
 const getCourseDetail = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
-    } catch (error) {
-        if (error instanceof PrismaClientKnownRequestError) {
-            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+        const { slug } = req.params;
+        const course = await db.course.findUnique({
+            where: {
+                slug: slug,
+            },
+            include: {
+                course_categories: {
+                    include: {
+                        Category: {
+                            select: {
+                                id: true,
+                                title: true,
+                            },
+                        },
+                    },
+                },
+                sections: {
+                    select: {
+                        title: true,
+                        updated_at: true,
+                        id: true,
+                        Lesson: {
+                            where: {
+                                is_delete: false,
+                            },
+                            select: {
+                                id: true,
+                                title: true,
+                                url_video: true,
+                            },
+                            orderBy: {
+                                created_at: "asc",
+                            },
+                        },
+                    },
+                    where: {
+                        is_delete: false,
+                    },
+                },
+                user: {
+                    select: {
+                        first_name: true,
+                        last_name: true,
+                        id: true,
+                    },
+                },
+            },
+        });
+
+        if (course) {
+            if (course.is_delete) {
+                return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
+            } else {
+                const categories: Category[] = [];
+                course.course_categories.forEach((category) => {
+                    categories.push(category.Category as any);
+                });
+                const sections: Section[] = course.sections;
+                const courseData: CourseDetail = {
+                    course_id: course.id,
+                    title: course.title,
+                    summary: course.summary,
+                    description: course.description,
+                    thumbnail: course.thumbnail,
+                    total_rating: course.average_rating,
+                    number_of_rating: course.number_of_rating,
+                    number_of_enrolled: course.number_of_enrolled,
+                    author: course.user,
+                    categories: categories,
+                    sections: sections,
+                };
+                return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, courseData);
+            }
         }
+        return new ResponseError(404, constants.error.ERROR_GET_COURSE_FAILED, false);
+    } catch (error) {
+        console.log(error);
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
