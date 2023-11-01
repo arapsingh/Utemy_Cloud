@@ -79,12 +79,12 @@ model Course {
 }
 
 model CourseCategory {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   course_id   Int
   category_id Int
-  created_at  DateTime  @default(now())
-  Course      Course?   @relation(fields: [course_id], references: [id], onDelete: Cascade)
-  Category    Category? @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  created_at  DateTime @default(now())
+  Course      Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  Category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
   @@map(name: "courses_categories")
 }

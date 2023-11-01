@@ -11,6 +11,8 @@ import ResetPassword from "./pages/ResetPassword";
 import Verify from "./pages/VerifyEmail";
 import CheckMail from "./pages/CheckMail";
 import ChangePassword from "./pages/ChangePassword";
+import MyCourses from "./pages/MyCourse";
+import CreateCourse from "./pages/CreateCourse";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoute from "./routes/PrivateRoutes";
@@ -35,6 +37,8 @@ function App() {
                     <Routes>
                         <Route element={<PrivateRoute />}>
                             <Route path="/change-password" element={<ChangePassword />}></Route>
+                            <Route path="/my-courses" element={<MyCourses />}></Route>
+                            <Route path="/create-course" element={<CreateCourse />}></Route>
                         </Route>
                         <Route path="/" element={<HomePage />}></Route>
                         <Route path="/login" element={<Login />}></Route>

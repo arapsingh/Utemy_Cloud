@@ -40,12 +40,16 @@ const getRightOfCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     }
 };
 const createCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
-    const { title, slug, description, summary, categories, status, thumbnail, price } = req.body;
+    const file = req.file;
+    const { title, slug, description, summary, categories, status, price } = req.body;
     const user_id = req.user_id;
     try {
-        const listCategoryId = categories.map((item: number) => ({
-            category_id: item,
+        let fullPathConverted = "";
+        if (file) fullPathConverted = helper.ConvertHelper.convertFilePath(file.path);
+        const listCategoryId = categories.split(",").map((item: number) => ({
+            category_id: Number(item),
         }));
+        const convertedStatus = status === "true" ? true : false;
 
         const uniqueSlug = generateUniqueSlug(slug);
         if (user_id) {
@@ -55,15 +59,10 @@ const createCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
                     slug: uniqueSlug,
                     description: description,
                     summary: summary,
-                    thumbnail: thumbnail,
+                    thumbnail: fullPathConverted,
                     author_id: user_id,
-                    status: status,
-                    price: price,
-                    average_rating: 0, // Giá trị mặc định cho average_rating
-                    number_of_rating: 0, // Giá trị mặc định cho number_of_rating
-                    number_of_enrolled: 0, // Giá trị mặc định cho number_of_enrolled
-                    sale_price: 0, // Giá trị mặc định cho sale_price
-                    sale_until: new Date(), // Giá trị mặc định cho sale_until
+                    status: convertedStatus,
+                    price: Number(price),
                     course_categories: {
                         create: listCategoryId,
                     },
