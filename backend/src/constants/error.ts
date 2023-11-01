@@ -79,6 +79,7 @@ const error = {
     ERROR_COURSE_PRICE_REQUIRED: "Price is required",
     ERROR_COURSE_PRICE_NUMBER: "Price must be number",
     ERROR_CREATE_COURSE_FAILED: "Create course failed",
+    ERROR_GET_COURSE_FAILED: "Get course failed",
 
     //rating
     ERROR_RATING_NOT_FOUND: "Rating doesn't exist",
