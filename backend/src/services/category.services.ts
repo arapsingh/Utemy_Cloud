@@ -1,6 +1,7 @@
 import { ResponseSuccess, ResponseError, ResponseBase } from "../common";
 import configs from "../configs";
 import { IRequestWithId } from "../types/request";
+import { Request } from "express";
 import helper from "../helper";
 import constants from "../constants";
 import { CategoryResponse } from "../types/category.type";
@@ -138,7 +139,7 @@ const deleteCategory = async (req: IRequestWithId): Promise<ResponseBase> => {
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
-const getCategories = async (req: IRequestWithId): Promise<ResponseBase> => {
+const getCategoriesWithPagination = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const { page_index: pageIndex } = req.query;
 
@@ -174,6 +175,55 @@ const getCategories = async (req: IRequestWithId): Promise<ResponseBase> => {
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
+const getCategories = async (req: Request): Promise<ResponseBase> => {
+    try {
+        const getListCategories = await configs.db.category.findMany({
+            orderBy: {
+                title: "asc",
+            },
+        });
+        if (!getListCategories) return new ResponseError(404, constants.error.ERROR_CATEGORY_NOT_FOUND, false);
+        const categories: CategoryResponse[] = [];
+        getListCategories.map((item) => {
+            const category: CategoryResponse = {
+                category_id: item.id,
+                description: item.description,
+                title: item.title,
+                url_image: item.url_image,
+            };
+            return categories.push(category);
+        });
+
+        return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, categories);
+    } catch (error) {
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const get5Categories = async (req: Request): Promise<ResponseBase> => {
+    try {
+        const getListCategories = await configs.db.category.findMany({
+            orderBy: {
+                title: "asc",
+            },
+        });
+        if (!getListCategories) return new ResponseError(404, constants.error.ERROR_CATEGORY_NOT_FOUND, false);
+
+        const categories: CategoryResponse[] = [];
+        getListCategories.map((item) => {
+            const category: CategoryResponse = {
+                category_id: item.id,
+                description: item.description,
+                title: item.title,
+                url_image: item.url_image,
+            };
+            return categories.push(category);
+        });
+
+        return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, categories);
+    } catch (error) {
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
 const getCategory = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const { category_id } = req.body;
@@ -202,6 +252,8 @@ const CategoryServices = {
     deleteCategory,
     createCategory,
     getCategory,
+    getCategoriesWithPagination,
+    get5Categories,
     getCategories,
 };
 export default CategoryServices;

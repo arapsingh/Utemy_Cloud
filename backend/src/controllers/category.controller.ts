@@ -53,8 +53,16 @@ export default class CategoryController {
         const response: ResponseBase = await services.CategoryServices.getCategory(req);
         return res.status(response.getStatusCode()).json(response);
     }
-    async getCategories(req: IRequestWithId, res: Response): Promise<Response> {
+    async getCategoriesWithPagination(req: IRequestWithId, res: Response): Promise<Response> {
+        const response: ResponseBase = await services.CategoryServices.getCategoriesWithPagination(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async getCategories(req: Request, res: Response): Promise<Response> {
         const response: ResponseBase = await services.CategoryServices.getCategories(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async get5Categories(req: Request, res: Response): Promise<Response> {
+        const response: ResponseBase = await services.CategoryServices.get5Categories(req);
         return res.status(response.getStatusCode()).json(response);
     }
 }

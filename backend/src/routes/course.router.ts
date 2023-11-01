@@ -2,7 +2,7 @@ import { Router } from "express";
 import controllers from "../controllers/index";
 import { isLogin } from "../middlewares/isLogin";
 import { isAuthor } from "../middlewares/isAuthor";
-import { uploadAvatar } from "../middlewares/multer";
+import { uploadAvatar, uploadThumbnail } from "../middlewares/multer";
 
 const courseRouter: Router = Router();
 
@@ -10,7 +10,7 @@ const courseRouter: Router = Router();
 courseRouter.get("/right/:course_id", isLogin, isAuthor, controllers.courseController.getRightOfCourse);
 
 //14. Create course
-courseRouter.post("/", isLogin, controllers.courseController.createCourse);
+courseRouter.post("/", isLogin, uploadThumbnail, controllers.courseController.createCourse);
 
 //19. Edit rating course
 courseRouter.patch("/rating", isLogin, controllers.courseController.editRatingCourse);
