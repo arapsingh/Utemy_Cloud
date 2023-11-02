@@ -62,7 +62,7 @@ export const createCourseSchema: ObjectSchema<CreateCourse> = Joi.object({
     //     "any.required": constants.error.ERROR_COURSE_THUMBNAIL_REQUIRED,
     // }),
 
-    price: Joi.required().messages({
+    price: Joi.number().required().messages({
         "any.required": constants.error.ERROR_COURSE_PRICE_REQUIRED,
         "number.base": constants.error.ERROR_COURSE_PRICE_NUMBER,
     }),

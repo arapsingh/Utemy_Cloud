@@ -14,6 +14,7 @@ import WarningIcon from "./WarningIcon";
 import CompleteIcon from "./CompleteIcon";
 import RatingIcon from "./RatingIcon";
 import AllcourseIcon from "./AllcourseIcon";
+import WatchVideoIcon from "./WatchVideoIcon";
 
 export {
     AddIcon,
@@ -32,4 +33,5 @@ export {
     CompleteIcon,
     RatingIcon,
     AllcourseIcon,
+    WatchVideoIcon,
 };

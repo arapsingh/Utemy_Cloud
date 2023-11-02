@@ -5,6 +5,7 @@ import lessonRouter from "./lesson.router";
 import categoryRouter from "./category.router";
 import courseRouter from "./course.router";
 import feedbackRouter from "./feedback.router";
+import ratingRouter from "./rating.router";
 export default {
     authRouter,
     userRouter,
@@ -13,4 +14,5 @@ export default {
     categoryRouter,
     courseRouter,
     feedbackRouter,
+    ratingRouter,
 };

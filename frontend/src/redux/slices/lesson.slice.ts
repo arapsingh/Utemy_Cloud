@@ -1,16 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type LessonSliceType = {};
+type LessonSliceType = {
+    nowUrlVideo: string;
+};
 
-const initialState: LessonSliceType = {};
+const initialState: LessonSliceType = {
+    nowUrlVideo: "",
+};
 
 export const lessonSlice = createSlice({
     name: "lesson",
     initialState,
-    reducers: {},
+    reducers: {
+        setNowUrlVideo: (state, action) => {
+            state.nowUrlVideo = action.payload.data as string;
+        },
+    },
     extraReducers: {},
 });
 
-export const {} = lessonSlice.actions;
+export const { setNowUrlVideo } = lessonSlice.actions;
 
 export default lessonSlice.reducer;

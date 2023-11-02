@@ -16,3 +16,14 @@ export const previewImage = (image: File | null, imageRef: React.RefObject<HTMLI
         }
     }
 };
+
+export const convertDateFormat = (inputDate: string) => {
+    const date = new Date(inputDate); // Chuyển chuỗi thành đối tượng ngày tháng
+    const day = String(date.getDate()).padStart(2, "0"); // Lấy ngày và đảm bảo rằng nó có 2 chữ số
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Lấy tháng (chú ý tháng bắt đầu từ 0) và đảm bảo rằng nó có 2 chữ số
+    const year = date.getFullYear(); // Lấy năm
+
+    const formattedDate = `${day}/${month}/${year}`;
+
+    return formattedDate;
+};

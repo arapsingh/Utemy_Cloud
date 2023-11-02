@@ -21,7 +21,7 @@ type AccordionType = {
     redirectToWatchVideo?: boolean;
     source?: string;
     disable: boolean;
-    orderLesson: any;
+    // orderLesson: any;
 };
 
 const Accordion: React.FC<AccordionType> = (props) => {
@@ -30,14 +30,12 @@ const Accordion: React.FC<AccordionType> = (props) => {
     // const dispatch = useAppDispatch();
     // const courseDetail: CourseDetailType = useAppSelector((state) => state.courseSlice.courseDetail) ?? {};
 
-    console.log(props.section.lessons);
-
     return (
         <>
             <div>
                 <h2 id="accordion-collapse-heading-1">
                     <div
-                        className={`flex items-center justify-between w-full p-4  bg-primary rounded-lg my-1 flex-wrap ${
+                        className={`flex items-center justify-between w-full p-4  bg-navy rounded-lg my-1 flex-wrap ${
                             show ? " shadow-xl" : ""
                         }`}
                     >
@@ -57,7 +55,7 @@ const Accordion: React.FC<AccordionType> = (props) => {
                                     d="M9 5 5 1 1 5"
                                 />
                             </svg>
-                            <span className="max-w-[400px] truncate ...">{props.section.title}</span>
+                            <span className="max-w-[400px] text-white truncate ...">{props.section.title}</span>
                         </div>
                         {props.isDisplayBtn && (
                             <div className="flex gap-2">
