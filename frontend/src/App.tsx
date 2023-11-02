@@ -13,6 +13,9 @@ import CheckMail from "./pages/CheckMail";
 import ChangePassword from "./pages/ChangePassword";
 import MyCourses from "./pages/MyCourse";
 import CreateCourse from "./pages/CreateCourse";
+import MyEnrolledCourse from "./pages/MyEnrolledCourse";
+import CourseDetail from "./pages/CourseDetail";
+import NotFound from "./pages/NotFound";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoute from "./routes/PrivateRoutes";
@@ -38,6 +41,7 @@ function App() {
                         <Route element={<PrivateRoute />}>
                             <Route path="/change-password" element={<ChangePassword />}></Route>
                             <Route path="/my-courses" element={<MyCourses />}></Route>
+                            <Route path="/my-enrolled-courses" element={<MyEnrolledCourse />}></Route>
                             <Route path="/create-course" element={<CreateCourse />}></Route>
                         </Route>
                         <Route path="/" element={<HomePage />}></Route>
@@ -47,6 +51,8 @@ function App() {
                         <Route path="/reset-password/:token" element={<ResetPassword />}></Route>
                         <Route path="/verify-email/:token" element={<Verify />}></Route>
                         <Route path="/check-mail" element={<CheckMail />}></Route>
+                        <Route path="/course-detail/:slug" element={<CourseDetail isLogin={isLogin} />}></Route>
+                        <Route path="/*" element={<NotFound />}></Route>
                     </Routes>
                     <Footer />
                 </div>

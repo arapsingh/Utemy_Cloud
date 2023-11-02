@@ -1,8 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Section } from "../../types/section";
 
-type SectionSliceType = {};
+type SectionSliceType = {
+    sections: Section[];
+};
 
-const initialState: SectionSliceType = {};
+const initialState: SectionSliceType = {
+    sections: [],
+};
 
 export const sectionSlice = createSlice({
     name: "section",

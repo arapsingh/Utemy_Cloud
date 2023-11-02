@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { NewCourse as CreateCourseType } from "../../types/course";
 import { Category } from "../../types/category";
 import { categoryActions, courseActions } from "../../redux/slices";
-// import { createValidationSchema } from "../../validations/course";
+import { createCourseValidationSchema } from "../../validations/course";
 import slugify from "slugify";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -139,7 +139,7 @@ const CreateCourse: FC = () => {
                     <div className="m-4 rounded-xl border border-black w-full max-w-[982px] bg-background">
                         <Formik
                             initialValues={initialValues}
-                            // validationSchema={createValidationSchema}
+                            validationSchema={createCourseValidationSchema}
                             onSubmit={handleOnSubmit}
                             innerRef={formikRef}
                         >

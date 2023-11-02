@@ -6,6 +6,7 @@ import DeleteIcon from "../assets/icons/DeleteIcon";
 import { User } from "../types/user";
 import CompleteIcon from "../assets/icons/CompleteIcon";
 import TotalRating from "./TotalRating";
+import { convertDateFormat } from "../utils/helper";
 
 type Course = {
     id: number;
@@ -14,6 +15,7 @@ type Course = {
     summary: string;
     thumbnail: string;
     author: User;
+    price?: number;
     rating?: number;
     status?: boolean;
     numberOfSection?: number;
@@ -26,11 +28,13 @@ type Course = {
 
 const CourseCard: FC<Course> = (props: Course) => {
     const [isDisplayDropDown, setIsDisplayDropDown] = useState<boolean>(false);
-    const hasSection = props.numberOfSection !== undefined;
+    const hasPrice = props.price !== undefined;
     const hasAttendee = props.attendees !== undefined;
+    const hasSectionCount = props.numberOfSection !== undefined;
+    const convertedDate = convertDateFormat(props.createdAt as string);
     return (
         <div className="py-2">
-            <div className="flex flex-col gap-2 tablet:gap-4 tablet:flex-row rounded-2xl hover:bg-backgroundHover/10 transition ease-in-out hover:shadow-lg duration-200 shadow-lg">
+            <div className="flex flex-col gap-2 tablet:gap-4 tablet:flex-row rounded-2xl hover:bg-lightblue/25 transition ease-in-out hover:shadow-lg duration-200 shadow-lg">
                 <div className="h-48 bg-gray-400 rounded-lg tablet:w-64 shrink-0">
                     <Link to={`/course-detail/${props.slug}`}>
                         <img src={props.thumbnail} alt={props.title} className="w-full h-full rounded-lg" />
@@ -70,14 +74,22 @@ const CourseCard: FC<Course> = (props: Course) => {
                                 Attendees: <span className="font-normal">{props.attendees}</span>
                             </p>
                         )}
-                        {hasSection && (
+                        {hasPrice && (
                             <p className="text-base font-bold">
-                                Number of sections: <span className="font-normal">{props.numberOfSection}</span>
+                                Price:
+                                <span className="font-normal"> {props.price} </span>{" "}
+                                <span className="font-normal opacity-50">VNĐ</span>
+                            </p>
+                        )}
+                        {hasSectionCount && (
+                            <p className="text-base font-bold">
+                                Number of section:
+                                <span className="font-normal"> {props.numberOfSection} </span>{" "}
                             </p>
                         )}
                         {props.createdAt && (
                             <p className="text-base font-bold">
-                                Created at: <span className="font-normal">{props.createdAt}</span>
+                                Created at: <span className="font-normal">{convertedDate}</span>
                             </p>
                         )}
                     </div>

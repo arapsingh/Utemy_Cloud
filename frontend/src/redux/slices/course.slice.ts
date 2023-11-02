@@ -1,25 +1,55 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Response } from "../../types/response";
-import { Course } from "../../types/course";
+import { Course, PagingCourse, SearchMyCourseEnrolledCourse, RightOfCourse } from "../../types/course";
 import apis from "../../api";
 
 type CourseSliceType = {
+    courseDetail: Course;
     courses: Course[];
     totalPage: number;
+    totalRecord: number;
     isLoading: boolean;
     isGetLoading: boolean;
     isUpload: boolean;
+    role: string;
 };
 
 const initialState: CourseSliceType = {
+    courseDetail: {
+        course_id: 0,
+        title: "",
+        slug: "",
+        status: false,
+        description: "",
+        thumbnail: "",
+        summary: "",
+        number_of_section: 0,
+        number_of_rating: 0,
+        number_of_enrolled: 0,
+        author: {
+            first_name: "",
+            last_name: "",
+            email: "",
+            url_avatar: "",
+            user_id: undefined,
+            description: "",
+        },
+        price: 0,
+        sale_price: 0,
+        average_rating: 0,
+        categories: [],
+        sections: [],
+    },
+    role: "",
     courses: [],
     totalPage: 0,
+    totalRecord: 0,
     isLoading: false,
     isGetLoading: false,
     isUpload: false,
 };
 export const createCourses = createAsyncThunk<Response<null>, FormData, { rejectValue: Response<null> }>(
-    "course/createCourse",
+    "course/create",
     async (body, ThunkAPI) => {
         try {
             const response = await apis.courseApis.createCourse(body);
@@ -29,11 +59,114 @@ export const createCourses = createAsyncThunk<Response<null>, FormData, { reject
         }
     },
 );
+export const getMyCourses = createAsyncThunk<
+    Response<PagingCourse>,
+    SearchMyCourseEnrolledCourse,
+    { rejectValue: Response<null> }
+>("course/my", async (body, ThunkAPI) => {
+    try {
+        const response = await apis.courseApis.getMyCourses(body);
+        return response.data as Response<PagingCourse>;
+    } catch (error: any) {
+        return ThunkAPI.rejectWithValue(error.data as Response<null>);
+    }
+});
+export const getEnrolledCourses = createAsyncThunk<
+    Response<PagingCourse>,
+    SearchMyCourseEnrolledCourse,
+    { rejectValue: Response<null> }
+>("course/enrolled", async (body, ThunkAPI) => {
+    try {
+        const response = await apis.courseApis.getEnrolledCourses(body);
+        return response.data as Response<PagingCourse>;
+    } catch (error: any) {
+        return ThunkAPI.rejectWithValue(error.data as Response<null>);
+    }
+});
+export const deleteCourse = createAsyncThunk<Response<null>, number, { rejectValue: Response<null> }>(
+    "course/delete",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.courseApis.deleteCourse(body);
+            return response.data as Response<null>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const getCourseDetail = createAsyncThunk<Response<Course>, string, { rejectValue: Response<null> }>(
+    "course/detail",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.courseApis.getCourseDetail(body);
+            return response.data as Response<Course>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const getRightOfCourse = createAsyncThunk<Response<RightOfCourse>, number, { rejectValue: Response<null> }>(
+    "course/right",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.courseApis.getRightOfCourse(body);
+            return response.data as Response<RightOfCourse>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+
 export const courseSlice = createSlice({
     name: "course",
     initialState,
     reducers: {},
-    extraReducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getMyCourses.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(getMyCourses.fulfilled, (state, action) => {
+            state.courses = action.payload.data?.data as Course[];
+            state.totalPage = action.payload.data?.total_page as number;
+            state.totalRecord = action.payload.data?.total_record as number;
+            state.isLoading = false;
+        });
+        builder.addCase(getMyCourses.rejected, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(getEnrolledCourses.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(getEnrolledCourses.fulfilled, (state, action) => {
+            state.courses = action.payload.data?.data as Course[];
+            state.totalPage = action.payload.data?.total_page as number;
+            state.totalRecord = action.payload.data?.total_record as number;
+            state.isLoading = false;
+        });
+        builder.addCase(getEnrolledCourses.rejected, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(getCourseDetail.pending, (state) => {
+            state.isGetLoading = true;
+        });
+        builder.addCase(getCourseDetail.fulfilled, (state, action) => {
+            state.courseDetail = action.payload.data as Course;
+            state.isGetLoading = false;
+        });
+        builder.addCase(getCourseDetail.rejected, (state) => {
+            state.isGetLoading = false;
+        });
+        builder.addCase(getRightOfCourse.pending, (state) => {
+            state.isGetLoading = true;
+        });
+        builder.addCase(getRightOfCourse.fulfilled, (state, action) => {
+            state.role = action.payload.data?.role as string;
+            state.isGetLoading = false;
+        });
+        builder.addCase(getRightOfCourse.rejected, (state) => {
+            state.isGetLoading = false;
+        });
+    },
 });
 
 export const {} = courseSlice.actions;

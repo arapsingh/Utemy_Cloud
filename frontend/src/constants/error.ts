@@ -81,6 +81,14 @@ const error = {
     ERROR_COURSE_PRICE_REQUIRED: "Price is required",
     ERROR_COURSE_PRICE_NUMBER: "Price must be number",
     ERROR_CREATE_COURSE_FAILED: "Create course failed",
+    ERROR_COURSE_SUMMARY_MAX: "Summry is too long",
+    ERROR_CATEGORY_MAX: "Maximum is 4 categories",
+    ERROR_CATEGORY_REQUIRED: "Atleast 1 category",
+    ERROR_IMAGE_TOO_BIG: "Image is too big, maximum 4 MB",
+    ERROR_IMAGE_NOT_SUPPORTED: "Wrong image type, JPG JPEG PNG only",
+    ERROR_VIDEO_TOO_BIG: "Video is too big, maximum 100 MB",
+    ERROR_VIDEO_NOT_SUPPORTED: "Wrong video type, MP4 MOV MKV only",
+    ERROR_VIDEO_IS_REQUIRED: "Video is required",
 
     //rating
     ERROR_RATING_NOT_FOUND: "Rating doesn't exist",

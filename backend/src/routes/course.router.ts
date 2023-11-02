@@ -7,7 +7,7 @@ import { uploadAvatar, uploadThumbnail } from "../middlewares/multer";
 const courseRouter: Router = Router();
 
 //13. Get right of course
-courseRouter.get("/right/:course_id", isLogin, isAuthor, controllers.courseController.getRightOfCourse);
+courseRouter.get("/right/:course_id", isLogin, controllers.courseController.getRightOfCourse);
 
 //14. Create course
 courseRouter.post("/", isLogin, uploadThumbnail, controllers.courseController.createCourse);
