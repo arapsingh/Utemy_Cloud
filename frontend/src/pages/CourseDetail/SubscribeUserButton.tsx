@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { WatchVideoIcon, RatingIcon, DeleteIcon } from "../../assets/icons";
+import { WatchVideoIcon, RatingIcon } from "../../assets/icons";
 import { Course as CourseDetail } from "../../types/course";
 type SubscribeUserButtonProps = {
     handleTogglePopupRating(): void;
@@ -26,10 +26,10 @@ const SubscribeUserButton: React.FC<SubscribeUserButtonProps> = (props) => {
                 <RatingIcon />
                 <span>Vote</span>
             </button>
-            <button onClick={props.handleToggleUnsubscribeCourse} className="btn btn-error text-lg">
+            {/* <button onClick={props.handleToggleUnsubscribeCourse} className="btn btn-error text-lg">
                 <DeleteIcon color="#000000" />
                 <span>Unsubcribe</span>
-            </button>
+            </button> */}
         </>
     );
 };

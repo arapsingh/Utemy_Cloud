@@ -18,6 +18,7 @@ module.exports = {
                 background: "#ffffff", //trắng cho header
                 footer: "#F9F8F6", // xám trắng cho footer
                 lightblue: "#29ABE2", // xanh trời nhạt
+                bluelogo: "#50BAE6",
                 nav: "#D8D8D8", // xám nhạt cho navbar
                 navy: "#74859C", // xanh navi
                 navyhover: "#7e8fa6",
