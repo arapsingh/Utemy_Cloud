@@ -15,6 +15,7 @@ import MyCourses from "./pages/MyCourse";
 import CreateCourse from "./pages/CreateCourse";
 import MyEnrolledCourse from "./pages/MyEnrolledCourse";
 import CourseDetail from "./pages/CourseDetail";
+import Cart from "./pages/Cart";
 import NotFound from "./pages/NotFound";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -43,6 +44,7 @@ function App() {
                             <Route path="/my-courses" element={<MyCourses />}></Route>
                             <Route path="/my-enrolled-courses" element={<MyEnrolledCourse />}></Route>
                             <Route path="/create-course" element={<CreateCourse />}></Route>
+                            <Route path="/cart" element={<Cart />}></Route>
                         </Route>
                         <Route path="/" element={<HomePage />}></Route>
                         <Route path="/login" element={<Login />}></Route>
