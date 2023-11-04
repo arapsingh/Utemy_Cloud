@@ -5,6 +5,7 @@ import CategoryController from "./category.controller";
 import CourseController from "./course.controller";
 import UserController from "./user.controller";
 import FeedbackController from "./feedback.controller";
+import RatingController from "./rating.controller";
 
 export default {
     authController: new AuthController(),
@@ -14,4 +15,5 @@ export default {
     categoryController: new CategoryController(),
     courseController: new CourseController(),
     feedbackController: new FeedbackController(),
+    ratingController: new RatingController(),
 };

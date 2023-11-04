@@ -4,11 +4,11 @@ import { isLogin } from "../middlewares/isLogin";
 
 const ratingRouter: Router = Router();
 
-ratingRouter.post("/", isLogin, controllers.courseController.ratingCourse);
+ratingRouter.post("/", isLogin, controllers.ratingController.ratingCourse);
 //19. Edit rating course
-ratingRouter.patch("/", isLogin, controllers.courseController.editRatingCourse);
+ratingRouter.patch("/", isLogin, controllers.ratingController.editRatingCourse);
 // Delete rating course
-ratingRouter.delete("/", isLogin, controllers.courseController.deleteRatingCourse);
+ratingRouter.delete("/", isLogin, controllers.ratingController.deleteRatingCourse);
 
-ratingRouter.get("/", isLogin, controllers.courseController.getUserRatingOfCourse);
+ratingRouter.get("/", isLogin, controllers.ratingController.getUserRatingOfCourse);
 export default ratingRouter;

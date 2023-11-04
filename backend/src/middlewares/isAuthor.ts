@@ -5,15 +5,30 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import constants from "../utils/constants";
 import jwt, { JwtPayload, TokenExpiredError, JsonWebTokenError, NotBeforeError } from "jsonwebtoken";
 import configs from "../configs";
-
+type GroupId = {
+    course_id?: number | string;
+    section_id?: number | string;
+    lesson_id?: number | string;
+};
+const isObjectEmpty = (object: Record<any, any>): boolean => {
+    for (const key in object) {
+        if (key in object) {
+            return false;
+        }
+    }
+    return true;
+};
 export const isAuthor = async (req: IRequestWithId, res: Response, next: NextFunction) => {
     try {
         const user_id = req.user_id;
-        const { course_id, section_id, lesson_id } = req.body;
-        if (course_id) {
+        let groupId: GroupId = { course_id: "", section_id: "", lesson_id: "" };
+        if (isObjectEmpty(req.body)) groupId = req.params;
+        else if (isObjectEmpty(req.params)) groupId = req.body;
+
+        if (groupId.course_id) {
             const isCourseExist = await configs.db.course.findUnique({
                 where: {
-                    id: course_id,
+                    id: Number(groupId.course_id),
                 },
             });
             if (!isCourseExist) {
@@ -27,10 +42,10 @@ export const isAuthor = async (req: IRequestWithId, res: Response, next: NextFun
                     next();
                 }
             }
-        } else if (section_id) {
+        } else if (groupId.section_id) {
             const isCourseExist = await configs.db.section.findFirst({
                 where: {
-                    id: section_id,
+                    id: Number(groupId.section_id),
                 },
                 include: {
                     Course: true,
@@ -47,10 +62,10 @@ export const isAuthor = async (req: IRequestWithId, res: Response, next: NextFun
                     next();
                 }
             }
-        } else if (lesson_id) {
+        } else if (groupId.lesson_id) {
             const isCourseExist = await configs.db.lesson.findFirst({
                 where: {
-                    id: lesson_id,
+                    id: Number(groupId.lesson_id),
                 },
                 include: {
                     section: {
@@ -80,13 +95,13 @@ export const isAuthor = async (req: IRequestWithId, res: Response, next: NextFun
         //     return res.status(401).json({ message: error.toString() });
         // }
         if (error instanceof TokenExpiredError) {
-            return res.status(401).json({ message: error.message });
+            return res.status(401).json({ status_code: 401, message: error.message });
         } else if (error instanceof JsonWebTokenError) {
-            return res.status(401).json({ message: error.message });
+            return res.status(401).json({ status_code: 401, message: error.message });
         } else if (error instanceof NotBeforeError) {
-            return res.status(401).json({ message: error.message });
+            return res.status(401).json({ status_code: 401, message: error.message });
         }
 
-        return res.status(500).json({ message: constants.ERROR_INTERNAL_SERVER });
+        return res.status(500).json({ status_code: 500, message: constants.ERROR_INTERNAL_SERVER });
     }
 };

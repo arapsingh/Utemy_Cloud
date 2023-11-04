@@ -17,8 +17,8 @@ const getEnrolledCourses = async (values: SearchMyCourseEnrolledCourse) => {
     return reponse;
 };
 const deleteCourse = async (values: number) => {
-    const path = "course";
-    const reponse = await apiCaller("DELETE", path, values);
+    const path = `course/${values}`;
+    const reponse = await apiCaller("DELETE", path);
     return reponse;
 };
 const getCourseDetail = async (values: string) => {
@@ -31,6 +31,16 @@ const getRightOfCourse = async (values: number) => {
     const reponse = await apiCaller("GET", path);
     return reponse;
 };
+const getTop10Rate = async () => {
+    const path = `course/top10`;
+    const reponse = await apiCaller("GET", path);
+    return reponse;
+};
+const getTop10Enrolled = async () => {
+    const path = `course/top-enrolled`;
+    const reponse = await apiCaller("GET", path);
+    return reponse;
+};
 const courseApis = {
     createCourse,
     getMyCourses,
@@ -38,6 +48,8 @@ const courseApis = {
     deleteCourse,
     getCourseDetail,
     getRightOfCourse,
+    getTop10Rate,
+    getTop10Enrolled,
 };
 
 export default courseApis;

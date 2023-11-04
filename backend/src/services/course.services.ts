@@ -193,10 +193,15 @@ const buyCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
-const getTop10Course = async (req: IRequestWithId): Promise<ResponseBase> => {
+const getTop10RateCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const top10Courses = await configs.db.courseCategory.findMany({
             take: 10,
+            where: {
+                Course: {
+                    is_delete: false,
+                },
+            },
             orderBy: {
                 Course: {
                     average_rating: "desc",
@@ -247,7 +252,79 @@ const getTop10Course = async (req: IRequestWithId): Promise<ResponseBase> => {
             slug: courseCategory.Course?.slug,
             category: courseCategory.Category,
         }));
+        // Đảm bảo top10Courses có dữ liệu
+        if (top10Courses.length === 0) {
+            return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
+        }
+        // Trả về danh sách top 10 khóa học
+        return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true, formattedData);
+    } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+        }
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
 
+const getTop10EnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
+    try {
+        const top10Courses = await configs.db.courseCategory.findMany({
+            take: 10,
+            where: {
+                Course: {
+                    is_delete: false,
+                },
+            },
+            orderBy: {
+                Course: {
+                    number_of_enrolled: "desc",
+                },
+            },
+            select: {
+                Course: {
+                    select: {
+                        id: true,
+                        title: true,
+                        summary: true,
+                        thumbnail: true,
+                        average_rating: true,
+                        number_of_rating: true,
+                        number_of_enrolled: true,
+                        slug: true,
+                        user: {
+                            select: {
+                                id: true,
+                                first_name: true,
+                                last_name: true,
+                            },
+                        },
+                    },
+                },
+                Category: {
+                    select: {
+                        id: true,
+                        title: true,
+                    },
+                },
+            },
+        });
+        // Định dạng dữ liệu theo cấu trúc yêu cầu
+        const formattedData = top10Courses.map((courseCategory) => ({
+            course_id: courseCategory.Course?.id,
+            title: courseCategory.Course?.title,
+            summary: courseCategory.Course?.summary,
+            thumbnail: courseCategory.Course?.thumbnail,
+            average_rating: courseCategory.Course?.average_rating,
+            number_of_rating: courseCategory.Course?.number_of_rating,
+            number_of_enrolled: courseCategory.Course?.number_of_enrolled,
+            author: {
+                id: courseCategory.Course?.user.id,
+                first_name: courseCategory.Course?.user.first_name,
+                last_name: courseCategory.Course?.user.last_name,
+            },
+            slug: courseCategory.Course?.slug,
+            category: courseCategory.Category,
+        }));
         // Đảm bảo top10Courses có dữ liệu
         if (top10Courses.length === 0) {
             return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
@@ -787,7 +864,8 @@ const CourseServices = {
     editCourse,
     deleteCourse,
     buyCourse,
-    getTop10Course,
+    getTop10RateCourse,
+    getTop10EnrolledCourse,
     searchMyCourse,
     searchMyEnrolledCourse,
     getAllCourse,
