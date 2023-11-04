@@ -24,6 +24,7 @@ type Course = {
     createdAt?: string;
     handleDeleteCourse?: (courseId: number) => void;
     handleEditCourse?: (id: number) => void;
+    handleDisplayDeleteModal?: (courseId: number) => void;
 };
 
 const CourseCard: FC<Course> = (props: Course) => {
@@ -106,7 +107,7 @@ const CourseCard: FC<Course> = (props: Course) => {
                                 }`}
                             >
                                 <div
-                                    className="flex items-center p-2 rounded-lg hover:bg-backgroundHover cursor-pointer"
+                                    className="flex items-center p-2 rounded-lg hover:bg-footer cursor-pointer"
                                     onClick={() => {
                                         if (props.handleEditCourse) props.handleEditCourse(props.id);
                                     }}
@@ -115,9 +116,9 @@ const CourseCard: FC<Course> = (props: Course) => {
                                     <span className="ml-2">Edit</span>
                                 </div>
                                 <div
-                                    className="flex items-center p-2 rounded-lg hover:bg-backgroundHover cursor-pointer"
+                                    className="flex items-center p-2 rounded-lg hover:bg-footer cursor-pointer"
                                     onClick={() => {
-                                        if (props.handleDeleteCourse) props.handleDeleteCourse(props.id);
+                                        if (props.handleDisplayDeleteModal) props.handleDisplayDeleteModal(props.id);
                                     }}
                                 >
                                     <DeleteIcon />

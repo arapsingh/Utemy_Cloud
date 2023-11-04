@@ -6,6 +6,8 @@ import apis from "../../api";
 type CourseSliceType = {
     courseDetail: Course;
     courses: Course[];
+    top10Rate: Course[];
+    top10Enrolled: Course[];
     totalPage: number;
     totalRecord: number;
     isLoading: boolean;
@@ -41,6 +43,8 @@ const initialState: CourseSliceType = {
         sections: [],
     },
     role: "",
+    top10Rate: [],
+    top10Enrolled: [],
     courses: [],
     totalPage: 0,
     totalRecord: 0,
@@ -116,7 +120,28 @@ export const getRightOfCourse = createAsyncThunk<Response<RightOfCourse>, number
         }
     },
 );
-
+export const getTop10Rate = createAsyncThunk<Response<Course[]>, void, { rejectValue: Response<null> }>(
+    "course/top10",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.courseApis.getTop10Rate();
+            return response.data as Response<Course[]>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const getTop10Enrolled = createAsyncThunk<Response<Course[]>, void, { rejectValue: Response<null> }>(
+    "course/top-enrolled",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.courseApis.getTop10Enrolled();
+            return response.data as Response<Course[]>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
 export const courseSlice = createSlice({
     name: "course",
     initialState,
@@ -164,6 +189,26 @@ export const courseSlice = createSlice({
             state.isGetLoading = false;
         });
         builder.addCase(getRightOfCourse.rejected, (state) => {
+            state.isGetLoading = false;
+        });
+        builder.addCase(getTop10Rate.pending, (state) => {
+            state.isGetLoading = true;
+        });
+        builder.addCase(getTop10Rate.fulfilled, (state, action) => {
+            state.top10Rate = action.payload.data as Course[];
+            state.isGetLoading = false;
+        });
+        builder.addCase(getTop10Rate.rejected, (state) => {
+            state.isGetLoading = false;
+        });
+        builder.addCase(getTop10Enrolled.pending, (state) => {
+            state.isGetLoading = true;
+        });
+        builder.addCase(getTop10Enrolled.fulfilled, (state, action) => {
+            state.top10Enrolled = action.payload.data as Course[];
+            state.isGetLoading = false;
+        });
+        builder.addCase(getTop10Enrolled.rejected, (state) => {
             state.isGetLoading = false;
         });
     },

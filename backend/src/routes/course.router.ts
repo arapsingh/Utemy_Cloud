@@ -13,10 +13,6 @@ courseRouter.get("/right/:course_id", isLogin, controllers.courseController.getR
 courseRouter.post("/", isLogin, uploadThumbnail, controllers.courseController.createCourse);
 
 //19. Edit rating course
-courseRouter.patch("/rating", isLogin, controllers.courseController.editRatingCourse);
-
-// Delete rating course
-courseRouter.delete("/rating", isLogin, controllers.courseController.deleteRatingCourse);
 
 //15. Edit course
 courseRouter.patch("/:course_id", isLogin, isAuthor, controllers.courseController.editCourse);
@@ -28,16 +24,16 @@ courseRouter.delete("/:course_id", isLogin, isAuthor, controllers.courseControll
 courseRouter.post("/buy", isLogin, isAuthor, controllers.courseController.buyCourse);
 
 //18. Rating course
-courseRouter.post("/:slug/rating", isLogin, controllers.courseController.ratingCourse);
 
 //20. Get list of rating course
 courseRouter.get("/:slug/rating", controllers.courseController.getListRatingOfCourse);
 
 //21. Get user's rating of course
-courseRouter.get("/rating", isLogin, controllers.courseController.getUserRatingOfCourse);
 
-//22. Get top 10 courses
-courseRouter.get("/top10", controllers.courseController.getTop10Course);
+//22. Get top 10 hightest rate courses
+courseRouter.get("/top10", controllers.courseController.getTop10RateCourse);
+
+courseRouter.get("/top-enrolled", controllers.courseController.getTop10EnrolledCourse);
 
 //23. Search my course
 courseRouter.get("/my", isLogin, controllers.courseController.searchMyCourse);

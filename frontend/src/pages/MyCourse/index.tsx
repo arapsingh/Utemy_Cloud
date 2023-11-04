@@ -5,15 +5,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { courseActions } from "../../redux/slices";
 import { Course } from "../../types/course";
-import { Spin, Navbar, Pagination, CourseCard } from "../../components";
+import { Spin, Navbar, Pagination, CourseCard, DeleteModal } from "../../components";
 import { User } from "../../types/user";
+import toast from "react-hot-toast";
 
 const MyCourses: React.FC = () => {
     const [userInput, setUserInput] = useState<string>("");
     const [keyword, setKeyword] = useState<string>("");
     const [pageIndex, setPageIndex] = useState<number>(1);
-    // const [isOpenDeleteModal, setIsOpenDeleteModal] = useState<boolean>(false);
-    // const [idItem, setIdItem] = useState<number>(-1);
+    const [isOpenDeleteModal, setIsOpenDeleteModal] = useState<boolean>(false);
+    const [idItem, setIdItem] = useState<number>(-1);
     const inputRef = React.useRef<HTMLInputElement>(null);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -52,32 +53,35 @@ const MyCourses: React.FC = () => {
         navigate(`/my-courses/edit/${id}`);
     };
 
-    // const handleDeleteCourse = () => {
-    //     //@ts-ignore
-    //     dispatch(courseActions.deleteCourse(idItem)).then((response) => {
-    //         if (response.payload.status_code === 200) {
-    //             dispatch(courseActions.setDeleteCourse(idItem));
-    //             toast.success(response.payload.message);
-    //         } else {
-    //             toast.error(response.payload.message);
-    //         }
-    //     });
-    //     setIsOpenDeleteModal(false);
-    // };
+    const handleDeleteCourse = () => {
+        dispatch(courseActions.deleteCourse(idItem)).then((response) => {
+            if (response.payload?.status_code === 200) {
+                dispatch(courseActions.getMyCourses({ pageIndex, keyword }));
+                toast.success(response.payload.message);
+            } else {
+                toast.error(response.payload?.message as string);
+            }
+        });
+        setIsOpenDeleteModal(false);
+    };
 
-    // const handleCancelDeleteModal = () => {
-    //     setIsOpenDeleteModal(!isOpenDeleteModal);
-    // };
+    const handleCancelDeleteModal = () => {
+        setIsOpenDeleteModal(!isOpenDeleteModal);
+    };
 
-    // const handleDiplayDeleteModal = (courseId: number) => {
-    //     setIdItem(courseId);
-    //     setIsOpenDeleteModal(true);
-    // };
+    const handleDisplayDeleteModal = (courseId: number) => {
+        setIdItem(courseId);
+        setIsOpenDeleteModal(true);
+    };
 
     return (
         <>
             {isGetLoading && <Spin />}
             <Navbar />
+
+            {isOpenDeleteModal && (
+                <DeleteModal handleDelete={handleDeleteCourse} handleCancel={handleCancelDeleteModal} />
+            )}
             <div className="container mx-auto mt-[100px] laptop:mt-0">
                 <div className="px-4 tablet:px-[60px]">
                     <h1 className="text-center text-[32px] py-4 font-bold text-lightblue text-title">MY COURSE</h1>
@@ -123,7 +127,7 @@ const MyCourses: React.FC = () => {
                                         attendees={course.number_of_enrolled}
                                         numberOfSection={course.number_of_section}
                                         isEditCourse={true}
-                                        // handleDeleteCourse={handleDiplayDeleteModal}
+                                        handleDisplayDeleteModal={handleDisplayDeleteModal}
                                         handleEditCourse={handleEditCourse}
                                         // createdAt={course.created_at?.toString()}
                                     />

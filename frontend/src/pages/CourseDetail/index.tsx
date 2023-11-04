@@ -57,6 +57,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                     toast.success(response.payload.message);
                     navigate("/my-courses");
                 } else {
+                    console.log(response);
                     toast.error(response.payload.message);
                 }
             }
