@@ -2,7 +2,7 @@ const error = {
     //etc
     ERROR_INTERNAL_SERVER: "Internal server",
     ERROR_BAD_REQUEST: " Bad request",
-    ERROR_UNAUTHORZIED: "Unauthorized",
+    ERROR_UNAUTHORIZED: "Unauthorized",
     ERROR_MISSING_REQUEST_BODY: "Missing request body",
     ERROR_DATA_NOT_FOUND: "Data not found",
     ERROR_LOGIN_AGAIN: "Please login again",

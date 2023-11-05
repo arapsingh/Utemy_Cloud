@@ -5,6 +5,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import constants from "../utils/constants";
 import jwt, { JwtPayload, TokenExpiredError, JsonWebTokenError, NotBeforeError } from "jsonwebtoken";
 import configs from "../configs";
+import helper from "../helper";
 type GroupId = {
     course_id?: number | string;
     section_id?: number | string;
@@ -20,11 +21,11 @@ const isObjectEmpty = (object: Record<any, any>): boolean => {
 };
 export const isAuthor = async (req: IRequestWithId, res: Response, next: NextFunction) => {
     try {
+        const file = req.file;
         const user_id = req.user_id;
         let groupId: GroupId = { course_id: "", section_id: "", lesson_id: "" };
         if (isObjectEmpty(req.body)) groupId = req.params;
         else if (isObjectEmpty(req.params)) groupId = req.body;
-
         if (groupId.course_id) {
             const isCourseExist = await configs.db.course.findUnique({
                 where: {
@@ -32,11 +33,15 @@ export const isAuthor = async (req: IRequestWithId, res: Response, next: NextFun
                 },
             });
             if (!isCourseExist) {
+                if (file) await helper.FileHelper.destroyedFileIfFailed(file.path);
                 res.status(404).json({ message: "Course not found" });
+
                 return;
             } else {
                 if (isCourseExist.author_id !== user_id) {
+                    if (file) await helper.FileHelper.destroyedFileIfFailed(file.path);
                     res.status(401).json({ message: "Unauthorized" });
+
                     return;
                 } else {
                     next();
@@ -52,11 +57,15 @@ export const isAuthor = async (req: IRequestWithId, res: Response, next: NextFun
                 },
             });
             if (!isCourseExist) {
+                if (file) await helper.FileHelper.destroyedFileIfFailed(file.path);
                 res.status(404).json({ message: "Course not found" });
+
                 return;
             } else {
                 if (isCourseExist.Course?.author_id !== user_id) {
+                    if (file) await helper.FileHelper.destroyedFileIfFailed(file.path);
                     res.status(401).json({ message: "Unauthorized" });
+
                     return;
                 } else {
                     next();
@@ -76,18 +85,24 @@ export const isAuthor = async (req: IRequestWithId, res: Response, next: NextFun
                 },
             });
             if (!isCourseExist) {
+                if (file) await helper.FileHelper.destroyedFileIfFailed(file.path);
                 res.status(404).json({ message: "Course not found" });
+
                 return;
             } else {
                 if (isCourseExist.section.Course?.author_id !== user_id) {
+                    if (file) await helper.FileHelper.destroyedFileIfFailed(file.path);
                     res.status(401).json({ message: "Unauthorized" });
+
                     return;
                 } else {
                     next();
                 }
             }
         } else {
+            if (file) await helper.FileHelper.destroyedFileIfFailed(file.path);
             res.status(401).json({ message: "Unauthorized" });
+
             return;
         }
     } catch (error: any) {

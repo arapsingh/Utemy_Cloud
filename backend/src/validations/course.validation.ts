@@ -106,7 +106,7 @@ const updateCourseSchema: ObjectSchema<UpdateCourse> = Joi.object({
         "string.base": constants.error.ERROR_COURSE_SUMMARY_STRING,
     }),
 
-    categories: Joi.array<number[]>().required().messages({
+    categories: Joi.string().required().messages({
         "any.required": constants.error.ERROR_COURSE_CATEGORIES_REQUIRED,
     }),
 

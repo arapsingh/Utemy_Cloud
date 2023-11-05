@@ -40,7 +40,7 @@ const ratingCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
             },
         });
         if (!isEnrolled) {
-            return new ResponseError(401, constants.error.ERROR_UNAUTHORZIED, false);
+            return new ResponseError(401, constants.error.ERROR_UNAUTHORIZED, false);
         } else {
             const isAlreadyRating = await configs.db.rating.findFirst({
                 where: {
@@ -107,7 +107,7 @@ const editRatingCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
         } else {
             if (isRatingExist.user_id !== user_id) {
                 console.log(isRatingExist.user_id);
-                return new ResponseError(401, constants.error.ERROR_UNAUTHORZIED, false);
+                return new ResponseError(401, constants.error.ERROR_UNAUTHORIZED, false);
             }
             const course_id = isRatingExist.course_id;
             const updateRatingCourse = await configs.db.rating.update({
@@ -164,7 +164,7 @@ const deleteRatingCourse = async (req: IRequestWithId): Promise<ResponseBase> =>
         });
         if (!isRatingExist) return new ResponseError(404, constants.error.ERROR_RATING_NOT_FOUND, false);
         else if (isRatingExist.user_id !== user_id)
-            return new ResponseError(401, constants.error.ERROR_UNAUTHORZIED, false);
+            return new ResponseError(401, constants.error.ERROR_UNAUTHORIZED, false);
         else {
             const isFoundCourse = await configs.db.course.findFirst({
                 where: {

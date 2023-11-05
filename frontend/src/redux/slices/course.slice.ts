@@ -63,6 +63,17 @@ export const createCourses = createAsyncThunk<Response<null>, FormData, { reject
         }
     },
 );
+export const editCourse = createAsyncThunk<Response<null>, FormData, { rejectValue: Response<null> }>(
+    "course/edit",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.courseApis.editCourse(body);
+            return response.data as Response<null>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
 export const getMyCourses = createAsyncThunk<
     Response<PagingCourse>,
     SearchMyCourseEnrolledCourse,
@@ -103,6 +114,17 @@ export const getCourseDetail = createAsyncThunk<Response<Course>, string, { reje
     async (body, ThunkAPI) => {
         try {
             const response = await apis.courseApis.getCourseDetail(body);
+            return response.data as Response<Course>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const getCourseDetailById = createAsyncThunk<Response<Course>, number, { rejectValue: Response<null> }>(
+    "course/detail-id",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.courseApis.getCourseDetailById(body);
             return response.data as Response<Course>;
         } catch (error: any) {
             return ThunkAPI.rejectWithValue(error.data as Response<null>);
@@ -179,6 +201,16 @@ export const courseSlice = createSlice({
             state.isGetLoading = false;
         });
         builder.addCase(getCourseDetail.rejected, (state) => {
+            state.isGetLoading = false;
+        });
+        builder.addCase(getCourseDetailById.pending, (state) => {
+            state.isGetLoading = true;
+        });
+        builder.addCase(getCourseDetailById.fulfilled, (state, action) => {
+            state.courseDetail = action.payload.data as Course;
+            state.isGetLoading = false;
+        });
+        builder.addCase(getCourseDetailById.rejected, (state) => {
             state.isGetLoading = false;
         });
         builder.addCase(getRightOfCourse.pending, (state) => {

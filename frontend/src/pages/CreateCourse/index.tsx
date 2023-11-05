@@ -269,7 +269,7 @@ const CreateCourse: FC = () => {
                                                     handleOnchange={(e: any) => handleChangeStatus(e, formik)}
                                                     options={statusOptions}
                                                     isMulti={false}
-                                                    placeholder="Uncompleted"
+                                                    placeholder="Incompleted"
                                                     styles={customStyles}
                                                 />
                                                 <ErrorMessage

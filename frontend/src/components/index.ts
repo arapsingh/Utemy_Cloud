@@ -6,4 +6,18 @@ import CourseCard from "./CourseCard";
 import CustomeSelect from "./CustomSelect";
 import TotalRating from "./TotalRating";
 import Accordion from "./Accordion";
-export { Spin, Navbar, Pagination, DeleteModal, CourseCard, CustomeSelect, TotalRating, Accordion };
+import PopupAddLesson from "./PopupAddLesson";
+import PopupUpdateLesson from "./PopupUpdateLesson";
+
+export {
+    Spin,
+    Navbar,
+    Pagination,
+    DeleteModal,
+    CourseCard,
+    CustomeSelect,
+    TotalRating,
+    Accordion,
+    PopupAddLesson,
+    PopupUpdateLesson,
+};

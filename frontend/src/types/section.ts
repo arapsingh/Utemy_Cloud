@@ -5,9 +5,15 @@ export type SectionRender = {
     lessons: Lesson[];
 };
 export type Section = {
-    course_id?: number;
-    order?: number;
     id: number;
     title: string;
-    lessons?: Lesson[];
+    Lesson?: Lesson[];
+};
+export type AddSection = {
+    course_id: number;
+    title: string;
+};
+export type EditSection = {
+    title: string;
+    section_id: number;
 };

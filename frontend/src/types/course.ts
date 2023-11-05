@@ -56,6 +56,21 @@ export type CourseDetail = {
     thumbnail: string;
     status: boolean;
 };
+export type EditCourse = {
+    course_id: number;
+    slug: string;
+    title: string;
+    categories: any;
+    summary: string;
+    description: string;
+    price: number;
+    thumbnail: File | null;
+    status: boolean | StatusOption;
+};
+export type StatusOption = {
+    value: boolean;
+    label: string;
+};
 export type RightOfCourse = {
     role: string;
 };

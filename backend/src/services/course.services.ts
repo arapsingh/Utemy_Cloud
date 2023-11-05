@@ -103,48 +103,75 @@ const createCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     }
 };
 const editCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
-    const { course_id } = req.params;
-    const { title, slug, summary, description, categories, status, thumbnail, price } = req.body;
-    const courseid = +course_id;
+    const file = req.file;
+    const { course_id, title, slug, summary, description, categories, status, price } = req.body;
+
     try {
         const isFoundCourseById = await configs.db.course.findFirst({
             where: {
-                id: courseid,
+                id: Number(course_id),
                 is_delete: false,
             },
         });
+        const convertedStatus = status === "true" ? true : false;
         if (!isFoundCourseById) {
             return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
         }
-        const updatedCourse = await configs.db.course.update({
-            where: {
-                id: courseid,
-            },
-            data: {
-                title: title,
-                slug: slug,
-                summary: summary,
-                description: description,
-                status: status,
-                thumbnail: thumbnail,
-                price: price,
-            },
-        });
-        if (!updatedCourse) {
-            return new ResponseError(400, constants.error.ERROR_MISSING_REQUEST_BODY, false);
+
+        if (file) {
+            const oldThumbnailPath = helper.ConvertHelper.deConvertFilePath(isFoundCourseById.thumbnail);
+            const fullPathConverted = helper.ConvertHelper.convertFilePath(file.path);
+            const updatedCourse = await configs.db.course.update({
+                where: {
+                    id: Number(course_id),
+                },
+                data: {
+                    title: title,
+                    slug: slug,
+                    summary: summary,
+                    description: description,
+                    status: convertedStatus,
+                    thumbnail: fullPathConverted,
+                    price: Number(price),
+                },
+            });
+            if (!updatedCourse) {
+                helper.FileHelper.destroyedFileIfFailed(file.path);
+                return new ResponseError(400, constants.error.ERROR_MISSING_REQUEST_BODY, false);
+            } else {
+                helper.FileHelper.destroyedFileIfFailed(oldThumbnailPath);
+            }
+        } else {
+            const updatedCourse = await configs.db.course.update({
+                where: {
+                    id: Number(course_id),
+                },
+                data: {
+                    title: title,
+                    slug: slug,
+                    summary: summary,
+                    description: description,
+                    status: convertedStatus,
+                    price: Number(price),
+                },
+            });
+            if (!updatedCourse) {
+                return new ResponseError(400, constants.error.ERROR_MISSING_REQUEST_BODY, false);
+            }
         }
         await db.courseCategory.deleteMany({
-            where: { course_id: courseid },
+            where: { course_id: Number(course_id) },
         });
         const isUpdateCategory = await db.courseCategory.createMany({
-            data: categories.map((category: number) => ({
-                course_id: courseid,
-                category_id: category,
+            data: categories.split(",").map((category: number) => ({
+                course_id: Number(course_id),
+                category_id: Number(category),
             })),
         });
         if (!isUpdateCategory) return new ResponseError(400, constants.error.ERROR_MISSING_REQUEST_BODY, false);
         return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
+        console.log(error);
         if (error instanceof PrismaClientKnownRequestError) {
             return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
@@ -154,11 +181,10 @@ const editCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
 const deleteCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const { course_id } = req.params;
-        const courseId = +course_id;
         // Check if the course exists
         const existingCourse = await db.course.findUnique({
             where: {
-                id: courseId,
+                id: Number(course_id),
             },
         });
 
@@ -169,7 +195,7 @@ const deleteCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
         // Set is_delete field to true to mark the course as deleted
         await db.course.update({
             where: {
-                id: courseId,
+                id: Number(course_id),
             },
             data: {
                 is_delete: true,
@@ -720,6 +746,104 @@ const getCourseDetail = async (req: IRequestWithId): Promise<ResponseBase> => {
                 });
                 const author = { ...course.user, user_id: course.user.id };
                 const sections: Section[] = course.sections;
+                let number_of_section = 0;
+                sections.forEach((section, index) => {
+                    number_of_section += 1;
+                });
+                const courseData: CourseDetail = {
+                    course_id: course.id,
+                    title: course.title,
+                    summary: course.summary,
+                    description: course.description,
+                    thumbnail: course.thumbnail,
+                    average_rating: course.average_rating,
+                    number_of_rating: course.number_of_rating,
+                    number_of_enrolled: course.number_of_enrolled,
+                    author: author,
+                    number_of_section,
+                    categories: categories,
+                    sections: sections,
+                    status: course.status,
+                    price: course.price,
+                    sale_price: course.sale_price,
+                    sale_until: course.sale_until,
+                };
+                return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, courseData);
+            }
+        }
+        return new ResponseError(404, constants.error.ERROR_GET_COURSE_FAILED, false);
+    } catch (error) {
+        console.log(error);
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getCourseDetailById = async (req: IRequestWithId): Promise<ResponseBase> => {
+    try {
+        const { course_id } = req.params;
+        const course = await db.course.findUnique({
+            where: {
+                id: Number(course_id),
+            },
+            include: {
+                course_categories: {
+                    include: {
+                        Category: {
+                            select: {
+                                id: true,
+                                title: true,
+                                url_image: true,
+                            },
+                        },
+                    },
+                },
+                sections: {
+                    select: {
+                        title: true,
+                        updated_at: true,
+                        id: true,
+                        Lesson: {
+                            where: {
+                                is_delete: false,
+                            },
+                            select: {
+                                id: true,
+                                title: true,
+                                url_video: true,
+                            },
+                            orderBy: {
+                                created_at: "asc",
+                            },
+                        },
+                    },
+                    where: {
+                        is_delete: false,
+                    },
+                },
+                user: {
+                    select: {
+                        first_name: true,
+                        last_name: true,
+                        id: true,
+                    },
+                },
+            },
+        });
+
+        if (course) {
+            if (course.is_delete) {
+                return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
+            } else {
+                const categories: Category[] = [];
+                course.course_categories.forEach((category) => {
+                    const temp: Category = {
+                        category_id: category.Category.id,
+                        title: category.Category.title,
+                        url_image: category.Category.url_image,
+                    };
+                    categories.push(temp);
+                });
+                const author = { ...course.user, user_id: course.user.id };
+                const sections: Section[] = course.sections;
                 const courseData: CourseDetail = {
                     course_id: course.id,
                     title: course.title,
@@ -761,7 +885,7 @@ const changeThumbnail = async (req: IRequestWithId): Promise<ResponseBase> => {
                 return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
             } else {
                 if (isCourseExist.author_id !== req.user_id) {
-                    return new ResponseError(401, constants.error.ERROR_UNAUTHORZIED, false);
+                    return new ResponseError(401, constants.error.ERROR_UNAUTHORIZED, false);
                 } else {
                     const oldThumbnailPath = isCourseExist.thumbnail;
                     const changeThumbnail = await configs.db.course.update({
@@ -872,6 +996,7 @@ const CourseServices = {
     getCourseDetail,
     changeThumbnail,
     getListRatingOfCourse,
+    getCourseDetailById,
 };
 
 export default CourseServices;

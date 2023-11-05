@@ -27,6 +27,7 @@ export const isLogin = async (req: IRequestWithId, res: Response, next: NextFunc
         }
         next();
     } catch (error: any) {
+        console.log(error);
         // if (error instanceof PrismaClientKnownRequestError) {
         //     return res.status(401).json({ message: error.toString() });
         // }
