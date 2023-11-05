@@ -14,6 +14,7 @@ export type CourseDetail = {
     // updated_at: Date;
     sections: Section[];
     average_rating: number;
+    number_of_section?: number;
     number_of_rating: number;
     number_of_enrolled: number;
     author: Author;
@@ -49,7 +50,7 @@ export type CourseEdit = {
 };
 
 export type Category = {
-    id: number;
+    category_id: number;
     title?: string;
     url_image: string;
     //description: string;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { EditIcon, WatchVideoIcon, DeleteIcon } from "../../assets/icons";
+import { EditIcon, WatchVideoIcon, DeleteIcon, GiftIcon } from "../../assets/icons";
 import { Course as CourseDetailType } from "../../types/course";
 import { useAppDispatch } from "../../hooks/hooks";
 import { lessonActions } from "../../redux/slices";
@@ -18,7 +18,7 @@ const AuthorButton: React.FC<AuthorButtonProps> = (props) => {
         <>
             {props.courseDetail.number_of_section > 0 && (
                 <Link to={`/course-detail/${props.courseDetail.slug}/watch`} onClick={clearUrlVideo}>
-                    <button className="text-white btn btn-primary text-lg">
+                    <button className="text-white btn btn-info text-lg">
                         <WatchVideoIcon />
                         <span>Learn Now</span>
                     </button>
@@ -31,6 +31,15 @@ const AuthorButton: React.FC<AuthorButtonProps> = (props) => {
                     <span>Edit</span>
                 </button>
             </Link>
+            <button
+                className="btn btn-warning text-lg"
+                onClick={() => {
+                    props.handleDelete();
+                }}
+            >
+                <GiftIcon />
+                <span>Promotion</span>
+            </button>
             <button
                 className="btn btn-error text-lg"
                 onClick={() => {

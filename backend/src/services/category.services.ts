@@ -33,7 +33,7 @@ const updateCategory = async (req: IRequestWithId): Promise<ResponseBase> => {
                     },
                 });
                 if (!isAdmin) {
-                    return new ResponseError(401, constants.error.ERROR_UNAUTHORZIED, false);
+                    return new ResponseError(401, constants.error.ERROR_UNAUTHORIZED, false);
                 } else {
                     const oldCategoryImagePath = helper.ConvertHelper.deConvertFilePath(isCategoryExist.url_image);
                     const fullpathConverted = helper.ConvertHelper.convertFilePath(file.path);
@@ -75,7 +75,7 @@ const createCategory = async (req: IRequestWithId): Promise<ResponseBase> => {
                 },
             });
             if (!isAdmin) {
-                return new ResponseError(401, constants.error.ERROR_UNAUTHORZIED, false);
+                return new ResponseError(401, constants.error.ERROR_UNAUTHORIZED, false);
             } else {
                 const fullpathConverted = helper.ConvertHelper.convertFilePath(file.path);
                 const createCategory = await configs.db.category.create({
@@ -119,7 +119,7 @@ const deleteCategory = async (req: IRequestWithId): Promise<ResponseBase> => {
                 },
             });
             if (!isAdmin) {
-                return new ResponseError(401, constants.error.ERROR_UNAUTHORZIED, false);
+                return new ResponseError(401, constants.error.ERROR_UNAUTHORIZED, false);
             } else {
                 const oldCategoryImagePath = helper.ConvertHelper.deConvertFilePath(isCategoryExist.url_image);
                 const deleteCategoty = await configs.db.category.delete({

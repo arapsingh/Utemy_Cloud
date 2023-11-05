@@ -12,10 +12,10 @@ courseRouter.get("/right/:course_id", isLogin, controllers.courseController.getR
 //14. Create course
 courseRouter.post("/", isLogin, uploadThumbnail, controllers.courseController.createCourse);
 
-//19. Edit rating course
+//19. Get course detail by id
 
 //15. Edit course
-courseRouter.patch("/:course_id", isLogin, isAuthor, controllers.courseController.editCourse);
+courseRouter.patch("/", isLogin, uploadThumbnail, isAuthor, controllers.courseController.editCourse);
 
 //16. Delete course
 courseRouter.delete("/:course_id", isLogin, isAuthor, controllers.courseController.deleteCourse);
@@ -37,15 +37,15 @@ courseRouter.get("/top-enrolled", controllers.courseController.getTop10EnrolledC
 
 //23. Search my course
 courseRouter.get("/my", isLogin, controllers.courseController.searchMyCourse);
-
-//24. Search my enrolled course
 courseRouter.get("/enrolled", isLogin, controllers.courseController.searchMyEnrolledCourse);
+courseRouter.get("/:slug", isLogin, controllers.courseController.getCourseDetail);
+courseRouter.get("/detail/:course_id", isLogin, isAuthor, controllers.courseController.getCourseDetailById);
+//24. Search my enrolled course
 
 //25. Get all course
 courseRouter.get("/all", isLogin, controllers.courseController.getAllCourse);
 
 //26. Get course detail
-courseRouter.get("/:slug", isLogin, controllers.courseController.getCourseDetail);
 
 courseRouter.post("/thumbnail", isLogin, uploadAvatar, controllers.courseController.changeThumbnail); //
 

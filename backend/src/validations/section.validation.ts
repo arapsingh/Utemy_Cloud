@@ -22,6 +22,7 @@ export const SectionSchema: ObjectSchema<Section> = Joi.object({
 
 type UpdateSection = {
     title: string;
+    section_id: number;
 };
 
 export const UpdateSectionSchema: ObjectSchema<UpdateSection> = Joi.object({
@@ -30,7 +31,11 @@ export const UpdateSectionSchema: ObjectSchema<UpdateSection> = Joi.object({
         "string.base": constants.ERROR_COURSE_TITLE_STRING,
         "string.max": constants.ERROR_COURSE_TITLE_TOO_LONG,
     }),
-    course_id: Joi.number(),
+    section_id: Joi.number().integer().required().messages({
+        "any.required": constants.ERROR_SECTION_ID_REQUIRED,
+        "number.base": constants.ERROR_SECTION_ID_NUMBER,
+        "number.integer": constants.ERROR_SECTION_ID_INTEGER,
+    }),
 });
 const sectionSchema = {
     SectionSchema,

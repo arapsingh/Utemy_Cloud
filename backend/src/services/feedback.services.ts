@@ -10,7 +10,7 @@ const createFeedback = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const { content } = req.body;
         const user_id = req.user_id;
-        if (!user_id) return new ResponseError(404, constants.error.ERROR_UNAUTHORZIED, false);
+        if (!user_id) return new ResponseError(404, constants.error.ERROR_UNAUTHORIZED, false);
         const createFeedback = await configs.db.feedback.create({
             data: {
                 content,
@@ -30,14 +30,14 @@ const createFeedback = async (req: IRequestWithId): Promise<ResponseBase> => {
 const getAllFeedbacks = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const user_id = req.user_id;
-        if (!user_id) return new ResponseError(404, constants.error.ERROR_UNAUTHORZIED, false);
+        if (!user_id) return new ResponseError(404, constants.error.ERROR_UNAUTHORIZED, false);
         const isAdmin = await configs.db.user.findFirst({
             where: {
                 id: user_id,
                 is_admin: true,
             },
         });
-        if (!isAdmin) return new ResponseError(404, constants.error.ERROR_UNAUTHORZIED, false);
+        if (!isAdmin) return new ResponseError(404, constants.error.ERROR_UNAUTHORIZED, false);
         const { page_index: pageIndex } = req.query;
         const pageSize = configs.general.PAGE_SIZE;
         const totalRecord = await configs.db.feedback.count();

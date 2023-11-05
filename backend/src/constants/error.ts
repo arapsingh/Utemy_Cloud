@@ -2,10 +2,11 @@ const error = {
     //etc
     ERROR_INTERNAL_SERVER: "Internal server",
     ERROR_BAD_REQUEST: " Bad request",
-    ERROR_UNAUTHORZIED: "Unauthorized",
+    ERROR_UNAUTHORIZED: "Unauthorized",
     ERROR_MISSING_REQUEST_BODY: "Missing request body",
     ERROR_DATA_NOT_FOUND: "Data not found",
     ERROR_LOGIN_AGAIN: "Please login again",
+    ERROR_VALIDATION_FAILED: "Validation failed",
     //confirm password
     ERROR_CONFIRM_PASSWORD: "Confirm password and password must be the same",
     ERROR_CONFIRM_NEW_PASSWORD: "Confirm password and new password must be the same",

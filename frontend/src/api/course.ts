@@ -6,6 +6,12 @@ const createCourse = async (values: FormData) => {
     const reponse = await apiCaller("POST", path, values);
     return reponse;
 };
+const editCourse = async (values: FormData) => {
+    const path = "course";
+    console.log(values.get("title"));
+    const reponse = await apiCaller("PATCH", path, values);
+    return reponse;
+};
 const getMyCourses = async (values: SearchMyCourseEnrolledCourse) => {
     const path = `course/my?page_index=${values.pageIndex}&search_item=${values.keyword}`;
     const reponse = await apiCaller("GET", path);
@@ -23,6 +29,11 @@ const deleteCourse = async (values: number) => {
 };
 const getCourseDetail = async (values: string) => {
     const path = `course/${values}`;
+    const reponse = await apiCaller("GET", path, values);
+    return reponse;
+};
+const getCourseDetailById = async (values: number) => {
+    const path = `course/detail/${values}`;
     const reponse = await apiCaller("GET", path, values);
     return reponse;
 };
@@ -50,6 +61,8 @@ const courseApis = {
     getRightOfCourse,
     getTop10Rate,
     getTop10Enrolled,
+    getCourseDetailById,
+    editCourse,
 };
 
 export default courseApis;
