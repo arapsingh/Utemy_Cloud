@@ -116,5 +116,13 @@ const error = {
     ERROR_TITLE_REQUIRED: "Title is required",
     ERROR_TITLE_MAX: "Title must be under 50 chars",
     ERROR_CATEGORY_ALREADY_EXISTS: "Category is already existed",
+
+    //promotion
+    ERROR_SALE_PRICE_NUMBER: "Sale price must be a number",
+    ERROR_SALE_PRICE_REQUIRED: "Sale price is required",
+    ERROR_SALE_UNTIL_MIN: "Sale until must be later than today",
+    ERROR_SALE_UNTIL_REQUIRED: "Sale until is required",
+    ERROR_SALE_UNTIL_DATE: "Sale until must be a date",
+    ERROR_SALE_MORE_EXP_THAN_PRICE: "Sale price must be cheaper than original price",
 };
 export default error;

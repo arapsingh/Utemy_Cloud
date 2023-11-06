@@ -12,7 +12,7 @@ const SubscribeUserButton: React.FC<SubscribeUserButtonProps> = (props) => {
     return (
         <>
             {props.courseDetail.number_of_section > 0 && (
-                <button className="text-white btn btn-primary text-lg">
+                <button className="text-white btn btn-info text-lg">
                     <WatchVideoIcon />
                     <Link to={`/course-detail/${props.courseDetail.slug}/watch`}>
                         <span>Learn Now</span>
@@ -21,7 +21,7 @@ const SubscribeUserButton: React.FC<SubscribeUserButtonProps> = (props) => {
             )}
             <button
                 onClick={props.handleTogglePopupRating}
-                className="btn bg-backgroundHover border-backgroundHover hover:bg-backgroundHover hover:border-backgroundHover btn-primary text-black text-lg"
+                className="btn hover:opacity-75 btn-warning text-black text-lg"
             >
                 <RatingIcon />
                 <span>Vote</span>

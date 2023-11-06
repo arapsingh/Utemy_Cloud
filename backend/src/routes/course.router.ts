@@ -22,7 +22,8 @@ courseRouter.delete("/:course_id", isLogin, isAuthor, controllers.courseControll
 
 //17. Buy course
 courseRouter.post("/buy", isLogin, isAuthor, controllers.courseController.buyCourse);
-
+courseRouter.post("/promotion", isLogin, isAuthor, controllers.courseController.addPromotion);
+courseRouter.delete("/promotion/:course_id", isLogin, isAuthor, controllers.courseController.stopPromotion);
 //18. Rating course
 
 //20. Get list of rating course
@@ -38,8 +39,8 @@ courseRouter.get("/top-enrolled", controllers.courseController.getTop10EnrolledC
 //23. Search my course
 courseRouter.get("/my", isLogin, controllers.courseController.searchMyCourse);
 courseRouter.get("/enrolled", isLogin, controllers.courseController.searchMyEnrolledCourse);
-courseRouter.get("/:slug", isLogin, controllers.courseController.getCourseDetail);
 courseRouter.get("/detail/:course_id", isLogin, isAuthor, controllers.courseController.getCourseDetailById);
+courseRouter.get("/:slug", controllers.courseController.getCourseDetail);
 //24. Search my enrolled course
 
 //25. Get all course

@@ -1,6 +1,6 @@
 export type Rating = {
-    id: number;
-    ratings: number;
+    id: number | undefined;
+    score: number | undefined;
     content: string;
     created_at: string;
     url_avatar: string | null;
@@ -11,12 +11,17 @@ export type Rating = {
 export type ListRating = {
     total_page: number;
     total_record: number;
-    ratings: Rating[];
+    data: Rating[];
 };
 export type RatingCourse = {
-    ratings: number;
+    score: number;
     content: string;
     course_id: number;
+};
+export type EditRating = {
+    score: number;
+    content: string;
+    rating_id: number;
 };
 export type GetRating = {
     slug: string;

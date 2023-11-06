@@ -155,11 +155,11 @@ const editRatingCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
 };
 const deleteRatingCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        const { rating_id } = req.body;
+        const { rating_id } = req.params;
         const user_id = req.user_id;
         const isRatingExist = await configs.db.rating.findFirst({
             where: {
-                id: rating_id,
+                id: Number(rating_id),
             },
         });
         if (!isRatingExist) return new ResponseError(404, constants.error.ERROR_RATING_NOT_FOUND, false);
@@ -176,7 +176,7 @@ const deleteRatingCourse = async (req: IRequestWithId): Promise<ResponseBase> =>
                 const course_id = isFoundCourse.id;
                 const deleteRating = await configs.db.rating.delete({
                     where: {
-                        id: rating_id,
+                        id: Number(rating_id),
                     },
                 });
                 const ratingListOfCourse = await configs.db.rating.findMany({
@@ -232,10 +232,10 @@ const deleteRatingCourse = async (req: IRequestWithId): Promise<ResponseBase> =>
 const getUserRatingOfCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const user_id = req.user_id;
-        const { course_id } = req.body;
+        const { course_id } = req.params;
         const isFoundCourse = await configs.db.course.findFirst({
             where: {
-                id: course_id,
+                id: Number(course_id),
             },
         });
         if (!isFoundCourse) return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
@@ -243,7 +243,7 @@ const getUserRatingOfCourse = async (req: IRequestWithId): Promise<ResponseBase>
             const ratingOfUser = await configs.db.rating.findFirst({
                 where: {
                     user_id,
-                    course_id,
+                    course_id: Number(course_id),
                 },
                 include: {
                     User: {

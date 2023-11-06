@@ -1,5 +1,5 @@
 import apiCaller from "../api-config/apiCaller";
-import { SearchMyCourseEnrolledCourse } from "../types/course";
+import { AddPromotion, SearchMyCourseEnrolledCourse } from "../types/course";
 
 const createCourse = async (values: FormData) => {
     const path = "course";
@@ -8,8 +8,17 @@ const createCourse = async (values: FormData) => {
 };
 const editCourse = async (values: FormData) => {
     const path = "course";
-    console.log(values.get("title"));
     const reponse = await apiCaller("PATCH", path, values);
+    return reponse;
+};
+const addPromotion = async (values: AddPromotion) => {
+    const path = "course/promotion";
+    const reponse = await apiCaller("POST", path, values);
+    return reponse;
+};
+const stopPromotion = async (values: number) => {
+    const path = `course/promotion/${values}`;
+    const reponse = await apiCaller("DELETE", path);
     return reponse;
 };
 const getMyCourses = async (values: SearchMyCourseEnrolledCourse) => {
@@ -63,6 +72,8 @@ const courseApis = {
     getTop10Enrolled,
     getCourseDetailById,
     editCourse,
+    addPromotion,
+    stopPromotion,
 };
 
 export default courseApis;

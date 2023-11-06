@@ -5,6 +5,7 @@ import { Course as CourseDetailType } from "../../types/course";
 import { useAppDispatch } from "../../hooks/hooks";
 import { lessonActions } from "../../redux/slices";
 type AuthorButtonProps = {
+    handleTogglePromotion(): void;
     handleDelete(): void;
     courseDetail: CourseDetailType;
 };
@@ -34,7 +35,7 @@ const AuthorButton: React.FC<AuthorButtonProps> = (props) => {
             <button
                 className="btn btn-warning text-lg"
                 onClick={() => {
-                    props.handleDelete();
+                    props.handleTogglePromotion();
                 }}
             >
                 <GiftIcon />
