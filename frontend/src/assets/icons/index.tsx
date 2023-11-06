@@ -14,6 +14,13 @@ import WarningIcon from "./WarningIcon";
 import CompleteIcon from "./CompleteIcon";
 import RatingIcon from "./RatingIcon";
 import AllcourseIcon from "./AllcourseIcon";
+import WatchVideoIcon from "./WatchVideoIcon";
+import CartAddIcon from "./CartAddIcon";
+import CartCheckIcon from "./CartCheckIcon";
+import CartIcon from "./CartIcon";
+import CartRemoveIcon from "./CartRemoveIcon";
+import CartSaveIcon from "./CartSaveIcon";
+import GiftIcon from "./GiftIcon";
 
 export {
     AddIcon,
@@ -32,4 +39,11 @@ export {
     CompleteIcon,
     RatingIcon,
     AllcourseIcon,
+    WatchVideoIcon,
+    CartAddIcon,
+    CartIcon,
+    CartCheckIcon,
+    CartRemoveIcon,
+    CartSaveIcon,
+    GiftIcon,
 };

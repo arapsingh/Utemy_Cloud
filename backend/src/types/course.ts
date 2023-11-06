@@ -5,7 +5,7 @@ export type CourseDetail = {
     title: string;
     // slug: string;
     categories: Category[];
-    // status: boolean;
+    status: boolean;
     description: string;
     thumbnail: string;
     summary: string;
@@ -13,13 +13,14 @@ export type CourseDetail = {
     // created_at: Date;
     // updated_at: Date;
     sections: Section[];
-    total_rating: number;
+    average_rating: number;
+    number_of_section?: number;
     number_of_rating: number;
     number_of_enrolled: number;
     author: Author;
-    // price: number;
-    // sale_price: number;
-    // sale_until: Date;
+    price: number;
+    sale_price: number | null;
+    sale_until: Date | null;
 };
 
 export type CourseInfo = {
@@ -49,7 +50,7 @@ export type CourseEdit = {
 };
 
 export type Category = {
-    id: number;
+    category_id: number;
     title?: string;
     url_image: string;
     //description: string;

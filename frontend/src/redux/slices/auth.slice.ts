@@ -1,6 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
-    User,
     Token as TokenType,
     Login as LoginType,
     Signup as SignupType,
@@ -8,6 +7,7 @@ import {
     ResetPassword as ResetPasswordType,
     ChangePassword as ChangePasswordType,
 } from "../../types/auth";
+import { User } from "../../types/user";
 import { Response } from "../../types/response";
 import { AppDispatch } from "../store";
 import apis from "../../api";
