@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { Rating, RatingCourse, GetRating, ListRating } from "../../types/rating";
+import { Rating, RatingCourse, GetRating, ListRating, EditRating } from "../../types/rating";
 import { Response } from "../../types/response";
 import apis from "../../api";
 
 type RatingSliceType = {
     ratings: Rating[];
+    rating: Rating;
     totalRecord: number;
     totalPage: number;
     isLoading: boolean;
@@ -13,6 +14,16 @@ type RatingSliceType = {
 
 const initialState: RatingSliceType = {
     ratings: [],
+    rating: {
+        id: undefined,
+        score: undefined,
+        content: "",
+        created_at: "",
+        url_avatar: "",
+        first_name: "",
+        last_name: "",
+        user_id: 0,
+    },
     totalRecord: 0,
     totalPage: 0,
     isLoading: false,
@@ -24,6 +35,39 @@ export const ratingCourse = createAsyncThunk<Response<null>, RatingCourse, { rej
         try {
             const response = await apis.ratingApis.ratingCourse(body);
             return response.data as Response<null>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const editRating = createAsyncThunk<Response<null>, EditRating, { rejectValue: Response<null> }>(
+    "rating/edit",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.ratingApis.editRating(body);
+            return response.data as Response<null>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const deleteRating = createAsyncThunk<Response<null>, number, { rejectValue: Response<null> }>(
+    "rating/delete",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.ratingApis.deleteRating(body);
+            return response.data as Response<null>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const getUserRating = createAsyncThunk<Response<Rating>, number, { rejectValue: Response<null> }>(
+    "rating/user",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.ratingApis.getUserRating(body);
+            return response.data as Response<Rating>;
         } catch (error: any) {
             return ThunkAPI.rejectWithValue(error.data as Response<null>);
         }
@@ -44,7 +88,11 @@ export const getListRatingOfCourseBySlug = createAsyncThunk<
 export const ratingSlice = createSlice({
     name: "rating",
     initialState,
-    reducers: {},
+    reducers: {
+        setDeleteRating: (state) => {
+            state.rating = initialState.rating;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(ratingCourse.pending, (state) => {
             state.isLoading = true;
@@ -59,16 +107,44 @@ export const ratingSlice = createSlice({
             state.isGetLoading = true;
         });
         builder.addCase(getListRatingOfCourseBySlug.fulfilled, (state, action) => {
-            state.ratings = action.payload.data?.ratings as Rating[];
+            state.ratings = action.payload.data?.data as Rating[];
             state.totalPage = action.payload.data?.total_page as number;
             state.isGetLoading = false;
         });
         builder.addCase(getListRatingOfCourseBySlug.rejected, (state) => {
             state.isGetLoading = false;
         });
+        builder.addCase(getUserRating.pending, (state) => {
+            state.isGetLoading = true;
+        });
+        builder.addCase(getUserRating.fulfilled, (state, action) => {
+            state.rating = action.payload.data as Rating;
+            state.isGetLoading = false;
+        });
+        builder.addCase(getUserRating.rejected, (state) => {
+            state.isGetLoading = false;
+        });
+        builder.addCase(editRating.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(editRating.fulfilled, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(editRating.rejected, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(deleteRating.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(deleteRating.fulfilled, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(deleteRating.rejected, (state) => {
+            state.isLoading = false;
+        });
     },
 });
 
-export const {} = ratingSlice.actions;
+export const { setDeleteRating } = ratingSlice.actions;
 
 export default ratingSlice.reducer;

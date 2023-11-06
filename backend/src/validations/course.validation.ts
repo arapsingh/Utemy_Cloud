@@ -168,6 +168,27 @@ const deleteRatingSchema: ObjectSchema<deleteRating> = Joi.object({
         "any.required": constants.error.ERROR_COURSE_ID_REQUIRED,
     }),
 });
+type addPromotion = {
+    sale_until: Date;
+    sale_price: number;
+    course_id: number;
+};
+const addPromotionSchema: ObjectSchema<addPromotion> = Joi.object({
+    course_id: Joi.number().required().integer().messages({
+        "number.integer": constants.error.ERROR_COURSE_ID_INTEGER,
+        "number.base": constants.error.ERROR_COURSE_ID_NUMBER,
+        "any.required": constants.error.ERROR_COURSE_ID_REQUIRED,
+    }),
+    sale_price: Joi.number().required().messages({
+        "number.base": constants.error.ERROR_SALE_PRICE_NUMBER,
+        "any.required": constants.error.ERROR_SALE_PRICE_REQUIRED,
+    }),
+    sale_until: Joi.date().required().min("now").messages({
+        "date.base": constants.error.ERROR_SALE_UNTIL_DATE,
+        "any.required": constants.error.ERROR_SALE_UNTIL_REQUIRED,
+        "date.min": constants.error.ERROR_SALE_UNTIL_MIN,
+    }),
+});
 
 const courseSchema = {
     enrolledCourseSchema,
@@ -176,5 +197,6 @@ const courseSchema = {
     createRatingSchema,
     editRatingSchema,
     deleteRatingSchema,
+    addPromotionSchema,
 };
 export default courseSchema;

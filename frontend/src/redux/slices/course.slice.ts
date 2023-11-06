@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Response } from "../../types/response";
-import { Course, PagingCourse, SearchMyCourseEnrolledCourse, RightOfCourse } from "../../types/course";
+import { Course, PagingCourse, SearchMyCourseEnrolledCourse, RightOfCourse, AddPromotion } from "../../types/course";
 import apis from "../../api";
 
 type CourseSliceType = {
@@ -68,6 +68,28 @@ export const editCourse = createAsyncThunk<Response<null>, FormData, { rejectVal
     async (body, ThunkAPI) => {
         try {
             const response = await apis.courseApis.editCourse(body);
+            return response.data as Response<null>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const addPromotion = createAsyncThunk<Response<null>, AddPromotion, { rejectValue: Response<null> }>(
+    "course/promotion",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.courseApis.addPromotion(body);
+            return response.data as Response<null>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const stopPromotion = createAsyncThunk<Response<null>, number, { rejectValue: Response<null> }>(
+    "course/stop-promotion",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.courseApis.stopPromotion(body);
             return response.data as Response<null>;
         } catch (error: any) {
             return ThunkAPI.rejectWithValue(error.data as Response<null>);
@@ -242,6 +264,24 @@ export const courseSlice = createSlice({
         });
         builder.addCase(getTop10Enrolled.rejected, (state) => {
             state.isGetLoading = false;
+        });
+        builder.addCase(addPromotion.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(addPromotion.fulfilled, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(addPromotion.rejected, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(stopPromotion.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(stopPromotion.fulfilled, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(stopPromotion.rejected, (state) => {
+            state.isLoading = false;
         });
     },
 });

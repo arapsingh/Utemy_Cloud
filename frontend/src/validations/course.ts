@@ -46,3 +46,9 @@ export const editCourseValidationSchema = Yup.object({
         .max(400, constants.error.ERROR_DESCRIPTION_TOO_MAX),
     price: Yup.number().required(constants.error.ERROR_COURSE_PRICE_REQUIRED),
 });
+export const addPromotionValidationSchema = Yup.object({
+    sale_price: Yup.number().required(constants.error.ERROR_SALE_PRICE_REQUIRED),
+    sale_until: Yup.date()
+        .min(new Date(), constants.error.ERROR_SALE_UNTIL_MIN)
+        .required(constants.error.ERROR_SALE_UNTIL_REQUIRED),
+});

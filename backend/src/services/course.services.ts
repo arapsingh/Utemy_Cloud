@@ -51,6 +51,70 @@ const getRightOfCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
+const addPromotion = async (req: IRequestWithId): Promise<ResponseBase> => {
+    try {
+        const user_id = req.user_id;
+        const { sale_price, sale_until, course_id } = req.body;
+        const isFoundCourse = await configs.db.course.findFirst({
+            where: {
+                id: course_id,
+                author_id: user_id,
+            },
+        });
+        if (isFoundCourse) {
+            if (isFoundCourse.price < sale_price)
+                return new ResponseError(500, constants.error.ERROR_SALE_MORE_EXP_THAN_PRICE, false);
+            const isAddPromotion = await configs.db.course.update({
+                data: {
+                    sale_price: Number(sale_price),
+                    sale_until,
+                },
+                where: {
+                    id: isFoundCourse.id,
+                },
+            });
+            if (isAddPromotion) return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
+            else return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+        } else return new ResponseError(500, constants.error.ERROR_COURSE_NOT_FOUND, false);
+    } catch (error) {
+        console.log(error);
+        if (error instanceof PrismaClientKnownRequestError) {
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+        }
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const stopPromotion = async (req: IRequestWithId): Promise<ResponseBase> => {
+    try {
+        const user_id = req.user_id;
+        const { course_id } = req.params;
+        const isFoundCourse = await configs.db.course.findFirst({
+            where: {
+                id: Number(course_id),
+                author_id: user_id,
+            },
+        });
+        if (isFoundCourse) {
+            const isStopPromotion = await configs.db.course.update({
+                data: {
+                    sale_price: isFoundCourse.price,
+                    sale_until: new Date(),
+                },
+                where: {
+                    id: isFoundCourse.id,
+                },
+            });
+            if (isStopPromotion) return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
+            else return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+        } else return new ResponseError(500, constants.error.ERROR_COURSE_NOT_FOUND, false);
+    } catch (error) {
+        console.log(error);
+        if (error instanceof PrismaClientKnownRequestError) {
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+        }
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
 const createCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     const file = req.file;
     const { title, slug, description, summary, categories, status, price } = req.body;
@@ -75,6 +139,7 @@ const createCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
                     author_id: user_id,
                     status: convertedStatus,
                     price: Number(price),
+                    sale_price: Number(price),
                     course_categories: {
                         create: listCategoryId,
                     },
@@ -133,6 +198,7 @@ const editCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
                     status: convertedStatus,
                     thumbnail: fullPathConverted,
                     price: Number(price),
+                    sale_price: Number(price),
                 },
             });
             if (!updatedCourse) {
@@ -997,6 +1063,8 @@ const CourseServices = {
     changeThumbnail,
     getListRatingOfCourse,
     getCourseDetailById,
+    addPromotion,
+    stopPromotion,
 };
 
 export default CourseServices;

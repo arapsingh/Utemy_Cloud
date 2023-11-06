@@ -16,6 +16,7 @@ import AuthorButton from "./AuthorButton";
 import GuestButton from "./GuestButton";
 import SubscribeUserButton from "./SubscribeUserButton";
 import UnsubscribeModal from "./UnsubcribeModal";
+import PopupPromotion from "./PopupPromotion";
 import CommentSection from "./CommentSection";
 import constants from "../../constants";
 // import { orderLesson } from "../../types/lesson";
@@ -29,18 +30,18 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState<boolean>(false);
     const [isOpenPopupRating, setIsOpenPopupRating] = useState<boolean>(false);
     const [isOpenUnsubscribeModal, setIsOpenUnsubscribeModal] = useState<boolean>(false);
+    const [isOpenPromotionPopup, setIsOpenPromotionPopup] = useState<boolean>(false);
     const [isNotFound, setIsNotFound] = useState<boolean>(false);
     const [idItem, setIdItem] = useState<number>(-1);
     const [pageIndex, setPageIndex] = useState<number>(1);
     const navigate = useNavigate();
     // const sectionOfCourse: SectionType[] = useAppSelector((state) => state.sectionSlice.sections);
     const courseDetail: CourseDetailType = useAppSelector((state) => state.courseSlice.courseDetail) ?? {};
-    console.log(courseDetail);
     const ratings: RatingType[] = useAppSelector((state) => state.ratingSlice.ratings) ?? [];
     const totalRatingPage: number = useAppSelector((state) => state.ratingSlice.totalPage) ?? Number(1);
 
     // const orderLesson: orderLesson[] = useAppSelector((state) => state.courseSlice.orderLesson);
-    const role: string = useAppSelector((state) => state.courseSlice.role) ?? "";
+    const role: string = useAppSelector((state) => state.courseSlice.role) ?? "Unenrolled";
     const isGetLoadingCourse: boolean = useAppSelector((state) => state.courseSlice.isGetLoading) ?? false;
     const handleChangePageIndex = (pageIndex: number) => {
         if (pageIndex < Number(1)) {
@@ -58,7 +59,6 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                     toast.success(response.payload.message);
                     navigate("/my-courses");
                 } else {
-                    console.log(response);
                     toast.error(response.payload.message);
                 }
             }
@@ -75,6 +75,9 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
     const handleToggleUnsubcribeCourse = () => {
         setIsOpenUnsubscribeModal(!isOpenUnsubscribeModal);
     };
+    const handleTogglePromotion = () => {
+        setIsOpenPromotionPopup(!isOpenPromotionPopup);
+    };
     const handleAfterVote = () => {
         dispatch(courseActions.getCourseDetail(slug as string));
         const values: GetRating = {
@@ -82,6 +85,9 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
             page_index: pageIndex,
         };
         dispatch(ratingActions.getListRatingOfCourseBySlug(values));
+    };
+    const handleAfterPromotion = () => {
+        dispatch(courseActions.getCourseDetail(slug as string));
     };
     useEffect(() => {
         dispatch(courseActions.getCourseDetail(slug as string)).then((response) => {
@@ -103,7 +109,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
             };
             dispatch(ratingActions.getListRatingOfCourseBySlug(values));
         }
-    }, [dispatch, slug, pageIndex]);
+    }, [dispatch, courseDetail, pageIndex]);
 
     if (isNotFound) return <NotFound />;
 
@@ -119,6 +125,13 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
             {isOpenDeleteModal && <DeleteModal handleDelete={handleDeleteCourse} handleCancel={handleCancelModal} />}
             {isOpenUnsubscribeModal && (
                 <UnsubscribeModal handleCancel={handleToggleUnsubcribeCourse} course_id={courseDetail.course_id} />
+            )}
+            {isOpenPromotionPopup && (
+                <PopupPromotion
+                    handleAfterPromotion={handleAfterPromotion}
+                    handleCancel={handleTogglePromotion}
+                    course={courseDetail}
+                />
             )}
             <Navbar />
             {isGetLoadingCourse && <Spin />}
@@ -177,6 +190,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                 <div className="flex-1 flex items-end gap-2 flex-wrap">
                                     {isLogin && role === constants.util.ROLE_AUTHOR && (
                                         <AuthorButton
+                                            handleTogglePromotion={handleTogglePromotion}
                                             handleDelete={() => {
                                                 setIsOpenDeleteModal(!isOpenDeleteModal);
                                                 setIdItem(courseDetail.course_id as number);

@@ -19,7 +19,7 @@ export type Course = {
     author?: User;
     price?: number;
     sale_price?: number;
-    sale_until?: Date;
+    sale_until?: Date | string;
     average_rating: number;
     categories: Category[];
     created_at?: Date;
@@ -73,4 +73,14 @@ export type StatusOption = {
 };
 export type RightOfCourse = {
     role: string;
+};
+
+// export type AddPromotion = {
+//     sale_price: number;
+//     sale_until: Date;
+// };
+export type AddPromotion = {
+    sale_price: number;
+    sale_until: Date;
+    course_id: number;
 };
