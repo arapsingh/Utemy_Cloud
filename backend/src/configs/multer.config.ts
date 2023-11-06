@@ -87,7 +87,7 @@ const uploadCategory = multer({
 //video
 const storageVideo = multer.diskStorage({
     destination: (req, res, cb) => {
-        cb(null, "videos");
+        cb(null, configs.general.PATH_TO_PUBLIC_FOLDER_VIDEOS);
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));

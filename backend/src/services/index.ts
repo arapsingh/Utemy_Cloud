@@ -5,6 +5,7 @@ import CourseService from "./course.services";
 import LessonServices from "./lesson.services";
 import CategoryServices from "./category.services";
 import FeedbackServices from "./feedback.services";
+import RatingServices from "./rating.services";
 export default {
     AuthServices,
     UserService,
@@ -13,4 +14,5 @@ export default {
     LessonServices,
     CategoryServices,
     FeedbackServices,
+    RatingServices,
 };

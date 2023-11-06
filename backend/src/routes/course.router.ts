@@ -2,54 +2,51 @@ import { Router } from "express";
 import controllers from "../controllers/index";
 import { isLogin } from "../middlewares/isLogin";
 import { isAuthor } from "../middlewares/isAuthor";
-import { uploadAvatar } from "../middlewares/multer";
+import { uploadAvatar, uploadThumbnail } from "../middlewares/multer";
 
 const courseRouter: Router = Router();
 
 //13. Get right of course
-courseRouter.get("/right/:course_id", isLogin, isAuthor, controllers.courseController.getRightOfCourse);
+courseRouter.get("/right/:course_id", isLogin, controllers.courseController.getRightOfCourse);
 
 //14. Create course
-courseRouter.post("/", isLogin, controllers.courseController.createCourse);
+courseRouter.post("/", isLogin, uploadThumbnail, controllers.courseController.createCourse);
 
-//19. Edit rating course
-courseRouter.patch("/rating", isLogin, controllers.courseController.editRatingCourse);
-
-// Delete rating course
-courseRouter.delete("/rating", isLogin, controllers.courseController.deleteRatingCourse);
+//19. Get course detail by id
 
 //15. Edit course
-courseRouter.patch("/:course_id", isLogin, isAuthor, controllers.courseController.editCourse);
+courseRouter.patch("/", isLogin, uploadThumbnail, isAuthor, controllers.courseController.editCourse);
 
 //16. Delete course
 courseRouter.delete("/:course_id", isLogin, isAuthor, controllers.courseController.deleteCourse);
 
 //17. Buy course
 courseRouter.post("/buy", isLogin, isAuthor, controllers.courseController.buyCourse);
-
+courseRouter.post("/promotion", isLogin, isAuthor, controllers.courseController.addPromotion);
+courseRouter.delete("/promotion/:course_id", isLogin, isAuthor, controllers.courseController.stopPromotion);
 //18. Rating course
-courseRouter.post("/:slug/rating", isLogin, controllers.courseController.ratingCourse);
 
 //20. Get list of rating course
 courseRouter.get("/:slug/rating", controllers.courseController.getListRatingOfCourse);
 
 //21. Get user's rating of course
-courseRouter.get("/rating", isLogin, controllers.courseController.getUserRatingOfCourse);
 
-//22. Get top 10 courses
-courseRouter.get("/top10", controllers.courseController.getTop10Course);
+//22. Get top 10 hightest rate courses
+courseRouter.get("/top10", controllers.courseController.getTop10RateCourse);
+
+courseRouter.get("/top-enrolled", controllers.courseController.getTop10EnrolledCourse);
 
 //23. Search my course
 courseRouter.get("/my", isLogin, controllers.courseController.searchMyCourse);
-
-//24. Search my enrolled course
 courseRouter.get("/enrolled", isLogin, controllers.courseController.searchMyEnrolledCourse);
+courseRouter.get("/detail/:course_id", isLogin, isAuthor, controllers.courseController.getCourseDetailById);
+courseRouter.get("/:slug", controllers.courseController.getCourseDetail);
+//24. Search my enrolled course
 
 //25. Get all course
 courseRouter.get("/all", isLogin, controllers.courseController.getAllCourse);
 
 //26. Get course detail
-courseRouter.get("/:slug", isLogin, controllers.courseController.getCourseDetail);
 
 courseRouter.post("/thumbnail", isLogin, uploadAvatar, controllers.courseController.changeThumbnail); //
 

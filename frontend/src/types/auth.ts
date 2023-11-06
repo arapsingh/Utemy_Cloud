@@ -2,14 +2,7 @@ export type Login = {
     email: string;
     password: string;
 };
-export type User = {
-    first_name: string;
-    last_name: string;
-    email: string;
-    url_avatar: string;
-    user_id: number | undefined;
-    description: string;
-};
+
 export type Signup = {
     first_name: string;
     last_name: string;

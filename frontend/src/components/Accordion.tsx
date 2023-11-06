@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-// import { Section } from "../types/section";
+import { Section } from "../types/section";
 import AddIcon from "../assets/icons/AddIcon";
 import DeleteIcon from "../assets/icons/DeleteIcon";
 import EditSectionIcon from "../assets/icons/EditSectionIcon";
-// import { useNavigate } from "react-router-dom";
-// import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 
-// import { CourseDetail as CourseDetailType } from "../types/course";
-// import { lessonActions } from "@redux/slice";
+import { Course } from "../types/course";
+import { lessonActions } from "../redux/slices";
 // import { orderLesson } from "../types/lesson";
 type AccordionType = {
-    section: any;
+    section: Section;
     handleDisplayAddSectionModal?: (id: number) => void;
     isDisplayBtn: boolean;
     handleDeleteSection?: (id: number) => void;
@@ -21,23 +21,21 @@ type AccordionType = {
     redirectToWatchVideo?: boolean;
     source?: string;
     disable: boolean;
-    orderLesson: any;
+    // orderLesson: any;
 };
 
 const Accordion: React.FC<AccordionType> = (props) => {
     const [show, setShow] = useState<boolean>(false);
-    // const navigate = useNavigate();
-    // const dispatch = useAppDispatch();
-    // const courseDetail: CourseDetailType = useAppSelector((state) => state.courseSlice.courseDetail) ?? {};
-
-    console.log(props.section.lessons);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const courseDetail: Course = useAppSelector((state) => state.courseSlice.courseDetail) ?? {};
 
     return (
         <>
             <div>
                 <h2 id="accordion-collapse-heading-1">
                     <div
-                        className={`flex items-center justify-between w-full p-4  bg-primary rounded-lg my-1 flex-wrap ${
+                        className={`flex items-center justify-between w-full p-4  bg-navy rounded-lg my-1 flex-wrap ${
                             show ? " shadow-xl" : ""
                         }`}
                     >
@@ -57,7 +55,7 @@ const Accordion: React.FC<AccordionType> = (props) => {
                                     d="M9 5 5 1 1 5"
                                 />
                             </svg>
-                            <span className="max-w-[400px] truncate ...">{props.section.title}</span>
+                            <span className="max-w-[400px] text-white truncate ...">{props.section.title}</span>
                         </div>
                         {props.isDisplayBtn && (
                             <div className="flex gap-2">
@@ -96,60 +94,52 @@ const Accordion: React.FC<AccordionType> = (props) => {
                     </div>
                 </h2>
             </div>
-            {/* {show && props.section.lessons && (
-                <DragDrop
-                    initialItems={props.section?.lessons.map((lesson, index) => (
-                        <div
-                            className={`py-4 pl-8 pr-4 border rounded-lg my-2 hover:cursor-pointer flex justify-between  ${
-                                lesson.url_video === props.source ? "bg-backgroundHover" : ""
-                            }`}
-                            onClick={() => {
-                                if (props.handleChangeSourceVideo) {
-                                    props.handleChangeSourceVideo(lesson.url_video);
-                                }
-                                if (props.redirectToWatchVideo) {
-                                    dispatch(lessonActions.setNowUrlVideo(lesson.url_video));
-                                    navigate(`/course-detail/${courseDetail.slug}/watch`);
-                                }
-                            }}
-                            key={`${lesson.id}`}
-                        >
-                            <p>{lesson.title}</p>
+            {show &&
+                props.section.Lesson &&
+                props.section.Lesson.map((lesson, index) => (
+                    <div
+                        className={`py-4 pl-8 pr-4 border border-black/25 rounded-lg my-2 hover:cursor-pointer flex justify-between  ${
+                            lesson.url_video === props.source ? "bg-backgroundHover" : ""
+                        }`}
+                        onClick={() => {
+                            if (props.handleChangeSourceVideo) {
+                                props.handleChangeSourceVideo(lesson.url_video);
+                            }
+                            if (props.redirectToWatchVideo) {
+                                dispatch(lessonActions.setNowUrlVideo(lesson.url_video));
+                                navigate(`/course-detail/${courseDetail.slug}/watch`);
+                            }
+                        }}
+                        key={`${lesson.id}`}
+                    >
+                        <p>{lesson.title}</p>
 
-                            {props.isDisplayBtn && (
-                                <div className="flex gap-2">
-                                    <div
-                                        className="cursor-pointer"
-                                        onClick={() => {
-                                            if (props.handleDisplayEditLesson) {
-                                                props.handleDisplayEditLesson(
-                                                    lesson.id,
-                                                    lesson.title,
-                                                    lesson.url_video,
-                                                );
-                                            }
-                                        }}
-                                    >
-                                        <EditSectionIcon />
-                                    </div>
-                                    <div
-                                        className="cursor-pointer"
-                                        onClick={() => {
-                                            if (props.handleDisplayDeleteModal) {
-                                                props.handleDisplayDeleteModal(lesson.id, false);
-                                            }
-                                        }}
-                                    >
-                                        <DeleteIcon />
-                                    </div>
+                        {props.isDisplayBtn && (
+                            <div className="flex gap-2">
+                                <div
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        if (props.handleDisplayEditLesson) {
+                                            props.handleDisplayEditLesson(lesson.id, lesson.title, lesson.url_video);
+                                        }
+                                    }}
+                                >
+                                    <EditSectionIcon />
                                 </div>
-                            )}
-                        </div>
-                    ))}
-                    role={props.disable}
-                    lessonOrder={props.orderLesson}
-                />
-            )} */}
+                                <div
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        if (props.handleDisplayDeleteModal) {
+                                            props.handleDisplayDeleteModal(lesson.id, false);
+                                        }
+                                    }}
+                                >
+                                    <DeleteIcon />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ))}
         </>
     );
 };

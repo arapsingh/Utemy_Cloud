@@ -10,9 +10,11 @@ const sectionRouter: Router = Router();
 sectionRouter.post("/", isLogin, isAuthor, controllers.sectionController.addSection);
 
 // 34. Edit section
-sectionRouter.patch("/:id", isLogin, isAuthor, controllers.sectionController.editSection);
+sectionRouter.patch("/", isLogin, isAuthor, controllers.sectionController.editSection);
 
 // 35. Delete Section
-sectionRouter.delete("/:id", isLogin, isAuthor, controllers.sectionController.deleteSection);
+sectionRouter.delete("/:section_id", isLogin, isAuthor, controllers.sectionController.deleteSection);
+
+sectionRouter.get("/:course_id", isLogin, isAuthor, controllers.sectionController.getAllSectionByCourseId);
 
 export default sectionRouter;
