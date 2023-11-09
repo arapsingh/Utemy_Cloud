@@ -3,7 +3,7 @@ import { Section } from "./section";
 export type CourseDetail = {
     course_id: number;
     title: string;
-    // slug: string;
+    slug: string;
     categories: Category[];
     status: boolean;
     description: string;
@@ -82,6 +82,7 @@ export type CourseCard = {
 export type CourseOrderByWithRelationInput = {
     [x: string]: "asc" | "desc" | { _count?: "asc" | "desc" } | undefined;
     created_at?: "asc" | "desc" | undefined;
+    price?: "asc" | "desc" | undefined;
     ratings?: { _count?: "asc" | "desc" } | undefined;
     enrolleds?: { _count?: "asc" | "desc" } | undefined;
     sections?: { _count?: "asc" | "desc" } | undefined;

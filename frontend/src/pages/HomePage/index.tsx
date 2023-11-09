@@ -46,6 +46,9 @@ const Home: React.FC = () => {
                                         rating={course.average_rating}
                                         categories={course.categories}
                                         slug={course.slug}
+                                        price={Number(course.price)}
+                                        salePrice={Number(course.sale_price)}
+                                        saleUntil={course.sale_until?.toString()}
                                     />
                                 );
                             })}
@@ -69,6 +72,9 @@ const Home: React.FC = () => {
                                         rating={course.average_rating}
                                         categories={course.categories}
                                         slug={course.slug}
+                                        price={Number(course.price)}
+                                        salePrice={Number(course.sale_price)}
+                                        saleUntil={course.sale_until?.toString()}
                                     />
                                 );
                             })}

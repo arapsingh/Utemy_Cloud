@@ -27,3 +27,47 @@ export const convertDateFormat = (inputDate: string) => {
 
     return formattedDate;
 };
+
+export const eveluateList = [
+    {
+        title: "5 stars",
+        value: 5,
+    },
+    {
+        title: "4 stars",
+        value: 4,
+    },
+    {
+        title: "3 stars",
+        value: 3,
+    },
+    {
+        title: "2 stars",
+        value: 2,
+    },
+    {
+        title: "1 star",
+        value: 1,
+    },
+];
+
+export const sortingBy = [
+    {
+        value: "newest",
+        title: "Newest",
+    },
+    {
+        value: "oldest",
+        title: "Oldest",
+    },
+    { value: "attendees", title: "Most Attendees" },
+    { value: "ascprice", title: "Price: Lowest to Highest" },
+    { value: "descprice", title: "Price: Highest to Lowest" },
+];
+export const calDayRemains = (date: string) => {
+    const target = +new Date(date);
+    const now = +new Date();
+    const gap = target - now;
+    const dayRemains = Math.floor(gap / (1000 * 60 * 60 * 24));
+    return dayRemains;
+};

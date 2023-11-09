@@ -1,5 +1,5 @@
 import apiCaller from "../api-config/apiCaller";
-import { AddPromotion, SearchMyCourseEnrolledCourse } from "../types/course";
+import { AddPromotion, SearchMyCourseEnrolledCourse, SearchAllCourses } from "../types/course";
 
 const createCourse = async (values: FormData) => {
     const path = "course";
@@ -46,6 +46,15 @@ const getCourseDetailById = async (values: number) => {
     const reponse = await apiCaller("GET", path, values);
     return reponse;
 };
+const getAllCourses = async (values: SearchAllCourses) => {
+    let categoryParams = "";
+    values.category?.forEach((temp) => {
+        categoryParams += `&category=${temp}`;
+    });
+    const path = `course/all?page_index=${values.pageIndex}&sort_by=${values.sortBy}&search_item=${values.keyword}&evaluate=${values.rating}${categoryParams}`;
+    const reponse = await apiCaller("GET", path);
+    return reponse;
+};
 const getRightOfCourse = async (values: number) => {
     const path = `course/right/${values}`;
     const reponse = await apiCaller("GET", path);
@@ -74,6 +83,7 @@ const courseApis = {
     editCourse,
     addPromotion,
     stopPromotion,
+    getAllCourses,
 };
 
 export default courseApis;

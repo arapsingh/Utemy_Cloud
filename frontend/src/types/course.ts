@@ -84,3 +84,16 @@ export type AddPromotion = {
     sale_until: Date;
     course_id: number;
 };
+export type SearchAllCourses = {
+    pageIndex: number;
+    rating?: number | undefined;
+    category?: number[];
+    keyword?: string;
+    sortBy?: string;
+};
+
+export type SearchAllCoursesResponse = {
+    total_page: number;
+    total_record: number;
+    data: Course[];
+};

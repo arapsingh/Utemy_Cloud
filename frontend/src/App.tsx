@@ -18,6 +18,8 @@ import CourseDetail from "./pages/CourseDetail";
 import Cart from "./pages/Cart";
 import EditCourse from "./pages/EditCourse";
 import NotFound from "./pages/NotFound";
+import AllCourses from "./pages/AllCourse";
+import WatchVideo from "./pages/WatchVideo";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoute from "./routes/PrivateRoutes";
@@ -47,9 +49,11 @@ function App() {
                             <Route path="/create-course" element={<CreateCourse />}></Route>
                             <Route path="/cart" element={<Cart />}></Route>
                             <Route path="/my-courses/edit/:course_id" element={<EditCourse />}></Route>
+                            <Route path="/course-detail/:slug/watch" element={<WatchVideo />}></Route>
                         </Route>
                         <Route path="/" element={<HomePage />}></Route>
                         <Route path="/login" element={<Login />}></Route>
+                        <Route path="/all-courses" element={<AllCourses />}></Route>
                         <Route path="/signup" element={<Signup />}></Route>
                         <Route path="/forgot-password" element={<ForgotPassword />}></Route>
                         <Route path="/reset-password/:token" element={<ResetPassword />}></Route>

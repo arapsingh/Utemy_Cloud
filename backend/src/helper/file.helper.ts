@@ -5,6 +5,19 @@ import fs from "fs";
 import ffmpegpath from "@ffmpeg-installer/ffmpeg";
 ffmpeg.setFfmpegPath(ffmpegpath.path);
 
+const bandwidthCalculation = (inputVideo: Express.Multer.File): Promise<number> => {
+    return new Promise((resolve, rejects) => {
+        ffmpeg.ffprobe(inputVideo.path, (error, metadata) => {
+            if (error) {
+                rejects(error);
+            } else {
+                const bandwidth: number = inputVideo.size / (metadata.format.duration as number);
+                resolve(bandwidth);
+            }
+        });
+    });
+};
+
 const createFileM3U8AndTS = async (
     inputFileVideo: Express.Multer.File,
     resolutions: string[],
@@ -23,13 +36,18 @@ const createFileM3U8AndTS = async (
         ffmpeg(inputFileVideo.path)
             .output(videoPath)
             .outputOptions([`-s ${resolution}`, "-c:v h264", "-c:a aac", "-f hls", "-hls_time 10", "-hls_list_size 0"])
+            .on("progress", (progress) => {
+                // In thông tin tiến trình xử lý video
+                console.log(` Progress ${JSON.stringify(progress)}`);
+            })
             .on("end", () => {
                 console.log(`Conversion to m3u8 completed.`);
             })
             .on("error", (err) => {
                 console.error(`Error: ${err}`);
             })
-            .save(videoPath);
+            .run();
+        //.save(videoPath);
     });
     // thực hiện tạo file main m3u8
     const urlVideo = createMainM3U8(inputFileVideo, resolutions, outputFolderPath, uuid);
@@ -43,9 +61,10 @@ const createMainM3U8 = async (
 ) => {
     const outputMainM3U8 = `${outputFolderPath}\\${uuid}\\main.m3u8`; //tạo output là path dẫn đến file main.m3u8
 
+    const bandwidth = bandwidthCalculation(inputFileVideo);
     //với mỗi resolution tạo 1 stream info làm nội dung trong file main.m3u8
     const streamInfoArray = resolutions.map((resolution) => {
-        return `#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=${resolution}\nvideo_${resolution}/video_${resolution}.m3u8`;
+        return `#EXT-X-STREAM-INF:BANDWIDTH=${bandwidth},RESOLUTION=${resolution}\nvideo_${resolution}/video_${resolution}.m3u8`;
     });
 
     //nội dung cuối cùng của file m3u8, gồm streamInfoArray nối với nhau và các chuỗi nối với nhau cách nhau bởi dấu \n

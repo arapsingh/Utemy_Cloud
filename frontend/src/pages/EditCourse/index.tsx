@@ -251,7 +251,9 @@ const EditCourse: React.FC = () => {
                                 )}
                                 <div className="mt-2 flex justify-end w-full">
                                     <button
-                                        className={`text-white btn btn-info text-lg ${isLoading ? "disabled" : ""}`}
+                                        className={`text-white btn btn-info hover:opacity-75 text-lg ${
+                                            isLoading ? "disabled" : ""
+                                        }`}
                                         onClick={() => handleEditSection(idItem, itemTitle)}
                                     >
                                         {isLoading ? "Loading..." : "Save"}

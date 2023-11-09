@@ -19,7 +19,7 @@ const AuthorButton: React.FC<AuthorButtonProps> = (props) => {
         <>
             {props.courseDetail.number_of_section > 0 && (
                 <Link to={`/course-detail/${props.courseDetail.slug}/watch`} onClick={clearUrlVideo}>
-                    <button className="text-white btn btn-info text-lg">
+                    <button className="text-white btn btn-info hover:opacity-80 text-lg">
                         <WatchVideoIcon />
                         <span>Learn Now</span>
                     </button>
@@ -33,7 +33,7 @@ const AuthorButton: React.FC<AuthorButtonProps> = (props) => {
                 </button>
             </Link>
             <button
-                className="btn btn-warning text-lg"
+                className="btn btn-warning hover:opacity-80 text-lg"
                 onClick={() => {
                     props.handleTogglePromotion();
                 }}
@@ -42,7 +42,7 @@ const AuthorButton: React.FC<AuthorButtonProps> = (props) => {
                 <span>Promotion</span>
             </button>
             <button
-                className="btn btn-error text-lg"
+                className="btn btn-error hover:opacity-80 text-lg"
                 onClick={() => {
                     props.handleDelete();
                 }}
