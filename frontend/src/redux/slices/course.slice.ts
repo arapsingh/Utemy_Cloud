@@ -1,6 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Response } from "../../types/response";
-import { Course, PagingCourse, SearchMyCourseEnrolledCourse, RightOfCourse, AddPromotion } from "../../types/course";
+import {
+    Course,
+    PagingCourse,
+    SearchMyCourseEnrolledCourse,
+    RightOfCourse,
+    AddPromotion,
+    SearchAllCourses,
+    SearchAllCoursesResponse,
+} from "../../types/course";
 import apis from "../../api";
 
 type CourseSliceType = {
@@ -116,6 +124,18 @@ export const getEnrolledCourses = createAsyncThunk<
     try {
         const response = await apis.courseApis.getEnrolledCourses(body);
         return response.data as Response<PagingCourse>;
+    } catch (error: any) {
+        return ThunkAPI.rejectWithValue(error.data as Response<null>);
+    }
+});
+export const getAllCourses = createAsyncThunk<
+    Response<SearchAllCoursesResponse>,
+    SearchAllCourses,
+    { rejectValue: Response<null> }
+>("course/all", async (body, ThunkAPI) => {
+    try {
+        const response = await apis.courseApis.getAllCourses(body);
+        return response.data as Response<SearchAllCoursesResponse>;
     } catch (error: any) {
         return ThunkAPI.rejectWithValue(error.data as Response<null>);
     }
@@ -281,6 +301,36 @@ export const courseSlice = createSlice({
             state.isLoading = false;
         });
         builder.addCase(stopPromotion.rejected, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(getAllCourses.pending, (state) => {
+            state.isGetLoading = true;
+        });
+        builder.addCase(getAllCourses.fulfilled, (state, action) => {
+            state.courses = action.payload.data?.data as Course[];
+            state.totalPage = action.payload.data?.total_page || 0;
+            state.totalRecord = action.payload.data?.total_record || 0;
+            state.isGetLoading = false;
+        });
+        builder.addCase(getAllCourses.rejected, (state) => {
+            state.isGetLoading = false;
+        });
+        builder.addCase(editCourse.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(editCourse.fulfilled, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(editCourse.rejected, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(createCourses.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(createCourses.fulfilled, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(createCourses.rejected, (state) => {
             state.isLoading = false;
         });
     },

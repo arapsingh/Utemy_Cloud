@@ -99,10 +99,11 @@ const Accordion: React.FC<AccordionType> = (props) => {
                 props.section.Lesson.map((lesson, index) => (
                     <div
                         className={`py-4 pl-8 pr-4 border border-black/25 rounded-lg my-2 hover:cursor-pointer flex justify-between  ${
-                            lesson.url_video === props.source ? "bg-backgroundHover" : ""
+                            lesson.url_video === props.source ? "bg-footer" : ""
                         }`}
                         onClick={() => {
                             if (props.handleChangeSourceVideo) {
+                                console.log("url video", lesson.url_video);
                                 props.handleChangeSourceVideo(lesson.url_video);
                             }
                             if (props.redirectToWatchVideo) {

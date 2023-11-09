@@ -6,7 +6,7 @@ import DeleteIcon from "../assets/icons/DeleteIcon";
 import { User } from "../types/user";
 import CompleteIcon from "../assets/icons/CompleteIcon";
 import TotalRating from "./TotalRating";
-import { convertDateFormat } from "../utils/helper";
+import { convertDateFormat, calDayRemains } from "../utils/helper";
 
 type Course = {
     id: number;
@@ -16,6 +16,8 @@ type Course = {
     thumbnail: string;
     author: User;
     price?: number;
+    salePrice?: number;
+    saleUntil?: string;
     rating?: number;
     status?: boolean;
     numberOfSection?: number;
@@ -29,10 +31,18 @@ type Course = {
 
 const CourseCard: FC<Course> = (props: Course) => {
     const [isDisplayDropDown, setIsDisplayDropDown] = useState<boolean>(false);
-    const hasPrice = props.price !== undefined;
     const hasAttendee = props.attendees !== undefined;
+    const hasPrice = props.price || props.price === 0;
     const hasSectionCount = props.numberOfSection !== undefined;
     const convertedDate = convertDateFormat(props.createdAt as string);
+    const hasSalePrice =
+        props.salePrice &&
+        props.price &&
+        props.salePrice < props.price &&
+        props.saleUntil &&
+        new Date(props.saleUntil) > new Date();
+    let dayRemains = undefined;
+    if (hasSalePrice) dayRemains = calDayRemains(props.saleUntil as string);
     return (
         <div className="py-2">
             <div className="flex flex-col gap-2 tablet:gap-4 tablet:flex-row rounded-2xl hover:bg-lightblue/25 transition ease-in-out hover:shadow-lg duration-200 shadow-lg">
@@ -67,7 +77,7 @@ const CourseCard: FC<Course> = (props: Course) => {
                                     Completed <CompleteIcon />
                                 </span>
                             ) : (
-                                <span className="font-normal">Uncomplete</span>
+                                <span className="font-normal">Incompleted</span>
                             )}
                         </p>
                         {hasAttendee && (
@@ -75,13 +85,32 @@ const CourseCard: FC<Course> = (props: Course) => {
                                 Attendees: <span className="font-normal">{props.attendees}</span>
                             </p>
                         )}
-                        {hasPrice && (
-                            <p className="text-base font-bold">
-                                Price:
-                                <span className="font-normal"> {props.price} </span>{" "}
-                                <span className="font-normal opacity-50">VNĐ</span>
-                            </p>
-                        )}
+                        {hasPrice &&
+                            (hasSalePrice ? (
+                                <p className="text-base font-bold">
+                                    Price:
+                                    <span className=" font-extrabold font-OpenSans text-lightblue ">
+                                        {" "}
+                                        đ{props.salePrice?.toLocaleString()}{" "}
+                                    </span>{" "}
+                                    <span className="font-normal italic text-xs line-through">
+                                        {" "}
+                                        đ{props.price?.toLocaleString()}{" "}
+                                    </span>{" "}
+                                    <span className=" font-extrabold font-OpenSans text-lightblue ">
+                                        {" "}
+                                        {dayRemains} days left
+                                    </span>{" "}
+                                </p>
+                            ) : (
+                                <p className="text-base font-bold">
+                                    Price:
+                                    <span className="font-extrabold font-OpenSans">
+                                        {" "}
+                                        đ{props.price?.toLocaleString()}{" "}
+                                    </span>{" "}
+                                </p>
+                            ))}
                         {hasSectionCount && (
                             <p className="text-base font-bold">
                                 Number of section:

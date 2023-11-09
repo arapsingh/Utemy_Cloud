@@ -19,6 +19,7 @@ import UnsubscribeModal from "./UnsubcribeModal";
 import PopupPromotion from "./PopupPromotion";
 import CommentSection from "./CommentSection";
 import constants from "../../constants";
+import { calDayRemains } from "../../utils/helper";
 // import { orderLesson } from "../../types/lesson";
 type CourseDetailProps = {
     isLogin: boolean;
@@ -43,6 +44,15 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
     // const orderLesson: orderLesson[] = useAppSelector((state) => state.courseSlice.orderLesson);
     const role: string = useAppSelector((state) => state.courseSlice.role) ?? "Unenrolled";
     const isGetLoadingCourse: boolean = useAppSelector((state) => state.courseSlice.isGetLoading) ?? false;
+    const hasSalePrice =
+        courseDetail.sale_price &&
+        courseDetail.price &&
+        courseDetail.sale_price < courseDetail.price &&
+        courseDetail.sale_until &&
+        new Date(courseDetail.sale_until) > new Date();
+
+    let dayRemains = undefined;
+    if (hasSalePrice) dayRemains = calDayRemains(courseDetail.sale_until as string);
     const handleChangePageIndex = (pageIndex: number) => {
         if (pageIndex < Number(1)) {
             setPageIndex(totalRatingPage);
@@ -143,7 +153,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                 <img
                                     src={courseDetail.thumbnail}
                                     alt={courseDetail.title}
-                                    className="h-[300px] w-full m-auto rounded-lg tablet:h-[400px] object-cover"
+                                    className="h-[300px] w-full m-auto rounded-lg tablet:h-[400px] object-contain"
                                 />
                             </div>
                             <div className=" flex-1 object-right flex flex-col gap-4 px-3 pb-3 laptop:pt-3">
@@ -182,10 +192,31 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                             {courseDetail.status === false ? "Incompleted" : " Completed"}
                                         </p>
                                     </div>
-                                    <div className="text-xl laptop:text-2xl mb-3">
-                                        <span className=" font-bold">Price: </span>
-                                        <span className="font-normal"> {courseDetail.price} </span>
-                                    </div>
+                                    {hasSalePrice ? (
+                                        <div className="text-xl font-bold laptop:text-2xl mb-3">
+                                            Price:
+                                            <span className=" font-extrabold font-OpenSans text-lightblue ">
+                                                {" "}
+                                                đ{courseDetail.sale_price?.toLocaleString()}{" "}
+                                            </span>{" "}
+                                            <span className="font-normal italic text-sm line-through ">
+                                                {" "}
+                                                đ{courseDetail.price?.toLocaleString()}{" "}
+                                            </span>{" "}
+                                            <span className=" font-extrabold font-OpenSans ml-2 text-lightblue ">
+                                                {" "}
+                                                {dayRemains} days left
+                                            </span>{" "}
+                                        </div>
+                                    ) : (
+                                        <div className="text-xl font-bold laptop:text-2xl mb-3">
+                                            Price:
+                                            <span className="font-extrabold font-OpenSans">
+                                                {" "}
+                                                đ{courseDetail.price?.toLocaleString()}{" "}
+                                            </span>{" "}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="flex-1 flex items-end gap-2 flex-wrap">
                                     {isLogin && role === constants.util.ROLE_AUTHOR && (
@@ -221,6 +252,12 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                             <div className="table-of-content my-4">
                                 <h2 className="text-xl tablet:text-3xl font-bold mb-3">Table of Content</h2>
                                 <span className="w-[60px] h-1 bg-black block mb-4"></span>
+                                {!courseDetail.sections ||
+                                    (courseDetail.sections.length === 0 && (
+                                        <p className="mt-4 text-xl text-center text-lightblue font-bold">
+                                            This course doesn't have any section yet
+                                        </p>
+                                    ))}
                                 {courseDetail.sections?.map((section: Section, index: number) => {
                                     return (
                                         <Accordion
