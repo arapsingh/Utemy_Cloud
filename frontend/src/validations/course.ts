@@ -26,14 +26,16 @@ export const createCourseValidationSchema = Yup.object({
 });
 
 export const editCourseValidationSchema = Yup.object({
-    thumbnail: Yup.mixed()
-        .nullable()
-        .test("fileFormat", constants.error.ERROR_IMAGE_NOT_SUPPORTED, (value: any) => {
-            return value && SUPPORTED_FORMATS.includes(value.type);
-        })
-        .test("fileSize", constants.error.ERROR_IMAGE_TOO_BIG, (value: any) => {
-            return value && value.size <= 1024 * 1024 * 4;
-        }),
+    // thumbnail: Yup.mixed()
+    //     .nullable()
+    //     .test("fileFormat", constants.error.ERROR_IMAGE_NOT_SUPPORTED, (value: any) => {
+    //         console.log("type", value.type);
+    //         return value && SUPPORTED_FORMATS.includes(value.type);
+    //     })
+    //     .test("fileSize", constants.error.ERROR_IMAGE_TOO_BIG, (value: any) => {
+    //         console.log("size", value.size);
+    //         return value && value.size <= 1024 * 1024 * 4;
+    //     }),
     categories: Yup.array().min(1, constants.error.ERROR_CATEGORY_REQUIRED).max(4, constants.error.ERROR_CATEGORY_MAX),
     title: Yup.string().trim().required(constants.error.ERROR_TITLE_REQUIRED).max(100, constants.error.ERROR_TITLE_MAX),
     summary: Yup.string()

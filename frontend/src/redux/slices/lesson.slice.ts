@@ -67,7 +67,8 @@ export const lessonSlice = createSlice({
     initialState,
     reducers: {
         setNowUrlVideo: (state, action) => {
-            state.nowUrlVideo = action.payload.data as string;
+            console.log("trong slice", action.payload);
+            state.nowUrlVideo = action.payload as string;
         },
     },
     extraReducers: (builder) => {
@@ -76,6 +77,7 @@ export const lessonSlice = createSlice({
         });
         builder.addCase(getLessonById.fulfilled, (state, action) => {
             state.lesson = action.payload.data as Lesson;
+            state.nowUrlVideo = action.payload.data?.url_video as string;
             state.isLoading = false;
         });
         builder.addCase(getLessonById.rejected, (state) => {

@@ -105,7 +105,7 @@ const MyCourses: React.FC = () => {
                             </div>
                         </div>
                         <Link to={"/create-course"}>
-                            <div className="text-white flex-3 flex btn btn-info text-lg">
+                            <div className="text-white flex-3 flex btn hover:opacity-80 btn-info text-lg">
                                 <CreateIcon />
                                 Create New
                             </div>
@@ -136,7 +136,7 @@ const MyCourses: React.FC = () => {
                         })}
                     </div>
                     {totalRecord === 0 && (
-                        <p className="mt-4 text-2xl text-error text-center font-bold">You don't have any courses!</p>
+                        <p className="mt-4 text-2xl text-error text-center font-bold">Such empty!!!</p>
                     )}
                     {totalPage > 1 && (
                         <div className="flex justify-end my-4">

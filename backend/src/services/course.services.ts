@@ -287,64 +287,66 @@ const buyCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
 };
 const getTop10RateCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        const top10Courses = await configs.db.courseCategory.findMany({
+        const top10Courses = await configs.db.course.findMany({
             take: 10,
             where: {
-                Course: {
-                    is_delete: false,
-                },
+                is_delete: false,
             },
             orderBy: {
-                Course: {
-                    average_rating: "desc",
-                },
+                average_rating: "desc",
             },
-            select: {
-                Course: {
-                    select: {
-                        id: true,
-                        title: true,
-                        summary: true,
-                        thumbnail: true,
-                        average_rating: true,
-                        number_of_rating: true,
-                        number_of_enrolled: true,
-                        slug: true,
-                        user: {
+            include: {
+                course_categories: {
+                    include: {
+                        Category: {
                             select: {
                                 id: true,
-                                first_name: true,
-                                last_name: true,
+                                title: true,
+                                url_image: true,
                             },
                         },
                     },
                 },
-                Category: {
+                user: {
                     select: {
                         id: true,
-                        title: true,
+                        first_name: true,
+                        last_name: true,
                     },
                 },
             },
         });
         // Định dạng dữ liệu theo cấu trúc yêu cầu
-        const formattedData = top10Courses.map((courseCategory) => ({
-            course_id: courseCategory.Course?.id,
-            title: courseCategory.Course?.title,
-            summary: courseCategory.Course?.summary,
-            thumbnail: courseCategory.Course?.thumbnail,
-            average_rating: courseCategory.Course?.average_rating,
-            number_of_rating: courseCategory.Course?.number_of_rating,
-            number_of_enrolled: courseCategory.Course?.number_of_enrolled,
-            author: {
-                id: courseCategory.Course?.user.id,
-                first_name: courseCategory.Course?.user.first_name,
-                last_name: courseCategory.Course?.user.last_name,
-            },
-            slug: courseCategory.Course?.slug,
-            category: courseCategory.Category,
-        }));
-        // Đảm bảo top10Courses có dữ liệu
+        const formattedData = top10Courses.map((course) => {
+            const tempCate = course.course_categories.map((cc) => {
+                const temp = {
+                    category_id: cc.Category.id,
+                    title: cc.Category.title,
+                    url_image: cc.Category.url_image,
+                };
+                return temp;
+            });
+            const formatCourse = {
+                course_id: course.id,
+                title: course.title,
+                summary: course.summary,
+                thumbnail: course.thumbnail,
+                average_rating: course.average_rating,
+                number_of_rating: course.number_of_rating,
+                number_of_enrolled: course.number_of_enrolled,
+                author: {
+                    user_id: course.user.id,
+                    first_name: course.user.first_name,
+                    last_name: course.user.last_name,
+                },
+                slug: course.slug,
+                categories: tempCate,
+                price: course.price,
+                sale_price: course.sale_price,
+                sale_until: course.sale_until,
+            };
+            return formatCourse;
+        });
         if (top10Courses.length === 0) {
             return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
         }
@@ -360,63 +362,66 @@ const getTop10RateCourse = async (req: IRequestWithId): Promise<ResponseBase> =>
 
 const getTop10EnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        const top10Courses = await configs.db.courseCategory.findMany({
+        const top10Courses = await configs.db.course.findMany({
             take: 10,
             where: {
-                Course: {
-                    is_delete: false,
-                },
+                is_delete: false,
             },
             orderBy: {
-                Course: {
-                    number_of_enrolled: "desc",
-                },
+                number_of_enrolled: "desc",
             },
-            select: {
-                Course: {
-                    select: {
-                        id: true,
-                        title: true,
-                        summary: true,
-                        thumbnail: true,
-                        average_rating: true,
-                        number_of_rating: true,
-                        number_of_enrolled: true,
-                        slug: true,
-                        user: {
+            include: {
+                course_categories: {
+                    include: {
+                        Category: {
                             select: {
                                 id: true,
-                                first_name: true,
-                                last_name: true,
+                                title: true,
+                                url_image: true,
                             },
                         },
                     },
                 },
-                Category: {
+                user: {
                     select: {
                         id: true,
-                        title: true,
+                        first_name: true,
+                        last_name: true,
                     },
                 },
             },
         });
         // Định dạng dữ liệu theo cấu trúc yêu cầu
-        const formattedData = top10Courses.map((courseCategory) => ({
-            course_id: courseCategory.Course?.id,
-            title: courseCategory.Course?.title,
-            summary: courseCategory.Course?.summary,
-            thumbnail: courseCategory.Course?.thumbnail,
-            average_rating: courseCategory.Course?.average_rating,
-            number_of_rating: courseCategory.Course?.number_of_rating,
-            number_of_enrolled: courseCategory.Course?.number_of_enrolled,
-            author: {
-                id: courseCategory.Course?.user.id,
-                first_name: courseCategory.Course?.user.first_name,
-                last_name: courseCategory.Course?.user.last_name,
-            },
-            slug: courseCategory.Course?.slug,
-            category: courseCategory.Category,
-        }));
+        const formattedData = top10Courses.map((course) => {
+            const tempCate = course.course_categories.map((cc) => {
+                const temp = {
+                    category_id: cc.Category.id,
+                    title: cc.Category.title,
+                    url_image: cc.Category.url_image,
+                };
+                return temp;
+            });
+            const formatCourse = {
+                course_id: course.id,
+                title: course.title,
+                summary: course.summary,
+                thumbnail: course.thumbnail,
+                average_rating: course.average_rating,
+                number_of_rating: course.number_of_rating,
+                number_of_enrolled: course.number_of_enrolled,
+                author: {
+                    user_id: course.user.id,
+                    first_name: course.user.first_name,
+                    last_name: course.user.last_name,
+                },
+                slug: course.slug,
+                categories: tempCate,
+                price: course.price,
+                sale_price: course.sale_price,
+                sale_until: course.sale_until,
+            };
+            return formatCourse;
+        });
         // Đảm bảo top10Courses có dữ liệu
         if (top10Courses.length === 0) {
             return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
@@ -630,41 +635,39 @@ const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
-const getAllCourse = async (
-    req: IRequestWithId,
-    // pageIndex?: number,
-    // searchItem?: string,
-    // sortBy?: string,
-    // evaluate?: number,
-    // category?: string[],
-): Promise<ResponseBase> => {
+const getAllCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        const pageIndex: number | undefined = req.query.pageIndex
-            ? parseInt(req.query.pageIndex as string, 10)
+        const pageIndex: number | undefined = req.query.page_index
+            ? parseInt(req.query.page_index as string, 10)
             : undefined;
-        const searchItem: string | undefined = req.query.searchItem ? (req.query.searchItem as string) : undefined;
-        const category: string[] | undefined = req.query.categoriy
-            ? Array.isArray(req.query.categories)
-                ? (req.query.categories as string[])
-                : [req.query.categories as string]
+        const searchItem: string | undefined = req.query.search_item ? (req.query.search_item as string) : undefined;
+        const category: string[] | string | undefined = req.query.category
+            ? Array.isArray(req.query.category)
+                ? (req.query.category as string[])
+                : [req.query.category as string]
             : undefined;
-        const sortBy: string | undefined = req.query.sortBy ? (req.query.sortBy as string) : undefined;
+        const sortBy: string | undefined = req.query.sort_by ? (req.query.sort_by as string) : undefined;
         const evaluate: number | undefined = req.query.evaluate ? parseFloat(req.query.evaluate as string) : undefined;
         const take = configs.general.PAGE_SIZE;
-        const skip = ((pageIndex ?? 1) - 1) * take;
+        const skip = ((Number(pageIndex) ?? 1) - 1) * take;
         const categoriesConvert = category?.map((item: string) => Number(item));
         const orderBy: CourseOrderByWithRelationInput = {};
-        if (sortBy === "newest") {
-            orderBy.created_at = "desc";
+        if (sortBy === "oldest") {
+            orderBy.created_at = "asc";
         } else if (sortBy === "attendees") {
             orderBy.enrolleds = { _count: "desc" };
+        } else if (sortBy === "ascprice") {
+            orderBy.price = "asc";
+        } else if (sortBy === "descprice") {
+            orderBy.price = "desc";
+        } else {
+            orderBy.created_at = "desc";
         }
-
         const categoriesFilter = categoriesConvert?.map((item: number) => {
             return {
-                courses_categories: {
+                course_categories: {
                     some: {
-                        category: {
+                        Category: {
                             id: item,
                         },
                     },
@@ -676,7 +679,7 @@ const getAllCourse = async (
             is_delete: false,
         };
 
-        if (searchItem) {
+        if (searchItem && searchItem !== "undefined") {
             baseFilter.title = {
                 contains: searchItem.toLowerCase(),
             };
@@ -688,14 +691,14 @@ const getAllCourse = async (
 
         if (evaluate) {
             baseFilter.average_rating = {
-                gte: evaluate,
-                lt: (evaluate as number) + 1, // nếu rating truyền vào là 3, thì login ở đây sẽ filter rating >=3 và bé hơn 4
+                gte: evaluate - 1,
+                lt: evaluate, // nếu rating truyền vào là 3, thì login ở đây sẽ filter rating >2 và <=3
             };
         }
-
         const totalRecord = await db.course.count({
             where: baseFilter,
         });
+
         const courseCardData = await configs.db.course.findMany({
             include: {
                 user: true,
@@ -708,6 +711,7 @@ const getAllCourse = async (
             skip,
             take,
             orderBy,
+            where: baseFilter,
         });
         const totalPage = Math.ceil(totalRecord / take);
         if (!courseCardData) {
@@ -720,8 +724,14 @@ const getAllCourse = async (
                 title: data.title,
                 summary: data.summary,
                 thumbnail: data.thumbnail,
-                total_rating: data.number_of_rating,
+                number_of_rating: data.number_of_rating,
+                average_rating: data.average_rating,
                 number_of_enrolled: data.number_of_enrolled,
+                created_at: data.created_at,
+                price: data.price,
+                sale_price: data.sale_price,
+                sale_until: data.sale_until,
+                status: data.status,
                 author: {
                     id: data.user.id,
                     first_name: data.user.first_name,
@@ -744,6 +754,7 @@ const getAllCourse = async (
         };
         return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, responseData);
     } catch (error) {
+        console.log(error);
         if (error instanceof PrismaClientKnownRequestError) {
             return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
@@ -833,6 +844,7 @@ const getCourseDetail = async (req: IRequestWithId): Promise<ResponseBase> => {
                     price: course.price,
                     sale_price: course.sale_price,
                     sale_until: course.sale_until,
+                    slug: course.slug,
                 };
                 return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, courseData);
             }
@@ -926,6 +938,7 @@ const getCourseDetailById = async (req: IRequestWithId): Promise<ResponseBase> =
                     price: course.price,
                     sale_price: course.sale_price,
                     sale_until: course.sale_until,
+                    slug: course.slug,
                 };
                 return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, courseData);
             }

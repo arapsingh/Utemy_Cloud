@@ -156,6 +156,7 @@ const EditForm: React.FC<props> = (props) => {
     };
 
     const handleOnSubmit = (values: EditCourse) => {
+        console.log("Submit");
         const categories = values.categories.map((item: any) => item.value);
         const slug = slugify(values.title.toLowerCase());
         const formData = new FormData();
@@ -368,18 +369,18 @@ const EditForm: React.FC<props> = (props) => {
                                         </div>
                                         <div className="flex justify-end mt-4">
                                             <button
-                                                className="text-white btn btn-info text-lg"
+                                                className={`text-white btn btn-info hover:opacity-75  text-lg  `}
+                                                disabled={isLoading}
                                                 type="submit"
-                                                disabled={isLoading ? true : false}
                                             >
                                                 {isLoading ? <span className="loading loading-spinner"></span> : ""}
                                                 {isLoading ? "Loading..." : "Save"}
                                             </button>
                                             <button
-                                                className="btn text-lg ml-2"
+                                                className="btn text-lg ml-2 "
                                                 type="submit"
                                                 onClick={() => navigate("/my-courses")}
-                                                disabled={isLoading ? true : false}
+                                                disabled={isLoading}
                                             >
                                                 Cancel
                                             </button>
