@@ -91,6 +91,7 @@ const createCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
                     },
                 },
             });
+            console.log(listCategoryId);
             if (isCreateCourse) {
                 return new ResponseSuccess(201, constants.success.SUCCESS_CREATE_DATA, true);
             }
