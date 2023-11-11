@@ -39,4 +39,8 @@ export default class SectionController {
         const response: ResponseBase = await SectionService.deleteSection(req);
         return res.status(response.getStatusCode()).json(response);
     }
+    async getAllSectionByCourseId(req: IRequestWithId, res: Response): Promise<Response> {
+        const response: ResponseBase = await SectionService.getAllSectionByCourseId(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
 }

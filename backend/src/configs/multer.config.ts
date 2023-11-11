@@ -1,8 +1,4 @@
-import { ResponseSuccess, ResponseError, ResponseBase } from "../common/response";
 import configs from "../configs";
-import { IRequestWithId } from "../types/request";
-import { Request } from "express";
-import constants from "../utils/constants";
 import multer from "multer";
 import path from "path";
 
@@ -87,7 +83,7 @@ const uploadCategory = multer({
 //video
 const storageVideo = multer.diskStorage({
     destination: (req, res, cb) => {
-        cb(null, "videos");
+        cb(null, configs.general.PATH_TO_PUBLIC_FOLDER_VIDEOS);
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));

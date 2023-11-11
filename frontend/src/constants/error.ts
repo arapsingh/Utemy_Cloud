@@ -2,7 +2,7 @@ const error = {
     //etc
     ERROR_INTERNAL_SERVER: "Internal server",
     ERROR_BAD_REQUEST: " Bad request",
-    ERROR_UNAUTHORZIED: "Unauthorized",
+    ERROR_UNAUTHORIZED: "Unauthorized",
     ERROR_MISSING_REQUEST_BODY: "Missing request body",
     ERROR_DATA_NOT_FOUND: "Data not found",
     ERROR_LOGIN_AGAIN: "Please login again",
@@ -81,6 +81,14 @@ const error = {
     ERROR_COURSE_PRICE_REQUIRED: "Price is required",
     ERROR_COURSE_PRICE_NUMBER: "Price must be number",
     ERROR_CREATE_COURSE_FAILED: "Create course failed",
+    ERROR_COURSE_SUMMARY_MAX: "Summry is too long",
+    ERROR_CATEGORY_MAX: "Maximum is 4 categories",
+    ERROR_CATEGORY_REQUIRED: "Atleast 1 category",
+    ERROR_IMAGE_TOO_BIG: "Image is too big, maximum 4 MB",
+    ERROR_IMAGE_NOT_SUPPORTED: "Wrong image type, JPG JPEG PNG only",
+    ERROR_VIDEO_TOO_BIG: "Video is too big, maximum 100 MB",
+    ERROR_VIDEO_NOT_SUPPORTED: "Wrong video type, MP4 MOV MKV only",
+    ERROR_VIDEO_IS_REQUIRED: "Video is required",
 
     //rating
     ERROR_RATING_NOT_FOUND: "Rating doesn't exist",
@@ -108,5 +116,13 @@ const error = {
     ERROR_TITLE_REQUIRED: "Title is required",
     ERROR_TITLE_MAX: "Title must be under 50 chars",
     ERROR_CATEGORY_ALREADY_EXISTS: "Category is already existed",
+
+    //promotion
+    ERROR_SALE_PRICE_NUMBER: "Sale price must be a number",
+    ERROR_SALE_PRICE_REQUIRED: "Sale price is required",
+    ERROR_SALE_UNTIL_MIN: "Sale until must be later than today",
+    ERROR_SALE_UNTIL_REQUIRED: "Sale until is required",
+    ERROR_SALE_UNTIL_DATE: "Sale until must be a date",
+    ERROR_SALE_MORE_EXP_THAN_PRICE: "Sale price must be cheaper than original price",
 };
 export default error;
