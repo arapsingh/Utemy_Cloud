@@ -6,6 +6,8 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { ResponseBase, ResponseError, ResponseSuccess } from "../common/response";
 import constants from "../constants";
 import { TokenExpiredError, JsonWebTokenError, NotBeforeError } from "jsonwebtoken";
+import lessonRouter from "~/routes/lesson.router";
+import helper from "../helper";
 
 const addSection = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
@@ -118,7 +120,19 @@ const deleteSection = async (req: IRequestWithId): Promise<ResponseBase> => {
                     is_delete: true,
                 },
             });
-            if (isDeleteLesson) return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true);
+            if (isDeleteLesson) {
+                const deletedLesson = await configs.db.lesson.findMany({
+                    where: {
+                        section_id: Number(section_id),
+                        is_delete: true,
+                    },
+                });
+                deletedLesson.forEach(async (lesson) => {
+                    const fullPathDeConverted = await helper.ConvertHelper.deConvertFilePath(lesson.url_video);
+                    await helper.FileHelper.destroyedVideoIfFailed(fullPathDeConverted);
+                });
+                return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true);
+            }
         }
         return new ResponseError(400, constants.error.ERROR_VALIDATION_FAILED, false);
     } catch (error) {

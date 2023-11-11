@@ -40,7 +40,6 @@ const CreateCourse: FC = () => {
     const dispatch = useAppDispatch();
     const [thumbnail, setThumbnail] = useState<File | null>(null);
     const isLoading = useAppSelector((state) => state.courseSlice.isLoading);
-    const isUpload = useAppSelector((state) => state.courseSlice.isUpload);
     const categories: Category[] = useAppSelector((state) => state.categorySlice.categories) ?? [];
     const formikRef = useRef(null);
     const imageRef = useRef<HTMLImageElement>(null);
@@ -323,21 +322,17 @@ const CreateCourse: FC = () => {
 
                                     <div className="py-[12px] flex justify-end">
                                         <button
-                                            disabled={isLoading || isUpload ? true : false}
+                                            disabled={isLoading}
                                             type="submit"
                                             className="text-white btn btn-info text-lg"
                                         >
-                                            {isLoading || isUpload ? (
-                                                <span className="loading loading-spinner"></span>
-                                            ) : (
-                                                ""
-                                            )}
-                                            {isLoading || isUpload ? "Loading..." : "Save"}
+                                            {isLoading ? <span className="loading loading-spinner"></span> : ""}
+                                            {isLoading ? "Loading..." : "Save"}
                                         </button>
                                         <button
                                             type="button"
                                             className="btn text-lg ml-2"
-                                            disabled={isLoading || isUpload}
+                                            disabled={isLoading}
                                             onClick={() => {
                                                 formik.resetForm(initialValues);
                                             }}

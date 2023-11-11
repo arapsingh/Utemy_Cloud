@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { images } from "../assets";
 import { SearchIcon } from "../assets/icons";
 import UserDropDown from "./UserDropDown";
-import { useAppSelector } from "../hooks/hooks";
+import { useAppSelector, useAppDispatch } from "../hooks/hooks";
+import { categoryActions } from "../redux/slices";
+import { Category } from "../types/category";
 interface HeaderProps {
     isLogin: boolean;
 }
@@ -15,16 +17,18 @@ const Header: React.FC<HeaderProps> = ({ isLogin }) => {
     const [isDisplayUserDrawer, setIsDisplayUserDrawer] = useState<boolean>(false);
     const [isDisplayCategoryDrawer, setIsDisplayCategoryDrawer] = useState<boolean>(false);
 
-    // const navigate = useNavigate();
-    // const dispatch = useAppDispatch();
-    // const categories: Category[] = useAppSelector((state) => state.courseSlice.categories) ?? [];
-    // const user: User = useAppSelector((state) => state.authSlice.user);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const categories: Category[] = useAppSelector((state) => state.categorySlice.categories) ?? [];
 
-    const handleKeyWordSearch = () => {};
+    const handleKeyWordSearch = () => {
+        navigate(`/all-courses?keyword=${keyword}`);
+        setKeyword("");
+    };
 
-    // useEffect(() => {
-    //     dispatch(courseActions.getCategories());
-    // }, [dispatch]);
+    useEffect(() => {
+        dispatch(categoryActions.getCategories());
+    }, [dispatch]);
 
     return (
         <>
@@ -50,23 +54,26 @@ const Header: React.FC<HeaderProps> = ({ isLogin }) => {
                             </div>
                             <div className="drawer-side">
                                 <label htmlFor="my-drawer" className="drawer-overlay"></label>
-                                {/* <ul className="menu p-4 w-80 h-full bg-white text-base-content">
+                                <ul className="menu p-4 w-80 h-full bg-white text-base-content">
                                     {categories.length > 0 &&
                                         categories.map((category) => {
                                             return (
-                                                <NavLink to={`/all-courses?category=${category.id}`} key={category.id}>
+                                                <NavLink
+                                                    to={`/all-courses?category=${category.category_id}`}
+                                                    key={category.category_id}
+                                                >
                                                     <li
                                                         onClick={() =>
                                                             setIsDisplayCategoryDrawer(!isDisplayCategoryDrawer)
                                                         }
-                                                        className="hover:bg-backgroundHover text-lg font-medium text-center cursor-pointer px-6 py-4 laptop:py-[26px] min-w-fit rounded-lg"
+                                                        className="hover:bg-footer text-lg font-medium text-center cursor-pointer px-6 py-4 laptop:py-[26px] min-w-fit rounded-lg"
                                                     >
                                                         {category.title}
                                                     </li>
                                                 </NavLink>
                                             );
                                         })}
-                                </ul> */}
+                                </ul>
                             </div>
                         </div>
                         <div className="hidden relative laptop:block flex-1">
