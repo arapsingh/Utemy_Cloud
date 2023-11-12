@@ -635,7 +635,7 @@ const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
-const getAllCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
+const getAllCourse = async (req: Request): Promise<ResponseBase> => {
     try {
         const pageIndex: number | undefined = req.query.page_index
             ? parseInt(req.query.page_index as string, 10)
