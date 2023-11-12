@@ -40,7 +40,7 @@ courseRouter.get("/top-enrolled", controllers.courseController.getTop10EnrolledC
 courseRouter.get("/my", isLogin, controllers.courseController.searchMyCourse);
 courseRouter.get("/enrolled", isLogin, controllers.courseController.searchMyEnrolledCourse);
 courseRouter.get("/detail/:course_id", isLogin, isAuthor, controllers.courseController.getCourseDetailById);
-courseRouter.get("/all", isLogin, controllers.courseController.getAllCourse);
+courseRouter.get("/all", controllers.courseController.getAllCourse);
 courseRouter.post("/thumbnail", isLogin, uploadAvatar, controllers.courseController.changeThumbnail);
 courseRouter.get("/:slug", controllers.courseController.getCourseDetail);
 
