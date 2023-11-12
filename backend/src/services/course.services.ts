@@ -21,6 +21,7 @@ import {
 import { PagingResponse } from "../types/response";
 import { title } from "process";
 import { Section } from "../types/section";
+import { create } from "domain";
 const getRightOfCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const user_id = req.user_id;
@@ -476,7 +477,7 @@ const searchMyCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
                 sections: true,
                 enrolleds: {
                     include: {
-                        User: true,
+                        user: true,
                     },
                 },
             },
@@ -554,7 +555,7 @@ const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase
                 created_at: "desc",
             },
             where: {
-                Course: {
+                course: {
                     title: {
                         contains: parsedSearchItem,
                     },
@@ -563,7 +564,7 @@ const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase
                 user_id: userId,
             },
             include: {
-                Course: {
+                course: {
                     include: {
                         user: true,
                         course_categories: {
@@ -583,7 +584,7 @@ const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase
         }
         const totalRecord = await db.enrolled.count({
             where: {
-                Course: {
+                course: {
                     title: {
                         contains: parsedSearchItem,
                     },
@@ -1061,6 +1062,7 @@ const getListRatingOfCourse = async (req: Request): Promise<ResponseBase> => {
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
+
 const CourseServices = {
     getRightOfCourse,
     createCourse,
