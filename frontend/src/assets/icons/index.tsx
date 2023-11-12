@@ -21,10 +21,14 @@ import CartIcon from "./CartIcon";
 import CartRemoveIcon from "./CartRemoveIcon";
 import CartSaveIcon from "./CartSaveIcon";
 import GiftIcon from "./GiftIcon";
+import MyEnrollCourseIcon from "./MyEnrollCourseIcon";
+import AllcoursesIcon from "./AllcourseIcon";
 
 export {
     AddIcon,
     CreateIcon,
+    MyEnrollCourseIcon,
+    AllcoursesIcon,
     DeleteIcon,
     ChangePasswordIcon,
     EditIcon,

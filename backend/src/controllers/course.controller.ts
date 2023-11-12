@@ -73,7 +73,7 @@ export default class CourseController {
         return res.status(response.getStatusCode()).json(response);
     }
 
-    async getAllCourse(req: IRequestWithId, res: Response): Promise<Response> {
+    async getAllCourse(req: Request, res: Response): Promise<Response> {
         const response: ResponseBase = await services.CourseService.getAllCourse(req);
         return res.status(response.getStatusCode()).json(response);
     }
