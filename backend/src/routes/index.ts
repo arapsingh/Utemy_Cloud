@@ -6,6 +6,10 @@ import categoryRouter from "./category.router";
 import courseRouter from "./course.router";
 import feedbackRouter from "./feedback.router";
 import ratingRouter from "./rating.router";
+import cartRouter from "./cart.router";
+import checkoutRouter from "./checkout.router";
+import vnpayRouter from "./vnpay.router";
+
 export default {
     authRouter,
     userRouter,
@@ -15,4 +19,7 @@ export default {
     courseRouter,
     feedbackRouter,
     ratingRouter,
+    cartRouter,
+    checkoutRouter,
+    vnpayRouter,
 };

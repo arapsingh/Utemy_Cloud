@@ -70,7 +70,7 @@ model Course {
 
   course_categories CourseCategory[]
 
-  carts Cart[]
+  carts CartDetail[]
 
   invoice_detail InvoiceDetail[]
 
@@ -129,38 +129,70 @@ model Enrolled {
   created_at DateTime @default(now())
   user_id    Int
   course_id  Int
-  Course     Course?  @relation(fields: [course_id], references: [id], onDelete: Cascade)
-
-  User User? @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  course     Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model Cart {
-  id              Int     @id @default(autoincrement())
-  user_id         Int
+  id          Int          @id @default(autoincrement())
+  user_id     Int
+  user        User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  cart_detail CartDetail[]
+}
+
+model CartDetail {
+  id              Int      @id @default(autoincrement())
+  cart_id         Int
   course_id       Int
-  saved_for_later Boolean @default(false)
-  Course          Course? @relation(fields: [course_id], references: [id], onDelete: Cascade)
-  User            User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  saved_for_later Boolean  @default(false)
+  course          Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  cart            Cart     @relation(fields: [cart_id], references: [id], onDelete: Cascade)
+
+  @@unique([cart_id, course_id])
+  @@map(name: "cart_detail")
+}
+
+model Transaction {
+  id                   Int     @id @default(autoincrement())
+  invoice_id           Int
+  vnp_amount           Int
+  vnp_bank_code        String  @db.Text
+  vnp_bank_tran_no     String  @db.Text
+  vnp_card_type        String  @db.Text
+  vnp_order_info       String  @db.Text
+  vnp_pay_date         String  @db.Text
+  vnp_response_code    String  @db.Text
+  vnp_tmn_code         String  @db.Text
+  vnp_transaction_no   String  @db.Text
+  vnp_txn_ref          String  @db.Text
+  vnp_secure_hash_type String  @db.Text
+  vnp_secure_hash      String  @db.Text
+  invoice              Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
 }
 
 model Invoice {
   id             Int             @id @default(autoincrement())
   user_id        Int
-  create_at      DateTime        @default(now())
-  total_money    Float           @db.Float
-  User           User?           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  total_money    Float           @default(0) @db.Float
+  is_success     Boolean         @default(false)
+  created_at     DateTime        @default(now())
+  user           User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
   invoice_detail InvoiceDetail[]
+  Transaction    Transaction[]
 }
 
 model InvoiceDetail {
-  id           Int      @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   invoice_id   Int
   course_id    Int
-  retail_price Float    @db.Float
-  paid_price   Float    @db.Float
-  Course       Course?  @relation(fields: [course_id], references: [id], onDelete: Cascade)
-  Invoice      Invoice? @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+  retail_price Float   @db.Float
+  paid_price   Float   @db.Float
+  course       Course  @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  invoice      Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
 
+  @@unique([invoice_id, course_id])
   @@index([invoice_id, course_id], name: "idx_invoice_course")
   @@map(name: "invoice_detail")
 }
@@ -170,5 +202,5 @@ model Feedback {
   content    String   @db.Text
   user_id    Int
   created_at DateTime @default(now())
-  User       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

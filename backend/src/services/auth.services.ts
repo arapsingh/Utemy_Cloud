@@ -191,6 +191,11 @@ const verifyEmail = async (req: Request): Promise<ResponseBase> => {
                     },
                 });
                 if (verifyUser) {
+                    const createCart = await configs.db.cart.create({
+                        data: {
+                            user_id: verifyUser.id,
+                        },
+                    });
                     return new ResponseSuccess(200, constants.success.SUCCESS_VERIFY_EMAIL, true);
                 } else {
                     return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
