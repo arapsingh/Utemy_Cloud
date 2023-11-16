@@ -155,21 +155,19 @@ model CartDetail {
 }
 
 model Transaction {
-  id                   Int     @id @default(autoincrement())
-  invoice_id           Int
-  vnp_amount           Int
-  vnp_bank_code        String  @db.Text
-  vnp_bank_tran_no     String  @db.Text
-  vnp_card_type        String  @db.Text
-  vnp_order_info       String  @db.Text
-  vnp_pay_date         String  @db.Text
-  vnp_response_code    String  @db.Text
-  vnp_tmn_code         String  @db.Text
-  vnp_transaction_no   String  @db.Text
-  vnp_txn_ref          String  @db.Text
-  vnp_secure_hash_type String  @db.Text
-  vnp_secure_hash      String  @db.Text
-  invoice              Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+  id                 Int     @id @default(autoincrement())
+  invoice_id         Int
+  vnp_amount         Int
+  vnp_bank_code      String  @db.Text
+  vnp_bank_tran_no   String  @db.Text
+  vnp_card_type      String  @db.Text
+  vnp_order_info     String  @db.Text
+  vnp_pay_date       String  @db.Text
+  vnp_response_code  String  @db.Text
+  vnp_tmn_code       String  @db.Text
+  vnp_transaction_no String  @db.Text
+  vnp_txn_ref        String  @db.Text
+  invoice            Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
 }
 
 model Invoice {

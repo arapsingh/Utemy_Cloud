@@ -7,6 +7,9 @@ import lessonSlice from "./slices/lesson.slice";
 import feedbackSlice from "./slices/feedback.slice";
 import categorySlice from "./slices/category.slice";
 import ratingSlice from "./slices/rating.slice";
+import cartSlice from "./slices/cart.slice";
+import invoiceSlice from "./slices/invoice.slice";
+import vnpaySlice from "./slices/vnpay.slice";
 
 // import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
 
@@ -20,6 +23,9 @@ const store = configureStore({
         feedbackSlice: feedbackSlice,
         categorySlice: categorySlice,
         ratingSlice: ratingSlice,
+        cartSlice: cartSlice,
+        invoiceSlice,
+        vnpaySlice,
         // fileStorageSlice: fileStorageSlice,
     },
     middleware: (getDefaultMiddleware) =>

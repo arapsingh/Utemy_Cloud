@@ -7,7 +7,7 @@ import UserController from "./user.controller";
 import FeedbackController from "./feedback.controller";
 import RatingController from "./rating.controller";
 import CartController from "./cart.controller";
-import CheckoutController from "./checkout.controller,";
+import InvoiceController from "./invoice.controller,";
 import VnpayController from "./vnpay.controller";
 
 export default {
@@ -20,6 +20,6 @@ export default {
     feedbackController: new FeedbackController(),
     ratingController: new RatingController(),
     cartController: new CartController(),
-    checkoutController: new CheckoutController(),
+    invoiceController: new InvoiceController(),
     vnpayController: new VnpayController(),
 };

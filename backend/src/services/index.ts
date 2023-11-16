@@ -8,7 +8,7 @@ import FeedbackServices from "./feedback.services";
 import RatingServices from "./rating.services";
 import CartServices from "./cart.services";
 import VnpayServices from "./vnpay_services";
-import CheckoutServices from "./checkout.services";
+import InvoiceServices from "./invoice.services";
 export default {
     AuthServices,
     UserService,
@@ -20,5 +20,5 @@ export default {
     RatingServices,
     CartServices,
     VnpayServices,
-    CheckoutServices,
+    InvoiceServices,
 };
