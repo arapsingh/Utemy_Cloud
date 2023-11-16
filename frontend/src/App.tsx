@@ -20,6 +20,9 @@ import EditCourse from "./pages/EditCourse";
 import NotFound from "./pages/NotFound";
 import AllCourses from "./pages/AllCourse";
 import WatchVideo from "./pages/WatchVideo";
+import Checkout from "./pages/CheckOut";
+import VnPayReturn from "./pages/VnPayReturn";
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoute from "./routes/PrivateRoutes";
@@ -50,6 +53,8 @@ function App() {
                             <Route path="/cart" element={<Cart />}></Route>
                             <Route path="/my-courses/edit/:course_id" element={<EditCourse />}></Route>
                             <Route path="/course-detail/:slug/watch" element={<WatchVideo />}></Route>
+                            <Route path="/checkout" element={<Checkout />}></Route>
+                            <Route path="/checkout/vnpay_return" element={<VnPayReturn />}></Route>
                         </Route>
                         <Route path="/" element={<HomePage />}></Route>
                         <Route path="/login" element={<Login />}></Route>

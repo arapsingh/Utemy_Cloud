@@ -35,7 +35,12 @@ const addCourseToCart = async (req: IRequestWithId): Promise<ResponseBase> => {
             } else {
                 cartId = isCartExist.id;
             }
-
+            const isEnrolled = await configs.db.enrolled.findFirst({
+                where: {
+                    user_id: userId,
+                    course_id: courseId,
+                },
+            });
             const isExistInCart = await configs.db.cartDetail.findFirst({
                 where: {
                     course_id: courseId,
@@ -43,6 +48,7 @@ const addCourseToCart = async (req: IRequestWithId): Promise<ResponseBase> => {
                 },
             });
             if (isExistInCart) return new ResponseError(400, "Already in cart", false);
+            else if (isEnrolled) return new ResponseError(400, "Already enrolled", false);
             else {
                 const addCourseToCart = await configs.db.cartDetail.create({
                     data: {
@@ -178,10 +184,42 @@ const getAllCart = async (req: IRequestWithId): Promise<ResponseBase> => {
             where: {
                 cart_id: cartId,
             },
+            include: {
+                course: {
+                    include: {
+                        user: true,
+                    },
+                },
+            },
         });
+        const cart_items = getAllCart.map((cartDetail) => {
+            const course = {
+                course_id: cartDetail.course.id,
+                title: cartDetail.course.title,
+                slug: cartDetail.course.slug,
+                thumbnail: cartDetail.course.thumbnail,
+                average_rating: cartDetail.course.average_rating,
+                number_of_rating: cartDetail.course.number_of_rating,
+                number_of_enrolled: cartDetail.course.number_of_enrolled,
+                author: cartDetail.course.user,
+                price: cartDetail.course.price,
+                sale_price: cartDetail.course.sale_price,
+                sale_until: cartDetail.course.sale_until,
+            };
+            const cart_item = {
+                cart_detail_id: cartDetail.id,
+                saved_for_later: cartDetail.saved_for_later,
+                course,
+            };
+            return cart_item;
+        });
+        const data = {
+            cart_id: cartId,
+            cart_items,
+        };
         if (!getAllCart) return new ResponseError(400, "Cart not found", false);
         else {
-            return new ResponseSuccess(200, "Get cart successfully", true, getAllCart);
+            return new ResponseSuccess(200, "Get cart successfully", true, data);
         }
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {

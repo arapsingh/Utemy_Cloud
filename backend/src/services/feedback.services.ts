@@ -46,7 +46,7 @@ const getAllFeedbacks = async (req: IRequestWithId): Promise<ResponseBase> => {
             skip: pageSize * (Number(pageIndex) - 1),
             take: pageSize,
             include: {
-                User: {
+                user: {
                     select: {
                         id: true,
                         url_avatar: true,
@@ -64,10 +64,10 @@ const getAllFeedbacks = async (req: IRequestWithId): Promise<ResponseBase> => {
             const feedback: FeedbackResponse = {
                 feedback_id: item.id,
                 content: item.content,
-                user_id: item.User.id,
-                first_name: item.User.first_name,
-                last_name: item.User.last_name,
-                url_avatar: item.User.url_avatar,
+                user_id: item.user.id,
+                first_name: item.user.first_name,
+                last_name: item.user.last_name,
+                url_avatar: item.user.url_avatar,
             };
             return getFeedbacksList.push(feedback);
         });

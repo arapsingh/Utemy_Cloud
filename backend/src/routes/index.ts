@@ -7,7 +7,7 @@ import courseRouter from "./course.router";
 import feedbackRouter from "./feedback.router";
 import ratingRouter from "./rating.router";
 import cartRouter from "./cart.router";
-import checkoutRouter from "./checkout.router";
+import invoiceRouter from "./invoice.router";
 import vnpayRouter from "./vnpay.router";
 
 export default {
@@ -20,6 +20,6 @@ export default {
     feedbackRouter,
     ratingRouter,
     cartRouter,
-    checkoutRouter,
+    invoiceRouter,
     vnpayRouter,
 };
