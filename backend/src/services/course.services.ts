@@ -155,7 +155,6 @@ const createCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
                     },
                 },
             });
-            console.log(listCategoryId);
             if (isCreateCourse) {
                 return new ResponseSuccess(201, constants.success.SUCCESS_CREATE_DATA, true);
             }
@@ -319,7 +318,7 @@ const getTop10RateCourse = async (req: IRequestWithId): Promise<ResponseBase> =>
         });
         // Định dạng dữ liệu theo cấu trúc yêu cầu
         const formattedData = top10Courses.map((course) => {
-            const tempCate = course.course_categories.map((cc) => {
+            const tempCate = (course.course_categories as any).map((cc: any) => {
                 const temp = {
                     category_id: cc.Category.id,
                     title: cc.Category.title,
@@ -394,7 +393,7 @@ const getTop10EnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase
         });
         // Định dạng dữ liệu theo cấu trúc yêu cầu
         const formattedData = top10Courses.map((course) => {
-            const tempCate = course.course_categories.map((cc) => {
+            const tempCate = (course.course_categories as any).map((cc: any) => {
                 const temp = {
                     category_id: cc.Category.id,
                     title: cc.Category.title,
@@ -913,14 +912,16 @@ const getCourseDetailById = async (req: IRequestWithId): Promise<ResponseBase> =
                 return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
             } else {
                 const categories: Category[] = [];
-                course.course_categories.forEach((category) => {
-                    const temp: Category = {
-                        category_id: category.Category.id,
-                        title: category.Category.title,
-                        url_image: category.Category.url_image,
-                    };
-                    categories.push(temp);
-                });
+                (course.course_categories as any).forEach(
+                    (category: { Category: { id: any; title: any; url_image: any } }) => {
+                        const temp: Category = {
+                            category_id: category.Category.id,
+                            title: category.Category.title,
+                            url_image: category.Category.url_image,
+                        };
+                        categories.push(temp);
+                    },
+                );
                 const author = { ...course.user, user_id: course.user.id };
                 const sections: Section[] = course.sections;
                 const courseData: CourseDetail = {
