@@ -1,4 +1,7 @@
 import React from "react";
+import InCartCourse from "./InCartCourse";
+import OutCartCourse from "./OutCartCourse";
+import { Link } from "react-router-dom";
 const Cart: React.FC = () => {
     return (
         <>
@@ -7,94 +10,14 @@ const Cart: React.FC = () => {
                 <div className="w-full flex flex-col  h-fit gap-4 ">
                     <div className="w-full flex flex-col  h-fit gap-4 p-4 ">
                         <p className="text-navy text-2xl">My cart</p>
-                        <div className="flex flex-col p-4 text-lg font-semibold shadow-md border rounded-sm">
-                            <div className="flex flex-col md:flex-row gap-3 justify-between">
-                                <div className="flex flex-row gap-6 ">
-                                    <div className="w-28 h-28">
-                                        <img
-                                            alt="cac"
-                                            className="w-full h-full"
-                                            src="http://localhost:3001//images//avatar//1698738997794.jpg"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                        <p className="text-2xl text-lightblue font-bold">Tên</p>
-                                        <p className="text-xs text-gray-600 font-semibold">
-                                            Author: <span className="font-normal">Tác giả</span>
-                                        </p>
-                                        <p className="text-xs text-gray-600 font-semibold">
-                                            Rating: <span className="font-normal">5</span>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className=" flex flex-row items-center text-right">
-                                    <div className="flex flex-col  items-start mr-[20px]">
-                                        <span className="w-full hover:underline hover:cursor-pointer hover:opacity-75">
-                                            Remove
-                                        </span>
-                                        <span className="w-full hover:underline hover:cursor-pointer hover:opacity-75">
-                                            Save for later
-                                        </span>
-                                        <span></span>
-                                    </div>
-                                    <div className="ml-[25px]">
-                                        <p className="text-gray-600 font-normal text-sm line-through">
-                                            đ99.99
-                                            {/* <span className="text-emerald-500 ml-2">(-50% OFF)</span> */}
-                                        </p>
-                                        <p className="text-lightblue font-bold text-2xl">đ49.99</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex flex-row self-center gap-1"></div>
-                        </div>
+                        <InCartCourse />
+                        <InCartCourse />
+                        <InCartCourse />
                     </div>
 
                     <div className="w-full flex flex-col  h-fit gap-4 p-4 ">
                         <p className="text-navy text-2xl">Saved for later</p>
-                        <div className="flex flex-col p-4 text-lg font-semibold shadow-md border rounded-sm">
-                            <div className="flex flex-col md:flex-row gap-3 justify-between">
-                                <div className="flex flex-row gap-6 ">
-                                    <div className="w-28 h-28">
-                                        <img
-                                            alt="cac"
-                                            className="w-full h-full"
-                                            src="http://localhost:3001//images//avatar//1698738997794.jpg"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                        <p className="text-2xl text-lightblue font-bold">Tên</p>
-                                        <p className="text-xs text-gray-600 font-semibold">
-                                            Author: <span className="font-normal">Tác giả</span>
-                                        </p>
-                                        <p className="text-xs text-gray-600 font-semibold">
-                                            Rating: <span className="font-normal">5</span>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className=" flex flex-row items-center text-right">
-                                    <div className="flex flex-col  items-start mr-[20px]">
-                                        <span className="w-full hover:underline hover:cursor-pointer hover:opacity-75">
-                                            Remove
-                                        </span>
-                                        <span className="w-full hover:underline hover:cursor-pointer hover:opacity-75">
-                                            Save for later
-                                        </span>
-                                        <span></span>
-                                    </div>
-                                    <div className="ml-[25px]">
-                                        <p className="text-gray-600 font-normal text-sm line-through">
-                                            đ99.99
-                                            {/* <span className="text-emerald-500 ml-2">(-50% OFF)</span> */}
-                                        </p>
-                                        <p className="text-lightblue font-bold text-2xl">đ49.99</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex flex-row self-center gap-1"></div>
-                        </div>
+                        <OutCartCourse />
                     </div>
                 </div>
 
@@ -119,7 +42,6 @@ const Cart: React.FC = () => {
                                 className="input input-bordered input-info input-md w-full max-w-xs"
                             />
                         </div>
-                        {/* <hr className="bg-gray-200 h-0.5"> */}
                         <div className="flex flex-row justify-between">
                             <p className="text-gray-600 text-3xl font-bold">Total</p>
                             <div>
@@ -127,12 +49,18 @@ const Cart: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex gap-2">
-                            <button className="transition-colors text-sm bg-bluelogo hover:bg-bluelogo/50 p-2 rounded-sm w-full text-white text-hover shadow-md">
-                                CHECKOUT
-                            </button>
-                            <button className="transition-colors text-sm bg-white border hover:opacity-50 border-gray-600 p-2 rounded-sm w-full text-gray-700 text-hover shadow-md">
-                                ADD MORE PRODUCTS
-                            </button>
+                            <Link
+                                className="transition-colors text-center text-sm bg-bluelogo hover:bg-background hover:text-bluelogo hover:border-bluelogo hover:border p-2 rounded-sm w-full text-white text-hover shadow-md"
+                                to="/checkout"
+                            >
+                                <span>CHECKOUT</span>
+                            </Link>
+                            <Link
+                                className="transition-colors text-center text-sm bg-white border hover:text-white hover:bg-gray-600 border-gray-600  p-2 rounded-sm w-full text-gray-700 text-hover shadow-md"
+                                to="/"
+                            >
+                                <span>ADD MORE PRODUCTS</span>
+                            </Link>
                         </div>
                     </div>
                 </div>
