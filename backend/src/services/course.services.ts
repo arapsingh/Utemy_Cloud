@@ -21,6 +21,7 @@ import {
 import { PagingResponse } from "../types/response";
 import { title } from "process";
 import { Section } from "../types/section";
+import { create } from "domain";
 const getRightOfCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const user_id = req.user_id;
@@ -476,7 +477,7 @@ const searchMyCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
                 sections: true,
                 enrolleds: {
                     include: {
-                        User: true,
+                        user: true,
                     },
                 },
             },
@@ -554,7 +555,7 @@ const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase
                 created_at: "desc",
             },
             where: {
-                Course: {
+                course: {
                     title: {
                         contains: parsedSearchItem,
                     },
@@ -563,7 +564,7 @@ const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase
                 user_id: userId,
             },
             include: {
-                Course: {
+                course: {
                     include: {
                         user: true,
                         course_categories: {
@@ -583,7 +584,7 @@ const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase
         }
         const totalRecord = await db.enrolled.count({
             where: {
-                Course: {
+                course: {
                     title: {
                         contains: parsedSearchItem,
                     },
@@ -596,22 +597,22 @@ const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase
 
         const courseCard: CourseInfo[] = (enrolledCourses as any).map((enroll: any) => {
             return {
-                course_id: enroll.Course?.id,
-                title: enroll.Course?.title,
-                summary: enroll.Course?.summary,
-                thumbnail: enroll.Course?.thumbnail,
-                number_of_rating: enroll.Course?.number_of_rating,
-                number_of_enrolled: enroll.Course?.number_of_enrolled,
-                average_rating: enroll.Course?.average_rating,
-                created_at: enroll.Course.created_at,
-                number_of_section: enroll.Course.sections.length,
+                course_id: enroll.course?.id,
+                title: enroll.course?.title,
+                summary: enroll.course?.summary,
+                thumbnail: enroll.course?.thumbnail,
+                number_of_rating: enroll.course?.number_of_rating,
+                number_of_enrolled: enroll.course?.number_of_enrolled,
+                average_rating: enroll.course?.average_rating,
+                created_at: enroll.course.created_at,
+                number_of_section: enroll.course.sections.length,
                 author: {
-                    id: enroll.Course?.user.id,
-                    first_name: enroll.Course?.user.first_name,
-                    last_name: enroll.Course?.user.last_name,
+                    id: enroll.course?.user.id,
+                    first_name: enroll.course?.user.first_name,
+                    last_name: enroll.course?.user.last_name,
                 },
-                slug: enroll.Course?.slug,
-                category: (enroll.Course?.course_categories as any).map((cc: any) => {
+                slug: enroll.course?.slug,
+                category: (enroll.course?.course_categories as any).map((cc: any) => {
                     return {
                         id: cc.Category?.id,
                         title: cc.Category?.title,
@@ -1061,6 +1062,7 @@ const getListRatingOfCourse = async (req: Request): Promise<ResponseBase> => {
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
+
 const CourseServices = {
     getRightOfCourse,
     createCourse,

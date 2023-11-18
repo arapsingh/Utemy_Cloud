@@ -64,5 +64,19 @@ export const apiCaller = (method: string, path: string, data?: any) => {
         data,
     });
 };
+export const apiCallerVnpay = (method: string, path: string, data?: any) => {
+    const refreshToken = Cookies.get("refreshToken");
+    return axiosPublic({
+        method,
+        headers: {
+            "Access-Control-Allow-Credentials": true,
+            "Access-Control-Allow-Origin": "*",
+            // "Origin:": "https://sandbox.vnpayment.vn",
+            rftoken: `rfToken ${refreshToken}`,
+        },
+        url: `/${path}`,
+        data,
+    });
+};
 
 export default apiCaller;

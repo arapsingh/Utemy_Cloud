@@ -15,7 +15,12 @@ export const general = {
     PAGE_SIZE: Number(process.env.PAGE_SIZE),
     EMAIL_SERVER: process.env.EMAIL_SERVER,
     PASSWORD_SERVER: process.env.PASSWORD_SERVER,
-
     PATH_TO_PUBLIC_FOLDER_VIDEOS: path.join(process.cwd(), "/public/videos"),
     PATH_TO_IMAGES: path.join(process.cwd(), "/public/images"),
+    TZ: process.env.TZ,
+    vnp_TmnCode: process.env.VNP_TMN_CODE,
+    vnp_HashSecret: process.env.VNP_HASH_SECRET,
+    vnp_Url: process.env.VNP_URL,
+    vnp_Api: process.env.VNP_API,
+    vnp_ReturnUrl: process.env.VNP_RETURN_URL,
 };

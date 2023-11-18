@@ -30,7 +30,7 @@ type CategorySliceType = {
     categories: Category[];
     totalPage: number;
     isLoading: boolean;
-    isGetLoading: false;
+    isGetLoading: boolean;
 };
 
 const initialState: CategorySliceType = {
@@ -46,24 +46,24 @@ export const categorySlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(get5Categories.pending, (state) => {
-            state.isLoading = true;
+            state.isGetLoading = true;
         });
         builder.addCase(get5Categories.fulfilled, (state, action) => {
             state.top5categories = action.payload.data as Category[];
-            state.isLoading = false;
+            state.isGetLoading = false;
         });
         builder.addCase(get5Categories.rejected, (state) => {
-            state.isLoading = false;
+            state.isGetLoading = false;
         });
         builder.addCase(getCategories.pending, (state) => {
-            state.isLoading = true;
+            state.isGetLoading = true;
         });
         builder.addCase(getCategories.fulfilled, (state, action) => {
             state.categories = action.payload.data as Category[];
-            state.isLoading = false;
+            state.isGetLoading = false;
         });
         builder.addCase(getCategories.rejected, (state) => {
-            state.isLoading = false;
+            state.isGetLoading = false;
         });
     },
 });
