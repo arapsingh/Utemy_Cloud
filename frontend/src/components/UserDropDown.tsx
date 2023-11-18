@@ -9,7 +9,7 @@ import {
     UserIcon,
 } from "../assets/icons";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { authActions } from "../redux/slices";
 
 const UserDropDown: React.FC = () => {
@@ -20,11 +20,13 @@ const UserDropDown: React.FC = () => {
         navigate("/");
     };
 
+    const totalCourseInCart = useAppSelector((state) => state.cartSlice.totalCourseInCart);
+
     return (
         <>
             <Link to={"/cart"} className="w-full rounded-lg hover:bg-footer">
                 <div className="flex justify-start indicator items-center px-4 py-4">
-                    <span className="indicator-item badge badge-info text-white">300</span>
+                    <span className="indicator-item badge badge-info text-white">{totalCourseInCart}</span>
                     <CartIcon />
                     <span className="ml-3 font-medium text-lg">Cart</span>
                 </div>

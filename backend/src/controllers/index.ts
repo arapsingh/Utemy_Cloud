@@ -6,6 +6,9 @@ import CourseController from "./course.controller";
 import UserController from "./user.controller";
 import FeedbackController from "./feedback.controller";
 import RatingController from "./rating.controller";
+import CartController from "./cart.controller";
+import InvoiceController from "./invoice.controller,";
+import VnpayController from "./vnpay.controller";
 
 export default {
     authController: new AuthController(),
@@ -16,4 +19,7 @@ export default {
     courseController: new CourseController(),
     feedbackController: new FeedbackController(),
     ratingController: new RatingController(),
+    cartController: new CartController(),
+    invoiceController: new InvoiceController(),
+    vnpayController: new VnpayController(),
 };
