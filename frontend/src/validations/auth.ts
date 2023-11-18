@@ -27,11 +27,11 @@ export const signupValidationSchema = Yup.object({
         .oneOf([Yup.ref("password")], constants.error.ERROR_CONFIRM_PASSWORD),
     first_name: Yup.string()
         .trim()
-        .required(constants.error.ERROR_FIRST_NAME_REQURIED)
+        .required(constants.error.ERROR_FIRST_NAME_REQUIRED)
         .max(30, constants.error.ERROR_FIRST_NAME_MAX),
     last_name: Yup.string()
         .trim()
-        .required(constants.error.ERROR_LAST_NAME_REQURIED)
+        .required(constants.error.ERROR_LAST_NAME_REQUIRED)
         .max(30, constants.error.ERROR_LAST_NAME_MAX),
 });
 

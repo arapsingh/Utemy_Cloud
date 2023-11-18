@@ -23,6 +23,7 @@ import WatchVideo from "./pages/WatchVideo";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoute from "./routes/PrivateRoutes";
+import MyProfile from "./pages/MyProfile";
 
 function App() {
     const dispatch = useAppDispatch();
@@ -50,6 +51,7 @@ function App() {
                             <Route path="/cart" element={<Cart />}></Route>
                             <Route path="/my-courses/edit/:course_id" element={<EditCourse />}></Route>
                             <Route path="/course-detail/:slug/watch" element={<WatchVideo />}></Route>
+                            <Route path="/my-profile" element={<MyProfile />}></Route>
                         </Route>
                         <Route path="/" element={<HomePage />}></Route>
                         <Route path="/login" element={<Login />}></Route>

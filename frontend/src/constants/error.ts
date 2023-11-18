@@ -23,6 +23,7 @@ const error = {
     ERROR_PASSWORD_MAX: "Password must be under 20 chars",
     ERROR_PASSWORD_MIN: "Password must be more than 8 chars",
     ERROR_WRONG_PASSWORD: "Wrong password",
+    ERROR_WEAK_PASSWORD: "Weak password",
     // current passsword
     ERROR_CURRENT_PASSWORD_STRING: "Current password must be string",
     ERROR_CURRENT_PASSWORD_REQUIRED: "Current password is required",
@@ -34,17 +35,18 @@ const error = {
     ERROR_NEW_PASSWORD_REQUIRED: "New password is required",
     ERROR_NEW_PASSWORD_MAX: "New password must be under 20 chars",
     ERROR_NEW_PASSWORD_MIN: "New password must be more than 20 chars",
+    ERROR_NEW_PASSWORD_DIFFERENT_OLD_PASSWORD: "New password must be different from old password",
     //token
     ERROR_BAD_TOKEN: "Bad token",
     ERROR_TOKEN_STRING: "Token must be a string",
     ERROR_TOKEN_REQUIRED: "Token is requried",
     //first name
     ERROR_FIRST_NAME_STRING: "First name must be string",
-    ERROR_FIRST_NAME_REQURIED: "First name is required",
+    ERROR_FIRST_NAME_REQUIRED: "First name is required",
     ERROR_FIRST_NAME_MAX: "First name must be under 30 chars",
     //last name
     ERROR_LAST_NAME_STRING: "Last name must be string",
-    ERROR_LAST_NAME_REQURIED: "Last name is requried",
+    ERROR_LAST_NAME_REQUIRED: "Last name is required",
     ERROR_LAST_NAME_MAX: "Last name must be under 30 chars",
     //user
     ERROR_USER_NOT_FOUND: "Wrong email or user doesn't exist",

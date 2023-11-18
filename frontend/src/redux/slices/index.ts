@@ -6,3 +6,4 @@ export * as lessonActions from "./lesson.slice";
 export * as feedbackActions from "./feedback.slice";
 export * as categoryActions from "./category.slice";
 export * as ratingActions from "./rating.slice";
+export * as fileStorageActions from "./filestorage.slice";

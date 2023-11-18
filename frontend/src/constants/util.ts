@@ -6,5 +6,12 @@ const util = {
     VIDEO_MP4: "video/mp4",
     VIDEO_MKV: "video/x-matroska",
     VIDEO_MOV: "video/mov",
+
+    //HTTP METHOD
+    HTTP_POST: "POST",
+    HTTP_GET: "GET",
+    HTTP_PATCH: "PATCH",
+    HTTP_PUT: "PUT",
+    HTTP_DELETE: "DELETE",
 };
 export default util;
