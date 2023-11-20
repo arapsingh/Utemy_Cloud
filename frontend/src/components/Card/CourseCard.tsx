@@ -1,12 +1,12 @@
 import { FC, useState } from "react";
 import { Link } from "react-router-dom";
-import ThreeDotIcon from "../assets/icons/ThreedotIcon";
-import EditIcon from "../assets/icons/EditIcon";
-import DeleteIcon from "../assets/icons/DeleteIcon";
-import { User } from "../types/user";
-import CompleteIcon from "../assets/icons/CompleteIcon";
-import TotalRating from "./TotalRating";
-import { convertDateFormat, calDayRemains } from "../utils/helper";
+import ThreeDotIcon from "../../assets/icons/ThreedotIcon";
+import EditIcon from "../../assets/icons/EditIcon";
+import DeleteIcon from "../../assets/icons/DeleteIcon";
+import { User } from "../../types/user";
+import CompleteIcon from "../../assets/icons/CompleteIcon";
+import TotalRating from "../TotalRating";
+import { convertDateFormat, calDayRemains } from "../../utils/helper";
 
 type Course = {
     id: number;

@@ -22,6 +22,7 @@ const getProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
                 url_avatar: true,
                 description: true,
                 email: true,
+                is_admin: true,
             },
         });
 

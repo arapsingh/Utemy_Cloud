@@ -353,6 +353,7 @@ const getMe = async (req: IRequestWithId): Promise<ResponseBase> => {
                 last_name: isFoundUser.last_name,
                 url_avatar: isFoundUser.url_avatar,
                 description: isFoundUser.description,
+                is_admin: isFoundUser.is_admin,
             };
             return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true, userInformation);
         } else {
