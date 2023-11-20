@@ -36,16 +36,6 @@ export default class CategoryController {
         return res.status(response.getStatusCode()).json(response);
     }
     async deleteCategory(req: IRequestWithId, res: Response): Promise<Response> {
-        const errorValidate: ValidationError | undefined = categorySchema.deleteCategorySchema.validate(req.body).error;
-
-        if (errorValidate) {
-            console.log(errorValidate);
-            return res.status(400).json({
-                status_code: 400,
-                message: convertJoiErrorToString(errorValidate),
-                success: false,
-            });
-        }
         const response: ResponseBase = await services.CategoryServices.deleteCategory(req);
         return res.status(response.getStatusCode()).json(response);
     }

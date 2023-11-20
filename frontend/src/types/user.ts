@@ -5,4 +5,5 @@ export type User = {
     url_avatar: string;
     user_id: number | undefined;
     description: string;
+    is_admin: boolean;
 };

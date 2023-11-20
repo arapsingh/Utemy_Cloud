@@ -7,10 +7,10 @@ import {
     MyEnrollCourseIcon,
     ChangePasswordIcon,
     UserIcon,
-} from "../assets/icons";
+} from "../../assets/icons";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { authActions } from "../redux/slices";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { authActions } from "../../redux/slices";
 
 const UserDropDown: React.FC = () => {
     const dispatch = useAppDispatch();
