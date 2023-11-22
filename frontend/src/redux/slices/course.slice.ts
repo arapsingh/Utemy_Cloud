@@ -43,6 +43,7 @@ const initialState: CourseSliceType = {
             url_avatar: "",
             user_id: undefined,
             description: "",
+            is_admin: false,
         },
         price: 0,
         sale_price: 0,

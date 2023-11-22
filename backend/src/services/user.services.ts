@@ -5,9 +5,11 @@ import configs from "../configs";
 import { OutstandingCourse } from "src/types/course";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { ResponseBase, ResponseError, ResponseSuccess } from "../common/response";
+import { PagingResponse } from "../types/response";
 import constants from "../constants";
 import helper from "../helper";
-import path from "path";
+import { User } from "../types/user";
+import bcrypt from "bcrypt";
 
 const getProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
@@ -22,6 +24,7 @@ const getProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
                 url_avatar: true,
                 description: true,
                 email: true,
+                is_admin: true,
             },
         });
 
@@ -55,8 +58,8 @@ const updateProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
                 description: description,
             },
         });
-        if (!isUpdate) return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, false); //Missing Request body
-        return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true);
+        if (!isUpdate) return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, false); //Missing Request body
+        return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
             return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
@@ -178,11 +181,213 @@ const changeAvatar = async (req: IRequestWithId): Promise<ResponseBase> => {
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
+const getAllUsers = async (req: IRequestWithId): Promise<ResponseBase> => {
+    try {
+        const { page_index: pageIndex, search_item: searchItem, role } = req.query;
+        const { user_id: userId } = req;
+        const isAdmin = await configs.db.user.findFirst({
+            where: {
+                id: Number(userId),
+                is_admin: true,
+                is_deleted: false,
+            },
+        });
+        if (!isAdmin) return new ResponseError(400, constants.error.ERROR_UNAUTHORIZED, false);
+        const parsePageIndex = Number(pageIndex);
+        const parsedPageIndex = isNaN(parsePageIndex) ? 1 : parsePageIndex;
+        const parsedSearchItem = searchItem as string;
+        const skip = (parsedPageIndex - 1) * 10;
+        const take = 10;
 
+        let searchUserData;
+        if (role === "All") {
+            searchUserData = {
+                OR: [
+                    {
+                        first_name: {
+                            contains: parsedSearchItem,
+                        },
+                    },
+                    {
+                        last_name: {
+                            contains: parsedSearchItem,
+                        },
+                    },
+                    {
+                        email: {
+                            contains: parsedSearchItem,
+                        },
+                    },
+                ],
+            };
+        } else {
+            searchUserData = {
+                OR: [
+                    {
+                        first_name: {
+                            contains: parsedSearchItem,
+                        },
+                    },
+                    {
+                        last_name: {
+                            contains: parsedSearchItem,
+                        },
+                    },
+                    {
+                        email: {
+                            contains: parsedSearchItem,
+                        },
+                    },
+                ],
+                is_admin: role === "Admin" ? true : false,
+            };
+        }
+
+        const users = await configs.db.user.findMany({
+            skip,
+            take,
+            orderBy: {
+                created_at: "desc",
+            },
+            where: searchUserData,
+        });
+
+        const totalRecord = await db.user.count({
+            where: searchUserData,
+        });
+
+        const totalPage = Math.ceil(totalRecord / take);
+
+        const usersData: User[] = users.map((user) => {
+            return {
+                user_id: user.id,
+                description: user.description as string,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                email: user.email,
+                url_avatar: user.url_avatar as string,
+                is_admin: user.is_admin,
+                is_delete: user.is_deleted,
+                created_at: user.created_at.toString(),
+            };
+        });
+
+        const responseData: PagingResponse<User[]> = {
+            total_page: totalPage,
+            total_record: totalRecord,
+            data: usersData,
+        };
+        return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, responseData);
+    } catch (error) {
+        console.error("Lỗi xảy ra:", error);
+        if (error instanceof PrismaClientKnownRequestError) {
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+        }
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const createNewUser = async (req: IRequestWithId): Promise<ResponseBase> => {
+    try {
+        const { first_name, last_name, email, password, is_admin } = req.body;
+        const user_id = Number(req.user_id);
+        const isAdmin = await configs.db.user.findFirst({
+            where: {
+                id: user_id,
+                is_admin: true,
+            },
+        });
+        if (!isAdmin) return new ResponseError(400, constants.error.ERROR_UNAUTHORIZED, false);
+        const hashedPassword = await bcrypt.hash(password, configs.general.HASH_SALT);
+        const createUser = await configs.db.user.create({
+            data: {
+                first_name,
+                last_name,
+                email,
+                password: hashedPassword,
+                is_admin,
+                is_verify: true,
+            },
+        });
+        if (createUser) return new ResponseSuccess(200, constants.success.SUCCESS_CREATE_DATA, true);
+        else return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    } catch (error) {
+        console.error("Lỗi xảy ra:", error);
+        if (error instanceof PrismaClientKnownRequestError) {
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+        }
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const editUser = async (req: IRequestWithId): Promise<ResponseBase> => {
+    try {
+        const { id } = req.params;
+        const { first_name, last_name, email, is_admin } = req.body;
+        const admin_id = Number(req.user_id);
+        const isAdmin = await configs.db.user.findFirst({
+            where: {
+                id: admin_id,
+                is_admin: true,
+            },
+        });
+        if (!isAdmin) return new ResponseError(400, constants.error.ERROR_UNAUTHORIZED, false);
+        const createUser = await configs.db.user.update({
+            data: {
+                first_name,
+                last_name,
+                email,
+                is_admin,
+            },
+            where: {
+                id: Number(id),
+            },
+        });
+        if (createUser) return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
+        else return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    } catch (error) {
+        console.error("Lỗi xảy ra:", error);
+        if (error instanceof PrismaClientKnownRequestError) {
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+        }
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const deleteUser = async (req: IRequestWithId): Promise<ResponseBase> => {
+    try {
+        const { id } = req.params;
+        const admin_id = Number(req.user_id);
+        const isAdmin = await configs.db.user.findFirst({
+            where: {
+                id: admin_id,
+                is_admin: true,
+            },
+        });
+        if (!isAdmin) return new ResponseError(400, constants.error.ERROR_UNAUTHORIZED, false);
+        const createUser = await configs.db.user.update({
+            data: {
+                is_deleted: true,
+            },
+            where: {
+                id: Number(id),
+            },
+        });
+        if (createUser) return new ResponseSuccess(200, constants.success.SUCCESS_DELETE_DATA, true);
+        else return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    } catch (error) {
+        console.error("Lỗi xảy ra:", error);
+        if (error instanceof PrismaClientKnownRequestError) {
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+        }
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
 const UserServices = {
     changeAvatar,
     getProfile,
     updateProfile,
     getAuthorProfile,
+    getAllUsers,
+    createNewUser,
+    deleteUser,
+    editUser,
 };
 export default UserServices;

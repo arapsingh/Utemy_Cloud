@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Navbar/Navbar";
 import { CourseCard, Pagination } from "../../components";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { Course, SearchAllCourses } from "../../types/course";

@@ -13,6 +13,7 @@ const success = {
     SUCCESS_GET_DATA: "Get data successfully",
     SUCCESS_CREATE_DATA: "Create data successfully",
     SUCCESS_UPDATE_DATA: "Update data successfully",
+    SUCCESS_DELETE_DATA: "Delete data successfully",
 
     //lesson
     SUCCESS_CREATE_LESSON: "Create lesson successfully",
@@ -30,5 +31,11 @@ const success = {
 
     //feedback
     SUCCESS_CREATE_FEEDBACK: "Create feedback successfully",
+
+    //cart
+    SUCCESS_ADD_CART: "Add to cart successfully",
+    SUCCESS_REMOVE_CART: "Remove from cart successfully",
+    SUCCESS_SAVE_FOR_LATER: "Change saved successfully",
+    SUCCESS_GET_CART: "Get cart successfully ",
 };
 export default success;

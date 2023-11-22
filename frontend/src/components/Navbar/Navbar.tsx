@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { categoryActions } from "../redux/slices";
-import { Category } from "../types/category";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { categoryActions } from "../../redux/slices";
+import { Category } from "../../types/category";
 import { NavLink } from "react-router-dom";
 
 const Navbar: React.FC = () => {
