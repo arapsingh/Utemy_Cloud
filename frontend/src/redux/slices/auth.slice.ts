@@ -28,6 +28,7 @@ const initialState: AuthSliceType = {
         user_id: undefined,
         url_avatar: "",
         description: "",
+        is_admin: false,
     },
     isLogin: false,
     isLoading: false,
@@ -112,6 +113,7 @@ export const authSlice = createSlice({
             state.user.last_name = action.payload.last_name;
             state.user.user_id = action.payload.user_id;
             state.user.url_avatar = action.payload.url_avatar;
+            state.user.is_admin = action.payload.is_admin;
             state.isLogin = true;
         },
         setLogout: (state) => {
@@ -175,6 +177,7 @@ export const logout = () => async (dispatch: AppDispatch) => {
                 email: "",
                 user_id: undefined,
                 description: "",
+                is_admin: false,
             }),
         );
         dispatch(setLogout());

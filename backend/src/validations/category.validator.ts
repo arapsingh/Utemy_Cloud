@@ -22,6 +22,7 @@ export const updateCategorySchema: ObjectSchema<updateCategory> = Joi.object({
         "string.max": constants.error.ERROR_DESCRIPTION_TOO_MAX,
         "string.min": constants.error.ERROR_DESCRIPTION_TOO_SHORT,
     }),
+    category_image: Joi.any(),
 });
 type createCategory = {
     title: string;

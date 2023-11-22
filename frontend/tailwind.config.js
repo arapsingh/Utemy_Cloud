@@ -16,6 +16,7 @@ module.exports = {
             },
             colors: {
                 background: "#ffffff", //trắng cho header
+                background_2: "#F8FAFC", //nền này khác trắng
                 footer: "#F9F8F6", // xám trắng cho footer
                 lightblue: "#29ABE2", // xanh trời nhạt
                 bluelogo: "#50BAE6",

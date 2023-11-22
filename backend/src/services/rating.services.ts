@@ -23,19 +23,18 @@ import { title } from "process";
 import { Section } from "../types/section";
 const ratingCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
-        const { slug } = req.params;
-        const { score, content } = req.body;
+        const { score, content, course_id } = req.body;
         const user_id = req.user_id as number;
         const isFoundCourse = await configs.db.course.findFirst({
             where: {
-                slug,
+                id: Number(course_id),
             },
         });
         if (!isFoundCourse) return new ResponseError(401, constants.error.ERROR_COURSE_NOT_FOUND, false);
-        const course_id = isFoundCourse.id;
+        const courseId = isFoundCourse.id;
         const isEnrolled = await configs.db.enrolled.findFirst({
             where: {
-                course_id,
+                course_id: courseId,
                 user_id,
             },
         });
@@ -45,10 +44,13 @@ const ratingCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
             const isAlreadyRating = await configs.db.rating.findFirst({
                 where: {
                     user_id,
-                    course_id,
+                    course_id: courseId,
                 },
             });
-            if (isAlreadyRating) return new ResponseError(400, constants.error.ERROR_ALREADY_RATING, false);
+            if (isAlreadyRating) {
+                console.log(isAlreadyRating);
+                return new ResponseError(400, constants.error.ERROR_ALREADY_RATING, false);
+            }
             const ratingCourse = await configs.db.rating.create({
                 data: {
                     user_id,

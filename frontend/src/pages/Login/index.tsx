@@ -5,7 +5,7 @@ import { Login as LoginType } from "../../types/auth";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { authActions } from "../../redux/slices";
 import constants from "../../constants";
-// import { Spin } from "@src/components";
+import { Spin } from "../../components";
 // import { Skeleton } from "@src/assets";
 import { loginValidationSchema } from "../../validations/auth";
 import toast from "react-hot-toast";
@@ -15,11 +15,14 @@ const Login: FC = () => {
     const dispatch = useAppDispatch();
 
     const isLogin: boolean = useAppSelector((state) => state.authSlice.isLogin);
+    const isAdmin: boolean = useAppSelector((state) => state.authSlice.user.is_admin) as boolean;
     const isLoading: boolean = useAppSelector((state) => state.authSlice.isLoading);
 
     const formikRef = useRef(null);
 
-    if (isLogin) return <Navigate to={"/"} />;
+    if (isLogin)
+        if (isAdmin) return <Navigate to={"/admin"} />;
+        else return <Navigate to={"/"} />;
 
     const initialValue: LoginType = {
         email: "",
@@ -43,7 +46,7 @@ const Login: FC = () => {
 
     return (
         <>
-            {/* {isLoading && <Spin />} */}
+            {isLoading && <Spin />}
             <div className="container mx-auto">
                 <div className="flex items-center justify-center mt-[100px] py-10">
                     <div className="bg-footer border-0 border-black m-4 rounded-xl shadow-lg">

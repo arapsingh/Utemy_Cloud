@@ -1,5 +1,5 @@
 import React from "react";
-import { images } from "../assets/index";
+import { images } from "../../assets/index";
 
 const Footer: React.FC = () => {
     return (

@@ -1,6 +1,6 @@
 import React from "react";
-import { WarningIcon } from "../assets/icons";
-import { useAppSelector } from "../hooks/hooks";
+import { WarningIcon } from "../../assets/icons";
+import { useAppSelector } from "../../hooks/hooks";
 
 type DeleteModalProps = {
     handleDelete: () => void;
@@ -11,7 +11,7 @@ const DeleteModal: React.FC<DeleteModalProps> = (props: DeleteModalProps) => {
     const isLoading = useAppSelector((state) => state.courseSlice.isLoading) ?? false;
     return (
         <>
-            <div className="fixed z-50 w-full h-full top-0 bottom-0 bg-black/50 flex justify-center items-center">
+            <div className="fixed z-50 w-full h-full top-0 bottom-0 right-0 left-0 bg-black/50 flex justify-center items-center">
                 <div className="bg-white p-4 w-[400px] flex flex-col items-center justify-center rounded-lg">
                     <div className="w-[60px] h-[60px] rounded-full border border-black bg-[#FFFF00] mb-4 flex justify-center items-center">
                         <WarningIcon />

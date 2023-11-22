@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Formik, Field, ErrorMessage } from "formik";
-import { UpdateLesson as UpdateLessonType } from "../types/lesson";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { lessonActions } from "../redux/slices";
-import { addLessonValidationSchema } from "../validations/lesson";
+import { UpdateLesson as UpdateLessonType } from "../../types/lesson";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { lessonActions } from "../../redux/slices";
+import { addLessonValidationSchema } from "../../validations/lesson";
 import toast, { Toaster } from "react-hot-toast";
-import constants from "../constants";
+import constants from "../../constants";
 
 type UpdateLessonModalProps = {
     handleDelete: () => void;

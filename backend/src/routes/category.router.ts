@@ -7,10 +7,10 @@ const categoryRouter: Router = Router();
 
 categoryRouter.post("/", isLogin, uploadCategory, controllers.categoryController.createCategory); //
 categoryRouter.patch("/", isLogin, uploadCategory, controllers.categoryController.updateCategory); //
-categoryRouter.delete("/", isLogin, controllers.categoryController.deleteCategory); //
+categoryRouter.delete("/:category_id", isLogin, controllers.categoryController.deleteCategory); //
 categoryRouter.get("/all", controllers.categoryController.getCategoriesWithPagination); //
 categoryRouter.get("/full", controllers.categoryController.getCategories); //
 categoryRouter.get("/top5", controllers.categoryController.get5Categories); //
-categoryRouter.get("/", isLogin, controllers.categoryController.getCategory); //
+categoryRouter.get("/:category_id", isLogin, controllers.categoryController.getCategory); //
 
 export default categoryRouter;

@@ -6,7 +6,9 @@ import lessonApis from "./lesson";
 import sectionApis from "./section";
 import cartApis from "./cart";
 import invoiceApis from "./invoice";
+import feedbackApis from "./feedback";
 import vnpayApis from "./vnpay";
+import userApis from "./user";
 
 const apis = {
     authApis,
@@ -18,5 +20,7 @@ const apis = {
     cartApis,
     invoiceApis,
     vnpayApis,
+    feedbackApis,
+    userApis,
 };
 export default apis;

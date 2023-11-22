@@ -24,6 +24,7 @@ export const updateProfileSchema: ObjectSchema<updateProfile> = Joi.object({
         "string.max": constants.ERROR_DESCRIPTION_TOO_MAX,
         "string.min": constants.ERROR_DESCRIPTION_TOO_SHORT,
     }),
+    email: Joi.string(),
 });
 //type changeAvatar = {};
 const userSchema = {
