@@ -15,7 +15,7 @@ const Login: FC = () => {
     const dispatch = useAppDispatch();
 
     const isLogin: boolean = useAppSelector((state) => state.authSlice.isLogin);
-    const isAdmin: boolean = useAppSelector((state) => state.authSlice.user.is_admin);
+    const isAdmin: boolean = useAppSelector((state) => state.authSlice.user.is_admin) as boolean;
     const isLoading: boolean = useAppSelector((state) => state.authSlice.isLoading);
 
     const formikRef = useRef(null);

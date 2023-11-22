@@ -37,7 +37,7 @@ export default {
     //token
     ERROR_BAD_TOKEN: "Bad token",
     ERROR_TOKEN_STRING: "Token must be a string",
-    ERROR_TOKEN_REQUIRED: "Token is requried",
+    ERROR_TOKEN_REQUIRED: "Token is REQUIRED",
     //first name
     ERROR_FIRST_NAME_STRING: "First name must be string",
     ERROR_FIRST_NAME_REQUIRED: "First name is required",

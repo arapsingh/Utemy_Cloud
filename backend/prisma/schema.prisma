@@ -23,6 +23,7 @@ model User {
   is_verify   Boolean    @default(false)
   token       String?    @db.Text
   is_admin    Boolean    @default(false)
+  is_deleted  Boolean    @default(false)
   courses     Course[]
   enrolleds   Enrolled[]
   ratings     Rating[]

@@ -3,3 +3,14 @@ export type Author = {
     last_name: string;
     id: number;
 };
+export type User = {
+    first_name: string;
+    last_name: string;
+    email: string;
+    url_avatar: string;
+    user_id: number | undefined;
+    description: string;
+    is_admin: boolean;
+    is_delete?: boolean;
+    created_at?: Date | string;
+};

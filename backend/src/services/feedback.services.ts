@@ -68,6 +68,7 @@ const getAllFeedbacks = async (req: IRequestWithId): Promise<ResponseBase> => {
                 first_name: item.user.first_name,
                 last_name: item.user.last_name,
                 url_avatar: item.user.url_avatar,
+                created_at: item.created_at.toString(),
             };
             return getFeedbacksList.push(feedback);
         });

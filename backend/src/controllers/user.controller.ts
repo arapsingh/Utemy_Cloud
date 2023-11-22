@@ -27,11 +27,25 @@ export default class UserController {
         const response: ResponseBase = await services.UserService.changeAvatar(req);
         return res.status(response.getStatusCode()).json(response);
     }
-    // async changeAvatar(req: Request, res: Response) {
 
-    // }
     async getAuthorProfile(req: Request, res: Response): Promise<Response> {
         const response: ResponseBase = await services.UserService.getAuthorProfile(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async createNewUser(req: IRequestWithId, res: Response): Promise<Response> {
+        const response: ResponseBase = await services.UserService.createNewUser(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async editUser(req: IRequestWithId, res: Response): Promise<Response> {
+        const response: ResponseBase = await services.UserService.editUser(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async deleteUser(req: IRequestWithId, res: Response): Promise<Response> {
+        const response: ResponseBase = await services.UserService.deleteUser(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async getAllUsers(req: IRequestWithId, res: Response): Promise<Response> {
+        const response: ResponseBase = await services.UserService.getAllUsers(req);
         return res.status(response.getStatusCode()).json(response);
     }
 }

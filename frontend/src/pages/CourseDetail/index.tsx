@@ -39,6 +39,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
     // const sectionOfCourse: SectionType[] = useAppSelector((state) => state.sectionSlice.sections);
     const courseDetail: CourseDetailType = useAppSelector((state) => state.courseSlice.courseDetail) ?? {};
     const ratings: RatingType[] = useAppSelector((state) => state.ratingSlice.ratings) ?? [];
+    console.log(ratings);
     const totalRatingPage: number = useAppSelector((state) => state.ratingSlice.totalPage) ?? Number(1);
 
     // const orderLesson: orderLesson[] = useAppSelector((state) => state.courseSlice.orderLesson);

@@ -72,9 +72,9 @@ const PopupAddCategory: React.FC<PopupAddCategoryProps> = (props) => {
     };
     return (
         <>
-            <div className="fixed z-50 top-0 left-0 right-0 bottom-0 bg-black/50 flex items-center justify-center">
+            <div className="fixed z-50 top-0 left-0 right-0 bottom-0 bg-black/50 flex items-center justify-center ">
                 <Toaster />
-                <div className="  max-w-[360px] tablet:max-w-[600px] max-h-[630px] tablet:max-h-[1000px] rounded-[12px] bg-background mx-auto tablet:mx-0 flex-1">
+                <div className="  max-w-[360px] tablet:max-w-[600px] max-h-[630px] tablet:max-h-[1000px] rounded-[12px] bg-background mx-auto tablet:mx-0 flex-1 ">
                     <div className="w-full p-[12px]">
                         <h1 className="text-3xl mb-1 font-bold text-center text-lightblue text-title">
                             ADD NEW CATEGORY
