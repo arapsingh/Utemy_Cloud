@@ -37,14 +37,14 @@ const error = {
     //token
     ERROR_BAD_TOKEN: "Bad token",
     ERROR_TOKEN_STRING: "Token must be a string",
-    ERROR_TOKEN_REQUIRED: "Token is requried",
+    ERROR_TOKEN_REQUIRED: "Token is REQUIRED",
     //first name
     ERROR_FIRST_NAME_STRING: "First name must be string",
-    ERROR_FIRST_NAME_REQURIED: "First name is required",
+    ERROR_FIRST_NAME_REQUIRED: "First name is required",
     ERROR_FIRST_NAME_MAX: "First name must be under 30 chars",
     //last name
     ERROR_LAST_NAME_STRING: "Last name must be string",
-    ERROR_LAST_NAME_REQURIED: "Last name is requried",
+    ERROR_LAST_NAME_REQUIRED: "Last name is REQUIRED",
     ERROR_LAST_NAME_MAX: "Last name must be under 30 chars",
     //user
     ERROR_USER_NOT_FOUND: "Wrong email or user doesn't exist",
@@ -124,5 +124,9 @@ const error = {
     ERROR_SALE_UNTIL_REQUIRED: "Sale until is required",
     ERROR_SALE_UNTIL_DATE: "Sale until must be a date",
     ERROR_SALE_MORE_EXP_THAN_PRICE: "Sale price must be cheaper than original price",
+
+    ERROR_VALIDATION_FAILED: "Validation failed",
+
+    ERROR_GET_COURSE_FAILED: "Get course failed",
 };
 export default error;

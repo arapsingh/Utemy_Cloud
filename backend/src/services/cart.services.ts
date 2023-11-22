@@ -47,8 +47,8 @@ const addCourseToCart = async (req: IRequestWithId): Promise<ResponseBase> => {
                     cart_id: cartId,
                 },
             });
-            if (isExistInCart) return new ResponseError(400, "Already in cart", false);
-            else if (isEnrolled) return new ResponseError(400, "Already enrolled", false);
+            if (isExistInCart) return new ResponseError(400, constants.error.ERROR_ALREADY_IN_CART, false);
+            else if (isEnrolled) return new ResponseError(400, constants.error.ERROR_ALREADY_ENROLLED, false);
             else {
                 const addCourseToCart = await configs.db.cartDetail.create({
                     data: {
@@ -56,7 +56,7 @@ const addCourseToCart = async (req: IRequestWithId): Promise<ResponseBase> => {
                         cart_id: cartId,
                     },
                 });
-                if (addCourseToCart) return new ResponseSuccess(200, constants.success.SUCCESS_CREATE_DATA, true);
+                if (addCourseToCart) return new ResponseSuccess(200, constants.success.SUCCESS_ADD_CART, true);
                 else return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
             }
         }
@@ -94,14 +94,14 @@ const removeCourseFromCart = async (req: IRequestWithId): Promise<ResponseBase> 
                 cart_id: cartId,
             },
         });
-        if (!isExistInCart) return new ResponseError(400, "Course not found in cart", false);
+        if (!isExistInCart) return new ResponseError(400, constants.error.ERROR_COURSE_NOT_FOUND_IN_CART, false);
         else {
             const removeCourseFromCart = await configs.db.cartDetail.delete({
                 where: {
                     id: isExistInCart.id,
                 },
             });
-            if (removeCourseFromCart) return new ResponseSuccess(200, "remove from cart successfully", true);
+            if (removeCourseFromCart) return new ResponseSuccess(200, constants.success.SUCCESS_REMOVE_CART, true);
             else return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
         }
     } catch (error) {
@@ -139,7 +139,7 @@ const changeSaveForLater = async (req: IRequestWithId): Promise<ResponseBase> =>
                 cart_id: cartId,
             },
         });
-        if (!isExistInCart) return new ResponseError(400, "Course not found in cart", false);
+        if (!isExistInCart) return new ResponseError(400, constants.error.ERROR_COURSE_NOT_FOUND_IN_CART, false);
         else {
             const changeSaveForLater = await configs.db.cartDetail.update({
                 where: {
@@ -149,7 +149,7 @@ const changeSaveForLater = async (req: IRequestWithId): Promise<ResponseBase> =>
                     saved_for_later: !isExistInCart.saved_for_later,
                 },
             });
-            if (changeSaveForLater) return new ResponseSuccess(200, "Change save for later successfully", true);
+            if (changeSaveForLater) return new ResponseSuccess(200, constants.success.SUCCESS_SAVE_FOR_LATER, true);
             else return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
         }
     } catch (error) {
@@ -217,9 +217,9 @@ const getAllCart = async (req: IRequestWithId): Promise<ResponseBase> => {
             cart_id: cartId,
             cart_items,
         };
-        if (!getAllCart) return new ResponseError(400, "Cart not found", false);
+        if (!getAllCart) return new ResponseError(400, constants.error.ERROR_CART_NOT_FOUND, false);
         else {
-            return new ResponseSuccess(200, "Get cart successfully", true, data);
+            return new ResponseSuccess(200, constants.success.SUCCESS_GET_CART, true, data);
         }
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {

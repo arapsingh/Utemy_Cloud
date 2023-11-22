@@ -101,8 +101,8 @@ const CategoryAdmin = () => {
                 <DeleteModal handleCancel={handleCancelDeleteModel} handleDelete={handleDeleteCategory} />
             )}
             {isGetLoading && <Loading />}
-
-            <div className="pt-[15px] flex flex-col items-center min-h-screen ">
+            {/* minhscreen */}
+            <div className="pt-[15px] flex flex-col items-center min-h-screen bg-background_2">
                 <Toaster />
                 <div className="w-3/4 px-10 mb-5 flex flex-col gap-4 justify-between shrink-0 tablet:flex-row">
                     <div className="flex justify-between w-full">

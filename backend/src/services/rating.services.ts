@@ -30,7 +30,6 @@ const ratingCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
                 id: Number(course_id),
             },
         });
-        console.log("found course", isFoundCourse);
         if (!isFoundCourse) return new ResponseError(401, constants.error.ERROR_COURSE_NOT_FOUND, false);
         const courseId = isFoundCourse.id;
         const isEnrolled = await configs.db.enrolled.findFirst({
@@ -39,7 +38,6 @@ const ratingCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
                 user_id,
             },
         });
-        console.log("enrolled", isEnrolled);
         if (!isEnrolled) {
             return new ResponseError(401, constants.error.ERROR_UNAUTHORIZED, false);
         } else {

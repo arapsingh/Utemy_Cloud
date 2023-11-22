@@ -26,6 +26,8 @@ import Dashboard from "./pages/Admin/Dashboard";
 import CategoryAdmin from "./pages/Admin/Category";
 import FeedbackAdmin from "./pages/Admin/Feedback";
 import UserAdmin from "./pages/Admin/User";
+import ProfileAdmin from "./pages/Admin/Profile";
+import MyProfile from "./pages/MyProfile";
 
 // import Header from "./components/Header";
 // import Footer from "./components/Footer";
@@ -59,6 +61,7 @@ function App() {
                                 <Route path="/course-detail/:slug/watch" element={<WatchVideo />}></Route>
                                 <Route path="/checkout" element={<Checkout />}></Route>
                                 <Route path="/checkout/vnpay_return" element={<VnPayReturn />}></Route>
+                                <Route path="/my-profile" element={<MyProfile />}></Route>
                             </Route>
                             <Route index element={<HomePage />}></Route>
                             <Route path="/login" element={<Login />}></Route>
@@ -74,6 +77,7 @@ function App() {
 
                         <Route path="/admin" element={<AdminRoute />}>
                             <Route index element={<Dashboard />} />
+                            <Route path="/admin/profile" element={<ProfileAdmin />} />
                             <Route path="/admin/category" element={<CategoryAdmin />} />
                             <Route path="/admin/user" element={<UserAdmin />} />
                             <Route path="/admin/feedback" element={<FeedbackAdmin />} />
