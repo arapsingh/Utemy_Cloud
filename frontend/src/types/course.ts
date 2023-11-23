@@ -22,7 +22,7 @@ export type Course = {
     sale_until?: Date | string;
     average_rating: number;
     categories: Category[];
-    created_at?: Date;
+    created_at?: Date | string;
     updated_at?: Date;
     sections?: Section[];
 };

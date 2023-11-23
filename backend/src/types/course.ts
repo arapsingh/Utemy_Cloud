@@ -57,7 +57,7 @@ export type Category = {
 };
 
 export type OutstandingCourse = {
-    id: number;
+    course_id: number;
     thumbnail: string;
     title: string;
     slug: string;
@@ -65,6 +65,8 @@ export type OutstandingCourse = {
     author: Author;
     created_at: Date;
     updated_at: Date;
+    status: boolean;
+    average_rating: number;
 };
 
 export type CourseCard = {
