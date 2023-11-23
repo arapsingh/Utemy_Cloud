@@ -112,7 +112,33 @@ export const updateProfile = createAsyncThunk<Response<User>, UpdateInformation,
 );
 
 const initialState: UserSliceType = {
-    courses: [],
+    courses: [
+        {
+            course_id: 0,
+            title: "",
+            summary: "",
+            number_of_rating: 0,
+            thumbnail: "",
+            description: "",
+            author: {
+                email: "",
+                first_name: "",
+                last_name: "",
+                description: "",
+                user_id: 0,
+            },
+            categories: [],
+            number_of_section: 0,
+            status: false,
+            number_of_enrolled: 0,
+            slug: "",
+            price: 0,
+            sale_price: 0,
+            sale_until: "",
+            average_rating: 0,
+            created_at: "",
+        },
+    ],
     users: [],
     user: {
         user_id: 0,
