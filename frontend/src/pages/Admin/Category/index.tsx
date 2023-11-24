@@ -130,9 +130,9 @@ const CategoryAdmin = () => {
                     </div>
                     <button
                         onClick={() => setIsOpenAddCategory(!isOpenAddCategory)}
-                        className="relative btn-circle text-3xl font-w bg-lightblue hover:bg-info/80 text-white"
+                        className="relative btn-info btn btn-outline  text-xl font-w hover:text-white text-white"
                     >
-                        <span className="left-1/2 top-1/2 ">+</span>{" "}
+                        <span className="left-1/2 top-1/2 ">Add</span>{" "}
                     </button>{" "}
                 </div>
                 {categories.length === 0 ? (
@@ -140,7 +140,7 @@ const CategoryAdmin = () => {
                 ) : (
                     <p className="mt-4 text-2xl text-center font-bold">There are {totalRecord} category(ies) </p>
                 )}
-                <div className="flex-1 grid my-1 grid-cols-1 w-3/4 px-10 ">
+                <div className="flex-1  my-1  w-3/4 px-10 justify-start">
                     {categories.map((category, index) => {
                         return (
                             <div className="w-full my-1 max-w-xs tablet:max-w-full " key={index}>

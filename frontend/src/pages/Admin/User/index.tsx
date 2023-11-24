@@ -16,13 +16,26 @@ import { Pagination } from "../../../components";
 import SearchIcon from "../../../assets/icons/SeacrchIcon";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { userActions } from "../../../redux/slices";
-import { DeleteModal } from "../../../components";
+import DeleteUserModal from "./DeleteUserModal";
+import ActiveUserModal from "./ActiveUserModal";
 import { User } from "../../../types/user";
 import toast, { Toaster } from "react-hot-toast";
+import PopupEditUser from "./PopupEditUser";
 
 const UserAdmin = () => {
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
+    const [isOpenActiveModal, setIsOpenActiveModal] = useState(false);
+    const [isOpenEditUserPopup, setIsOpenEditUserPopup] = useState(false);
     const [userId, setUserId] = useState(0);
+    const [editUser, setEditUser] = useState<User>({
+        first_name: "",
+        email: "",
+        user_id: 0,
+        last_name: "",
+        description: "",
+        is_admin: undefined,
+        is_delete: undefined,
+    });
     const dispatch = useAppDispatch();
     const currentId = useAppSelector((state) => state.authSlice.user.user_id);
     const users = useAppSelector((state) => state.userSlice.users);
@@ -38,12 +51,38 @@ const UserAdmin = () => {
     };
     const handleOpenDeleteModal = (id: number) => {
         setUserId(id);
-        setIsOpenDeleteModal(false);
+        setIsOpenDeleteModal(true);
+    };
+    const handleCancelActiveModal = () => {
+        setIsOpenActiveModal(false);
+    };
+    const handleOpenActiveModal = (id: number) => {
+        setUserId(id);
+        setIsOpenActiveModal(true);
+    };
+    const handleCancelEditUserPopup = () => {
+        setIsOpenEditUserPopup(false);
+    };
+    const handleOpenEditUserPopup = (user: any) => {
+        setEditUser(user);
+        setIsOpenEditUserPopup(true);
+    };
+    const handleActive = () => {
+        dispatch(userActions.activeUser(userId)).then((response) => {
+            if (response.payload?.status_code === 200) {
+                toast.success(response.payload.message);
+                dispatch(userActions.getAllUsersWithPagination({ pageIndex: 1, searchItem: "", role: "All" }));
+                setIsOpenActiveModal(false);
+            } else if (response.payload) toast.error(response.payload.message);
+        });
     };
     const handleDelete = () => {
         dispatch(userActions.deleteUser(userId)).then((response) => {
-            if (response.payload?.status_code === 200) toast.success(response.payload.message);
-            else if (response.payload) toast.error(response.payload.message);
+            if (response.payload?.status_code === 200) {
+                toast.success(response.payload.message);
+                dispatch(userActions.getAllUsersWithPagination({ pageIndex: 1, searchItem: "", role: "All" }));
+                setIsOpenDeleteModal(false);
+            } else if (response.payload) toast.error(response.payload.message);
         });
     };
 
@@ -73,7 +112,15 @@ const UserAdmin = () => {
     }, [dispatch, pageIndex, searchItem, role]);
     return (
         <>
-            {isOpenDeleteModal && <DeleteModal handleCancel={handleCancelDeleteModal} handleDelete={handleDelete} />}
+            {isOpenDeleteModal && (
+                <DeleteUserModal handleCancel={handleCancelDeleteModal} handleDelete={handleDelete} />
+            )}
+            {isOpenActiveModal && (
+                <ActiveUserModal handleCancel={handleCancelActiveModal} handleActive={handleActive} />
+            )}
+            {isOpenEditUserPopup && (
+                <PopupEditUser handleCancelEditUser={handleCancelEditUserPopup} editUser={editUser} />
+            )}
             <div className="mt-12 mb-8 flex flex-col gap-12 bg-background_2 min-h-screen">
                 <Toaster />
                 <Card>
@@ -218,7 +265,7 @@ const UserAdmin = () => {
                                             </td>
                                             <td className={className}>
                                                 <Typography
-                                                    color={user.is_delete ? "red" : "blue-gray"}
+                                                    color={"blue-gray"}
                                                     className="py-0.5 px-2 text-[11px] font-medium w-fit"
                                                 >
                                                     {date![1] + " " + date![2] + " " + date![3]}
@@ -236,20 +283,29 @@ const UserAdmin = () => {
                                             ) : (
                                                 <td className={className}>
                                                     <Typography
-                                                        as="a"
-                                                        href="#"
+                                                        as="text"
+                                                        onClick={() => handleOpenEditUserPopup(user)}
                                                         className="text-xs font-semibold hover:underline hover:cursor-pointer text-blue-gray-600"
                                                     >
                                                         Edit
                                                     </Typography>
-                                                    <Typography
-                                                        as="a"
-                                                        href="#"
-                                                        onClick={() => handleOpenDeleteModal(id)}
-                                                        className="text-xs text-red-700 font-semibold hover:underline hover:cursor-pointer "
-                                                    >
-                                                        Delete
-                                                    </Typography>
+                                                    {user.is_delete ? (
+                                                        <Typography
+                                                            as="text"
+                                                            onClick={() => handleOpenActiveModal(id)}
+                                                            className="text-xs text-green-700 font-semibold hover:underline hover:cursor-pointer "
+                                                        >
+                                                            Active
+                                                        </Typography>
+                                                    ) : (
+                                                        <Typography
+                                                            as="text"
+                                                            onClick={() => handleOpenDeleteModal(id)}
+                                                            className="text-xs text-red-700 font-semibold hover:underline hover:cursor-pointer "
+                                                        >
+                                                            Delete
+                                                        </Typography>
+                                                    )}
                                                 </td>
                                             )}
                                         </tr>

@@ -44,6 +44,10 @@ export default class UserController {
         const response: ResponseBase = await services.UserService.deleteUser(req);
         return res.status(response.getStatusCode()).json(response);
     }
+    async activeUser(req: IRequestWithId, res: Response): Promise<Response> {
+        const response: ResponseBase = await services.UserService.activeUser(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
     async getAllUsers(req: IRequestWithId, res: Response): Promise<Response> {
         const response: ResponseBase = await services.UserService.getAllUsers(req);
         return res.status(response.getStatusCode()).json(response);

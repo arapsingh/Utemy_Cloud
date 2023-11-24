@@ -1,5 +1,5 @@
 import apiCaller from "../api-config/apiCaller";
-import { GetAllUser, CreateNewUser, UpdateInformation as UpdateInformationType } from "../types/user";
+import { GetAllUser, CreateNewUser, UpdateInformation as UpdateInformationType, EditUser } from "../types/user";
 
 const getAllUsersWithPagination = async (values: GetAllUser) => {
     const path = `user/all?search_item=${values.searchItem}&page_index=${values.pageIndex}&role=${values.role}`;
@@ -11,9 +11,25 @@ const deleteUser = async (values: number) => {
     const reponse = await apiCaller("DELETE", path);
     return reponse;
 };
+
+const activeUser = async (values: number) => {
+    const path = `user/${values}`;
+    const reponse = await apiCaller("PUT", path);
+    return reponse;
+};
 const createNewUser = async (values: CreateNewUser) => {
     const path = `user/`;
     const reponse = await apiCaller("POST", path, values);
+    return reponse;
+};
+const editUser = async (values: EditUser) => {
+    const path = `user/${values.id}`;
+    const data = {
+        first_name: values.first_name,
+        last_name: values.last_name,
+        is_admin: values.is_admin,
+    };
+    const reponse = await apiCaller("PATCH", path, data);
     return reponse;
 };
 const getProfile = async () => {
@@ -60,6 +76,8 @@ const userApis = {
     updateProfile,
     getAuthorProfile,
     changeAvatar,
+    activeUser,
+    editUser,
 };
 
 export default userApis;

@@ -28,6 +28,7 @@ import FeedbackAdmin from "./pages/Admin/Feedback";
 import UserAdmin from "./pages/Admin/User";
 import ProfileAdmin from "./pages/Admin/Profile";
 import MyProfile from "./pages/MyProfile";
+import CreateUser from "./pages/Admin/CreateUser";
 
 // import Header from "./components/Header";
 // import Footer from "./components/Footer";
@@ -80,6 +81,7 @@ function App() {
                             <Route path="/admin/profile" element={<ProfileAdmin />} />
                             <Route path="/admin/category" element={<CategoryAdmin />} />
                             <Route path="/admin/user" element={<UserAdmin />} />
+                            <Route path="/admin/user/create" element={<CreateUser />} />
                             <Route path="/admin/feedback" element={<FeedbackAdmin />} />
                         </Route>
                         {/* <Route path="/admin" element={<AdminAppLayout isLogin={isLogin} />}>

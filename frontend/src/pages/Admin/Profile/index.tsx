@@ -193,62 +193,67 @@ const ProfileAdmin = () => {
                         >
                             {(formik) => (
                                 <Form
-                                    className="bg-background m-4 rounded-xl shadow-lg p-4 w-1/2 border-gray-400 border "
+                                    className="bg-background m-4 rounded-xl shadow-lg p-4 w-1/2 flex flex-col justify-between border-gray-400 border "
                                     onSubmit={formik.handleSubmit}
                                 >
-                                    <div className="flex flex-col mb-3">
-                                        <label htmlFor="current_password" className="text-sm mb-1 tablet:text-xl">
-                                            Current Password
-                                        </label>
-                                        <Field
-                                            type="password"
-                                            placeholder="Current password..."
-                                            className="px-2 py-4 w-full rounded-lg border-[1px] outline-none"
-                                            id="current_password"
-                                            name="current_password"
-                                        />
-                                        <ErrorMessage
-                                            name="current_password"
-                                            component="span"
-                                            className="text-[14px] text-error font-medium"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col mb-3">
-                                        <label htmlFor="new_password" className="text-sm mb-1 tablet:text-xl">
-                                            New Password
-                                        </label>
-                                        <Field
-                                            type="password"
-                                            placeholder="New password..."
-                                            className="px-2 py-4 w-full rounded-lg border-[1px] outline-none"
-                                            id="new_password"
-                                            name="new_password"
-                                        />
-                                        <ErrorMessage
-                                            name="new_password"
-                                            component="span"
-                                            className="text-[14px] text-error font-medium"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col mb-3">
-                                        <label htmlFor="confirm" className="text-sm mb-1 tablet:text-xl">
-                                            Confirm Password
-                                        </label>
-                                        <Field
-                                            type="password"
-                                            placeholder="Confirm password..."
-                                            className="px-2 py-4 w-full rounded-lg border-[1px] outline-none"
-                                            id="confirm_password"
-                                            name="confirm_password"
-                                        />
-                                        <ErrorMessage
-                                            name="confirm_password"
-                                            component="span"
-                                            className="text-[14px] text-error font-medium"
-                                        />
+                                    <div className="flex flex-col justify-start">
+                                        <div className="flex flex-col mb-3">
+                                            <label htmlFor="current_password" className="text-sm mb-1 tablet:text-xl">
+                                                Current Password
+                                            </label>
+                                            <Field
+                                                type="password"
+                                                placeholder="Current password..."
+                                                className="px-2 py-4 w-full rounded-lg border-[1px] outline-none"
+                                                id="current_password"
+                                                name="current_password"
+                                            />
+                                            <ErrorMessage
+                                                name="current_password"
+                                                component="span"
+                                                className="text-[14px] text-error font-medium"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col mb-3">
+                                            <label htmlFor="new_password" className="text-sm mb-1 tablet:text-xl">
+                                                New Password
+                                            </label>
+                                            <Field
+                                                type="password"
+                                                placeholder="New password..."
+                                                className="px-2 py-4 w-full rounded-lg border-[1px] outline-none"
+                                                id="new_password"
+                                                name="new_password"
+                                            />
+                                            <ErrorMessage
+                                                name="new_password"
+                                                component="span"
+                                                className="text-[14px] text-error font-medium"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col mb-3">
+                                            <label htmlFor="confirm" className="text-sm mb-1 tablet:text-xl">
+                                                Confirm Password
+                                            </label>
+                                            <Field
+                                                type="password"
+                                                placeholder="Confirm password..."
+                                                className="px-2 py-4 w-full rounded-lg border-[1px] outline-none"
+                                                id="confirm_password"
+                                                name="confirm_password"
+                                            />
+                                            <ErrorMessage
+                                                name="confirm_password"
+                                                component="span"
+                                                className="text-[14px] text-error font-medium"
+                                            />
+                                        </div>
                                     </div>
                                     <div className="flex justify-end">
-                                        <button type="submit" className="btn-info btn text-white hover:bg-lightblue/80">
+                                        <button
+                                            type="submit"
+                                            className="btn-info btn text-white text-lg hover:bg-lightblue/80"
+                                        >
                                             Change password
                                         </button>
                                     </div>
