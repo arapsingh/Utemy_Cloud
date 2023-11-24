@@ -111,7 +111,7 @@ const getAuthorProfile = async (req: Request): Promise<ResponseBase> => {
 
         user?.courses.map((course) => {
             const data: OutstandingCourse = {
-                id: course.id,
+                course_id: course.id,
                 thumbnail: course.thumbnail,
                 title: course.title,
                 slug: course.slug,
@@ -123,6 +123,8 @@ const getAuthorProfile = async (req: Request): Promise<ResponseBase> => {
                 },
                 created_at: course.created_at,
                 updated_at: course.updated_at,
+                average_rating: course.average_rating,
+                status: course.status,
             };
             courses.push(data);
         });

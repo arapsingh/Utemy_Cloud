@@ -35,6 +35,7 @@ import CreateUser from "./pages/Admin/CreateUser";
 import PrivateRoute from "./routes/PrivateRoutes";
 import UserAppLayout from "./layout/userAppLayout";
 import AdminRoute from "./routes/AdminRoutes";
+import AuthorProfile from "./pages/AuthorProfile";
 function App() {
     const dispatch = useAppDispatch();
 
@@ -70,6 +71,7 @@ function App() {
                             <Route path="/signup" element={<Signup />}></Route>
                             <Route path="/forgot-password" element={<ForgotPassword />}></Route>
                             <Route path="/reset-password/:token" element={<ResetPassword />}></Route>
+                            <Route path="/profile/:id" element={<AuthorProfile />}></Route>
                             <Route path="/verify-email/:token" element={<Verify />}></Route>
                             <Route path="/check-mail" element={<CheckMail />}></Route>
                             <Route path="/course-detail/:slug" element={<CourseDetail isLogin={isLogin} />}></Route>
