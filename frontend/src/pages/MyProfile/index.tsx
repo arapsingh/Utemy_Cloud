@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { UpdateInformation as UpdateInformationType, User as UserType } from "../../types/user";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { userActions, authActions} from "../../redux/slices";
+import { userActions, authActions } from "../../redux/slices";
 import { updateProfileValidationSchema } from "../../validations/user";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
@@ -27,7 +27,56 @@ const MyProfile: React.FC = () => {
         // @ts-ignore
         dispatch(authActions.getMe());
     }, [dispatch]);
-    const handleOnSubmit = (values: UserType) => {
+    // Thêm state để theo dõi file được chọn
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+    // Hàm xử lý khi người dùng chọn file
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+
+    // Kiểm tra xem có file được chọn không
+    if (files && files.length > 0) {
+        const selectedFile = files[0];
+
+        // Kiểm tra kích thước tối đa (ví dụ: 5MB)
+        const maxSize = 4 * 1024 * 1024; // 5MB
+        if (selectedFile.size > maxSize) {
+            toast.error("File size exceeds the maximum limit (4MB). Please choose a smaller file.");
+            event.target.value = ""; // Reset input field
+            return;
+        }
+
+        // Kiểm tra loại file (chỉ chấp nhận các loại ảnh)
+        const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+        if (!allowedTypes.includes(selectedFile.type)) {
+            toast.error("Invalid file type. Please choose a valid image file (JPEG, PNG, GIF).");
+            event.target.value = ""; // Reset input field
+            return;
+        }
+
+        // Lưu trữ file được chọn trong state hoặc tiếp tục xử lý
+        setSelectedFile(selectedFile);
+    }
+    };
+    const handleOnSubmit = async (values: UserType) => {
+        // Tải lên avatar nếu có file được chọn
+        if (selectedFile) {
+            try {
+                const formData = new FormData();
+                formData.append("avatar", selectedFile);
+
+                // Gọi hàm xử lý upload avatar từ redux slice
+                await dispatch(userActions.changeAvatar(formData));
+
+                // Nếu thành công, có thể thực hiện các xử lý khác (ví dụ: cập nhật thông tin người dùng)
+                // ...
+
+                toast.success("Avatar updated successfully!");
+                window.location.reload();
+            } catch (error) {
+                toast.error("Error updating avatar.");
+            }
+        }
         const data: UpdateInformationType = {
             first_name: values.first_name,
             last_name: values.last_name,
@@ -73,9 +122,37 @@ const MyProfile: React.FC = () => {
                             >
                                 {(formik) => (
                                     <Form
-                                        className="flex items-center justify-center flex-col"
+                                        className="flex items-center justify-center flex-row"
                                         onSubmit={formik.handleSubmit}
                                     >
+                                        {/* Avatar frame */}
+                                        <div className="w-auto h-auto mr-8 overflow-hidden">
+
+                                            {/* Display the selected avatar */}
+                                            {(selectedFile || user.url_avatar) && (
+                                                <img
+                                                    src={
+                                                        selectedFile
+                                                            ? URL.createObjectURL(selectedFile)
+                                                            : user.url_avatar
+                                                    }
+                                                    alt="Avatar"
+                                                    className="max-w-xs max-h-80 min-h-full min-w-full"
+                                                />
+                                            )}
+                                            {/* Avatar input */}
+                                            <label htmlFor="avatar" className="block text-sm mb-1 tablet:text-xl text-center">
+                                                Choose Avatar
+                                            </label>
+                                            <input
+                                                id="avatar"
+                                                name="avatar"
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleFileChange}
+                                                className="px-2 py-1 rounded-lg border-[1px] outline-none"
+                                            />
+                                        </div>
                                         <div className="bg-primary m-4 rounded-xl shadow-lg p-4">
                                             <div className="flex flex-col mobile:flex-row gap-2">
                                                 <div className="flex flex-col mb-3">

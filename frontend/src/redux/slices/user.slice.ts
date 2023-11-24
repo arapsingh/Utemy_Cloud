@@ -4,6 +4,7 @@ import { Response } from "../../types/response";
 import UserApis from "../../api/user";
 import { Course } from "../../types/course";
 
+
 type UserSliceType = {
     courses: Course[];
     user: User;
@@ -41,7 +42,7 @@ export const userSlice = createSlice({
         //     state.isLoading = false;
         // });
 
-        builder.addCase(getProfile.pending, (state) => {
+        builder.addCase(getProfile.pending, (state: { isLoading: boolean; }) => {
             state.isLoading = true;
         });
         builder.addCase(getProfile.fulfilled, (state, action) => {
@@ -63,6 +64,15 @@ export const userSlice = createSlice({
         builder.addCase(getAuthorProfile.rejected, (state) => {
             state.isLoading = false;
         });
+        builder.addCase(changeAvatar.pending, (state) => {
+            state.isLoading = true;
+          })
+        builder.addCase(changeAvatar.fulfilled, (state) => {
+            state.isLoading = false;
+          })
+        builder.addCase(changeAvatar.rejected, (state) => {
+            state.isLoading = false;
+          });
     },
 });
 export const getProfile = createAsyncThunk<Response<User>, null, { rejectValue: Response<null> }>(
@@ -89,6 +99,32 @@ export const updateProfile = createAsyncThunk<
         return ThunkAPI.rejectWithValue(error.data as Response<null>);
     }
 });
+
+export const changeAvatar = createAsyncThunk<Response<null>, FormData, { rejectValue: Response<null> }>(
+    'user/avatar',
+    async (formData, ThunkAPI) => {
+      try {
+        // Không cần tạo FormData ở đây, vì đã được thực hiện trong hàm changeAvatar
+        const response = await UserApis.changeAvatar(formData);
+  
+        // Kiểm tra xem response có tồn tại không
+        if (response) {
+          return response.data as Response<null>;
+        } else {
+          // Nếu response là undefined, reject với giá trị lỗi tương ứng
+          return ThunkAPI.rejectWithValue({
+            status_code: 500,
+            data: null,
+            success: false,
+            message: 'Undefined',
+          });
+        }
+      } catch (error: any) {
+        return ThunkAPI.rejectWithValue(error.data as Response<null>);
+      }
+    },
+  );
+  
 
 export const getAuthorProfile = createAsyncThunk<
     Response<AuthorInformation>,

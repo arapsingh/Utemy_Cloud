@@ -1,10 +1,9 @@
 import axios from "axios";
-import Cookies from "js-cookie";
 import constants from "../constants";
 import apis from "../api";
-
+const { Cookies } = require('js-cookie');
 const axiosPublic = axios.create({
-    baseURL: process.env.API_APP_BASE_URL || "http://localhost:3001",
+    baseURL: process.env.API_APP_BASE_URL || "https://backend1-terrific-serval-nk.cfapps.ap21.hana.ondemand.com",
 });
 
 const axiosInstance = axios.create();
@@ -61,6 +60,20 @@ export const apiCaller = (method: string, path: string, data?: any) => {
             rftoken: `rfToken ${refreshToken}`,
         },
         url: `/api/${path}`,
+        data,
+    });
+};
+export const apiCallerVnpay = (method: string, path: string, data?: any) => {
+    const refreshToken = Cookies.get("refreshToken");
+    return axiosPublic({
+        method,
+        headers: {
+            "Access-Control-Allow-Credentials": true,
+            "Access-Control-Allow-Origin": "*",
+            // "Origin:": "https://sandbox.vnpayment.vn",
+            rftoken: `rfToken ${refreshToken}`,
+        },
+        url: `/${path}`,
         data,
     });
 };

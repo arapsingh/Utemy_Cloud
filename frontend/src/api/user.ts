@@ -35,11 +35,23 @@ const getAuthorProfile = async (id: number) => {
     return response;
 };
 
+const changeAvatar = async (formData: FormData) => {
+    const path = `user/avatar`;
+    // Tạo một FormData và thêm file vào đó
+    try {
+        const response = await apiCaller(constants.util.HTTP_POST, path, formData);
+        return response;
+    } catch (error) {
+        // Xử lý lỗi nếu có
+        console.error('Error:', error);
+      }
+}
 const UserApis = {
     changePassword,
     getProfile,
     updateProfile,
     getAuthorProfile,
+    changeAvatar,
 };
 
 export default UserApis;

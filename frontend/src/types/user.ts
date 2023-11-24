@@ -8,7 +8,9 @@ export type User = {
     user_id: number | undefined;
     description: string;
 };
-
+export type UserAvatar = {
+    url_avatar?: string;
+}
 export type UpdateInformation = {
     first_name: string | undefined;
     last_name: string | undefined;
