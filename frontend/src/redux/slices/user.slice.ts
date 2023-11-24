@@ -1,19 +1,145 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AuthorInformation, UpdateInformation, User } from "../../types/user";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Response } from "../../types/response";
-import UserApis from "../../api/user";
+import {
+    User,
+    GetAllUser,
+    CreateNewUser as CreateNewUserType,
+    AuthorInformation,
+    UpdateInformation,
+} from "../../types/user";
+import apis from "../../api";
 import { Course } from "../../types/course";
 
-
 type UserSliceType = {
+    users: User[];
     courses: Course[];
     user: User;
-    isGetLoading: boolean;
     isLoading: boolean;
+    isGetLoading: boolean;
+    totalPage: number;
+    totalRecord: number;
 };
+export const getAllUsersWithPagination = createAsyncThunk<Response<null>, GetAllUser, { rejectValue: Response<null> }>(
+    "user/all",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.userApis.getAllUsersWithPagination(body);
+            return response.data as Response<null>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const createNewUser = createAsyncThunk<Response<null>, CreateNewUserType, { rejectValue: Response<null> }>(
+    "user/create",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.userApis.createNewUser(body);
+            return response.data as Response<null>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const deleteUser = createAsyncThunk<Response<null>, number, { rejectValue: Response<null> }>(
+    "user/delete",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.userApis.deleteUser(body);
+            return response.data as Response<null>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const getProfile = createAsyncThunk<Response<User>, null, { rejectValue: Response<null> }>(
+    "user/profile",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.userApis.getProfile();
+            return response.data as Response<User>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const changeAvatar = createAsyncThunk<Response<null>, FormData, { rejectValue: Response<null> }>(
+    "user/avatar",
+    async (formData, ThunkAPI) => {
+        try {
+            // Không cần tạo FormData ở đây, vì đã được thực hiện trong hàm changeAvatar
+            const response = await apis.userApis.changeAvatar(formData);
+
+            // Kiểm tra xem response có tồn tại không
+            if (response) {
+                return response.data as Response<null>;
+            } else {
+                // Nếu response là undefined, reject với giá trị lỗi tương ứng
+                return ThunkAPI.rejectWithValue({
+                    status_code: 500,
+                    data: null,
+                    success: false,
+                    message: "Undefined",
+                });
+            }
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const getAuthorProfile = createAsyncThunk<Response<AuthorInformation>, number, { rejectValue: Response<null> }>(
+    "user/getAuthorProfile",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.userApis.getAuthorProfile(body);
+            return response.data as Response<AuthorInformation>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+
+export const updateProfile = createAsyncThunk<Response<User>, UpdateInformation, { rejectValue: Response<null> }>(
+    "user/update-profile",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.userApis.updateProfile(body);
+            return response.data as Response<User>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
 
 const initialState: UserSliceType = {
-    courses: [],
+    courses: [
+        {
+            course_id: 0,
+            title: "",
+            summary: "",
+            number_of_rating: 0,
+            thumbnail: "",
+            description: "",
+            author: {
+                email: "",
+                first_name: "",
+                last_name: "",
+                description: "",
+                user_id: 0,
+            },
+            categories: [],
+            number_of_section: 0,
+            status: false,
+            number_of_enrolled: 0,
+            slug: "",
+            price: 0,
+            sale_price: 0,
+            sale_until: "",
+            average_rating: 0,
+            created_at: "",
+        },
+    ],
+    users: [],
     user: {
         user_id: 0,
         url_avatar: "",
@@ -22,9 +148,12 @@ const initialState: UserSliceType = {
         last_name: "",
         email: "",
         description: "",
+        is_admin: false,
     },
+    isLoading: false,
     isGetLoading: false,
-    isLoading: false
+    totalPage: 0,
+    totalRecord: 0,
 };
 
 export const userSlice = createSlice({
@@ -32,111 +161,69 @@ export const userSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        // builder.addCase(changePassword.pending, (state) => {
-        //     state.isLoading = true;
-        // });
-        // builder.addCase(changePassword.fulfilled, (state) => {
-        //     state.isLoading = false;
-        // });
-        // builder.addCase(changePassword.rejected, (state) => {
-        //     state.isLoading = false;
-        // });
-
-        builder.addCase(getProfile.pending, (state: { isLoading: boolean; }) => {
+        builder.addCase(getAllUsersWithPagination.pending, (state) => {
+            state.isGetLoading = true;
+        });
+        builder.addCase(getAllUsersWithPagination.fulfilled, (state, action: any) => {
+            state.users = action.payload.data?.data as User[];
+            state.totalPage = action.payload.data.total_page;
+            state.totalRecord = action.payload.data.total_record;
+            state.isGetLoading = false;
+        });
+        builder.addCase(getAllUsersWithPagination.rejected, (state) => {
+            state.isGetLoading = false;
+        });
+        builder.addCase(createNewUser.pending, (state) => {
             state.isLoading = true;
         });
-        builder.addCase(getProfile.fulfilled, (state, action) => {
+        builder.addCase(createNewUser.fulfilled, (state, action: any) => {
+            state.users = action.payload.data?.data as User[];
             state.isLoading = false;
+        });
+        builder.addCase(createNewUser.rejected, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(deleteUser.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(deleteUser.fulfilled, (state, action: any) => {
+            state.isLoading = false;
+        });
+        builder.addCase(deleteUser.rejected, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(getProfile.pending, (state) => {
+            state.isGetLoading = true;
+        });
+        builder.addCase(getProfile.fulfilled, (state, action) => {
+            state.isGetLoading = false;
             state.user = action.payload.data as User;
         });
         builder.addCase(getProfile.rejected, (state) => {
-            state.isLoading = false;
+            state.isGetLoading = false;
         });
 
         builder.addCase(getAuthorProfile.pending, (state) => {
-            state.isLoading = true;
+            state.isGetLoading = true;
         });
         builder.addCase(getAuthorProfile.fulfilled, (state, action) => {
-            state.isLoading = false;
+            state.isGetLoading = false;
             state.user = action.payload.data?.user as User;
             state.courses = action.payload.data?.courses as Course[];
         });
         builder.addCase(getAuthorProfile.rejected, (state) => {
-            state.isLoading = false;
+            state.isGetLoading = false;
         });
         builder.addCase(changeAvatar.pending, (state) => {
             state.isLoading = true;
-          })
+        });
         builder.addCase(changeAvatar.fulfilled, (state) => {
             state.isLoading = false;
-          })
+        });
         builder.addCase(changeAvatar.rejected, (state) => {
             state.isLoading = false;
-          });
+        });
     },
-});
-export const getProfile = createAsyncThunk<Response<User>, null, { rejectValue: Response<null> }>(
-    "user/profile",
-    async (body, ThunkAPI) => {
-        try {
-            const response = await UserApis.getProfile();
-            return response.data as Response<User>;
-        } catch (error: any) {
-            return ThunkAPI.rejectWithValue(error.data as Response<null>);
-        }
-    }
-);
-
-export const updateProfile = createAsyncThunk<
-    Response<User>,
-    UpdateInformation,
-    { rejectValue: Response<null> }
->("user/update-profile", async (body, ThunkAPI) => {
-    try {
-        const response = await UserApis.updateProfile(body);
-        return response.data as Response<User>;
-    } catch (error: any) {
-        return ThunkAPI.rejectWithValue(error.data as Response<null>);
-    }
-});
-
-export const changeAvatar = createAsyncThunk<Response<null>, FormData, { rejectValue: Response<null> }>(
-    'user/avatar',
-    async (formData, ThunkAPI) => {
-      try {
-        // Không cần tạo FormData ở đây, vì đã được thực hiện trong hàm changeAvatar
-        const response = await UserApis.changeAvatar(formData);
-  
-        // Kiểm tra xem response có tồn tại không
-        if (response) {
-          return response.data as Response<null>;
-        } else {
-          // Nếu response là undefined, reject với giá trị lỗi tương ứng
-          return ThunkAPI.rejectWithValue({
-            status_code: 500,
-            data: null,
-            success: false,
-            message: 'Undefined',
-          });
-        }
-      } catch (error: any) {
-        return ThunkAPI.rejectWithValue(error.data as Response<null>);
-      }
-    },
-  );
-  
-
-export const getAuthorProfile = createAsyncThunk<
-    Response<AuthorInformation>,
-    number,
-    { rejectValue: Response<null> }
->("user/getAuthorProfile", async (body, ThunkAPI) => {
-    try {
-        const response = await UserApis.getAuthorProfile(body);
-        return response.data as Response<AuthorInformation>;
-    } catch (error: any) {
-        return ThunkAPI.rejectWithValue(error.data as Response<null>);
-    }
 });
 
 export const {} = userSlice.actions;

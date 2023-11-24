@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Navbar/Navbar";
 import { CourseCard, Pagination } from "../../components";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { Course, SearchAllCourses } from "../../types/course";
@@ -28,6 +28,7 @@ const AllCourses: React.FC = () => {
     const navigate = useNavigate();
 
     let courseList: Course[] = useAppSelector((state) => state.courseSlice.courses) ?? [];
+    console.log(courseList);
     let totalPage: number = useAppSelector((state) => state.courseSlice.totalPage) ?? 1;
     const categoriesList: Category[] = useAppSelector((state) => state.categorySlice.categories) ?? [];
 

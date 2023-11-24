@@ -10,7 +10,7 @@ import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 // import PopUpChangeAvatar from "./PopUpChangeAvatar";
 import { Navbar } from "../../components";
-import { Logo } from "../../assets/images";
+import { DefaultAvatar } from "../../assets/images";
 
 const MyProfile: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -34,29 +34,29 @@ const MyProfile: React.FC = () => {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
 
-    // Kiểm tra xem có file được chọn không
-    if (files && files.length > 0) {
-        const selectedFile = files[0];
+        // Kiểm tra xem có file được chọn không
+        if (files && files.length > 0) {
+            const selectedFile = files[0];
 
-        // Kiểm tra kích thước tối đa (ví dụ: 5MB)
-        const maxSize = 4 * 1024 * 1024; // 5MB
-        if (selectedFile.size > maxSize) {
-            toast.error("File size exceeds the maximum limit (4MB). Please choose a smaller file.");
-            event.target.value = ""; // Reset input field
-            return;
+            // Kiểm tra kích thước tối đa (ví dụ: 5MB)
+            const maxSize = 4 * 1024 * 1024; // 5MB
+            if (selectedFile.size > maxSize) {
+                toast.error("File size exceeds the maximum limit (4MB). Please choose a smaller file.");
+                event.target.value = ""; // Reset input field
+                return;
+            }
+
+            // Kiểm tra loại file (chỉ chấp nhận các loại ảnh)
+            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+            if (!allowedTypes.includes(selectedFile.type)) {
+                toast.error("Invalid file type. Please choose a valid image file (JPEG, PNG, GIF).");
+                event.target.value = ""; // Reset input field
+                return;
+            }
+
+            // Lưu trữ file được chọn trong state hoặc tiếp tục xử lý
+            setSelectedFile(selectedFile);
         }
-
-        // Kiểm tra loại file (chỉ chấp nhận các loại ảnh)
-        const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-        if (!allowedTypes.includes(selectedFile.type)) {
-            toast.error("Invalid file type. Please choose a valid image file (JPEG, PNG, GIF).");
-            event.target.value = ""; // Reset input field
-            return;
-        }
-
-        // Lưu trữ file được chọn trong state hoặc tiếp tục xử lý
-        setSelectedFile(selectedFile);
-    }
     };
     const handleOnSubmit = async (values: UserType) => {
         // Tải lên avatar nếu có file được chọn
@@ -105,11 +105,9 @@ const MyProfile: React.FC = () => {
             <Navbar />
             <div className="container mx-auto mt-[100px] laptop:mt-0">
                 <div className="px-4 tablet:px-[60px]">
-                    <h1 className="text-center text-[32px] py-4 font-bold text-title">MY PROFILE</h1>
+                    <h1 className="text-center text-[32px] py-4 font-bold text-title text-lightblue">MY PROFILE</h1>
                     <div className="flex justify-center items-center">
-                        <div className="hidden laptop:block">
-                            <img src={Logo} alt="Utemy" />
-                        </div>
+                        <div className="hidden laptop:block">{/* <img src={Logo} alt="Utemy" /> */}</div>
                         <div className="flex flex-col items-center justify-center">
                             {/* <div className="w-32 h-32 rounded-full border">
                                 <PopUpChangeAvatar urlAvatar={user.url_avatar || DefaultAvatar} userId={user.user_id} />
@@ -127,7 +125,6 @@ const MyProfile: React.FC = () => {
                                     >
                                         {/* Avatar frame */}
                                         <div className="w-auto h-auto mr-8 overflow-hidden">
-
                                             {/* Display the selected avatar */}
                                             {(selectedFile || user.url_avatar) && (
                                                 <img
@@ -135,13 +132,18 @@ const MyProfile: React.FC = () => {
                                                         selectedFile
                                                             ? URL.createObjectURL(selectedFile)
                                                             : user.url_avatar
+                                                            ? user.url_avatar
+                                                            : DefaultAvatar
                                                     }
                                                     alt="Avatar"
-                                                    className="max-w-xs max-h-80 min-h-full min-w-full"
+                                                    className="max-w-xs max-h-80 min-h-full min-w-full border-4 rounded-lg"
                                                 />
                                             )}
                                             {/* Avatar input */}
-                                            <label htmlFor="avatar" className="block text-sm mb-1 tablet:text-xl text-center">
+                                            <label
+                                                htmlFor="avatar"
+                                                className="block text-sm mb-1 tablet:text-xl text-center"
+                                            >
                                                 Choose Avatar
                                             </label>
                                             <input
@@ -153,7 +155,7 @@ const MyProfile: React.FC = () => {
                                                 className="px-2 py-1 rounded-lg border-[1px] outline-none"
                                             />
                                         </div>
-                                        <div className="bg-primary m-4 rounded-xl shadow-lg p-4">
+                                        <div className="bg-white m-4 rounded-xl shadow-lg p-4">
                                             <div className="flex flex-col mobile:flex-row gap-2">
                                                 <div className="flex flex-col mb-3">
                                                     <label htmlFor="first_name" className="text-sm mb-1 tablet:text-xl">
@@ -235,10 +237,16 @@ const MyProfile: React.FC = () => {
                                                 />
                                             </div>
                                             <div className="flex justify-end">
-                                                <button className="text-white btn btn-primary text-lg" type="submit">
+                                                <button
+                                                    className="text-white btn btn-info text-lg hover:bg-lightblue/80"
+                                                    type="submit"
+                                                >
                                                     Save
                                                 </button>
-                                                <button className="btn ml-2 btn-error text-lg" onClick={handleLogout}>
+                                                <button
+                                                    className="btn ml-2 btn-error text-white text-lg hover:bg-red-500"
+                                                    onClick={handleLogout}
+                                                >
                                                     Logout
                                                 </button>
                                             </div>

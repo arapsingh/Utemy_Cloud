@@ -1,20 +1,19 @@
 import * as Yup from "yup";
 import constants from "../constants";
 
-
 export const changePasswordValidationSchema = Yup.object({
     current_password: Yup.string().trim().required(constants.error.ERROR_NEW_PASSWORD_REQUIRED),
     new_password: Yup.string()
         .trim()
-        .min(8, constants.error.ERROR_WEAK_PASSWORD)
+        .min(8, constants.error.ERROR_PASSWORD_MIN)
         .max(32, constants.error.ERROR_NEW_PASSWORD_MAX)
         .required(constants.error.ERROR_NEW_PASSWORD_REQUIRED),
     confirm_password: Yup.string()
         .trim()
-        .min(8, constants.error.ERROR_WEAK_PASSWORD)
-        .max(32,constants.error.ERROR_NEW_PASSWORD_MAX)
+        .min(8, constants.error.ERROR_PASSWORD_MIN)
+        .max(32, constants.error.ERROR_NEW_PASSWORD_MAX)
         .required(constants.error.ERROR_CONFIRM_PASSWORD_REQUIRED)
-        .oneOf([Yup.ref("new_password")], constants.error.ERROR_NEW_PASSWORD_DIFFERENT_OLD_PASSWORD),
+        .oneOf([Yup.ref("new_password")], constants.error.ERROR_CONFIRM_NEW_PASSWORD),
 });
 
 export const updateProfileValidationSchema = Yup.object({

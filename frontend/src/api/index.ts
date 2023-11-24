@@ -8,6 +8,7 @@ import fileStorageApis from "./fileStorage";
 import userApis from "./user";
 import cartApis from "./cart";
 import invoiceApis from "./invoice";
+import feedbackApis from "./feedback";
 import vnpayApis from "./vnpay";
 
 const apis = {
@@ -22,5 +23,6 @@ const apis = {
     cartApis,
     invoiceApis,
     vnpayApis,
+    feedbackApis,
 };
 export default apis;

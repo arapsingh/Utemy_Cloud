@@ -1,9 +1,9 @@
 import axios from "axios";
 import constants from "../constants";
 import apis from "../api";
-const { Cookies } = require('js-cookie');
+import Cookies from "js-cookie";
 const axiosPublic = axios.create({
-    baseURL: process.env.API_APP_BASE_URL || "https://backend1-terrific-serval-nk.cfapps.ap21.hana.ondemand.com",
+    baseURL: process.env.API_APP_BASE_URL || "http://localhost:3001",
 });
 
 const axiosInstance = axios.create();

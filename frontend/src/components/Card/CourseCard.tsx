@@ -1,12 +1,12 @@
 import { FC, useState } from "react";
 import { Link } from "react-router-dom";
-import ThreeDotIcon from "../assets/icons/ThreedotIcon";
-import EditIcon from "../assets/icons/EditIcon";
-import DeleteIcon from "../assets/icons/DeleteIcon";
-import { User } from "../types/user";
-import CompleteIcon from "../assets/icons/CompleteIcon";
-import TotalRating from "./TotalRating";
-import { convertDateFormat, calDayRemains } from "../utils/helper";
+import ThreeDotIcon from "../../assets/icons/ThreedotIcon";
+import EditIcon from "../../assets/icons/EditIcon";
+import DeleteIcon from "../../assets/icons/DeleteIcon";
+import { User } from "../../types/user";
+import CompleteIcon from "../../assets/icons/CompleteIcon";
+import TotalRating from "../TotalRating";
+import { convertDateFormat, calDayRemains } from "../../utils/helper";
 
 type Course = {
     id: number;
@@ -17,7 +17,7 @@ type Course = {
     author: User;
     price?: number;
     salePrice?: number;
-    saleUntil?: string;
+    saleUntil?: string | Date | undefined;
     rating?: number;
     status?: boolean;
     numberOfSection?: number;
@@ -28,8 +28,9 @@ type Course = {
     handleEditCourse?: (id: number) => void;
     handleDisplayDeleteModal?: (courseId: number) => void;
 };
-
 const CourseCard: FC<Course> = (props: Course) => {
+    console.log("props.rating", props.rating)
+    console.log("Course in CourseCard:", props);
     const [isDisplayDropDown, setIsDisplayDropDown] = useState<boolean>(false);
     const hasAttendee = props.attendees !== undefined;
     const hasPrice = props.price || props.price === 0;
@@ -66,7 +67,7 @@ const CourseCard: FC<Course> = (props: Course) => {
 
                         <div className="text-base flex items-center gap-1">
                             <span className=" font-bold">Rating: </span>
-                            <TotalRating ratingId={props.id} totalScore={props.rating as number} isForCourse={false} />
+                            <TotalRating ratingId={Number(props.id)} totalScore={props.rating as number} isForCourse={false} />
                             <span>{props.rating}</span>
                         </div>
 

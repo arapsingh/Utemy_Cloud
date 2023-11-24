@@ -4,3 +4,14 @@ export type Category = {
     url_image: string;
     description: string;
 };
+
+export type NewCategory = {
+    title: string;
+    description: string;
+    category_image: File | null | undefined;
+};
+
+export type GetCategoriesWithPagination = {
+    searchItem: string;
+    pageIndex: number;
+};

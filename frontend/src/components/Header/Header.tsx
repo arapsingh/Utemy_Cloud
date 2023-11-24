@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, NavLink } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { images } from "../assets";
-import { SearchIcon } from "../assets/icons";
-import UserDropDown from "./UserDropDown";
-import { useAppSelector, useAppDispatch } from "../hooks/hooks";
-import { categoryActions } from "../redux/slices";
-import { Category } from "../types/category";
+import { images } from "../../assets";
+import { SearchIcon } from "../../assets/icons";
+import UserDropDown from "../Dropdown/UserDropDown";
+import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
+import { categoryActions } from "../../redux/slices";
+import { Category } from "../../types/category";
 interface HeaderProps {
     isLogin: boolean;
 }
