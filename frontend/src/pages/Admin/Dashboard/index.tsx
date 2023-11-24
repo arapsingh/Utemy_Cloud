@@ -296,7 +296,7 @@ export function Home() {
         dispatch(componentActions.setAdminNavPlace("dashboard"));
     });
     return (
-        <div className="pt-[15px]">
+        <div className="pt-[15px] bg-background_2">
             <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
                 {statisticsCardsData.map(({ icon, title, footer, ...rest }) => (
                     <StatisticsCard

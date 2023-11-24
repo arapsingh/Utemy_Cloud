@@ -1,8 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Navbar, Typography, Button, Menu, MenuHandler, MenuList, MenuItem, Avatar } from "@material-tailwind/react";
 import { UserCircleIcon, ChevronDownIcon, PowerIcon } from "@heroicons/react/24/solid";
 import { DefaultAvatar as Logo } from "../../assets/images";
+import Utemy from "../../assets/images/utemy_logo_notext.png";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { authActions } from "../../redux/slices";
 
@@ -20,13 +21,15 @@ const profileMenuItems = [
 ];
 
 function ProfileMenu() {
-    const avatar = useAppSelector((state) => state.authSlice.user.url_avatar);
+    const navigate = useNavigate();
+    const user = useAppSelector((state) => state.authSlice.user);
     const dispatch = useAppDispatch();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
     const closeMenu = () => setIsMenuOpen(false);
     const logout = () => {
         dispatch(authActions.logout());
+        navigate("/");
     };
 
     return (
@@ -37,13 +40,15 @@ function ProfileMenu() {
                     color="blue-gray"
                     className="flex items-center gap-2 px-2 rounded-full py-0.5 lg:ml-auto"
                 >
-                    <Typography color="black"> Nhân nguyễn </Typography>
+                    <Typography color="black">
+                        {user.first_name} {user.last_name}
+                    </Typography>
                     <Avatar
                         size="md"
                         alt="tania andrew"
                         withBorder={true}
                         className="border border-gray-400 p-0.5"
-                        src={avatar ? avatar : Logo}
+                        src={user.url_avatar ? user.url_avatar : Logo}
                     />
                     <ChevronDownIcon
                         strokeWidth={2.5}
@@ -56,10 +61,10 @@ function ProfileMenu() {
                 {profileMenuItems.map(({ label, icon, link }, key) => {
                     const isLastItem = key === profileMenuItems.length - 1;
                     return (
-                        <Link to={link as string}>
+                        <NavLink to={link as string}>
                             <MenuItem
                                 key={label}
-                                onClick={isLastItem ? closeMenu : logout}
+                                onClick={isLastItem ? logout : closeMenu}
                                 className={`flex items-center gap-2 rounded ${
                                     isLastItem
                                         ? "hover:bg-red-500 hover:text-white text-red"
@@ -79,7 +84,7 @@ function ProfileMenu() {
                                     {label}
                                 </Typography>
                             </MenuItem>
-                        </Link>
+                        </NavLink>
                     );
                 })}
             </MenuList>
@@ -91,9 +96,10 @@ export function AdminNavbar() {
     return (
         <Navbar className="mx-auto my-2 max-w-screen-xl bg-gray-300 p-2 lg:rounded-full lg:pl-6">
             <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
-                <Typography as="a" href="#" className="mr-4 ml-2 text-black cursor-pointer py-1.5 font-medium">
+                <Avatar src={Utemy} className="rounded-full" />
+                {/* <Typography as="a" href="#" className="mr-4 ml-2 text-black cursor-pointer py-1.5 font-medium">
                     Utemy
-                </Typography>
+                </Typography> */}
 
                 <ProfileMenu />
             </div>

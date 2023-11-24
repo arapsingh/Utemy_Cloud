@@ -17,6 +17,7 @@ const getProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
             where: {
                 id: req.user_id,
                 is_verify: true,
+                is_deleted: false,
             },
             select: {
                 first_name: true,
@@ -76,6 +77,7 @@ const getAuthorProfile = async (req: Request): Promise<ResponseBase> => {
             where: {
                 id: user_id,
                 is_verify: true,
+                is_deleted: false,
             },
             select: {
                 first_name: true,
@@ -380,6 +382,35 @@ const deleteUser = async (req: IRequestWithId): Promise<ResponseBase> => {
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
+const activeUser = async (req: IRequestWithId): Promise<ResponseBase> => {
+    try {
+        const { id } = req.params;
+        const admin_id = Number(req.user_id);
+        const isAdmin = await configs.db.user.findFirst({
+            where: {
+                id: admin_id,
+                is_admin: true,
+            },
+        });
+        if (!isAdmin) return new ResponseError(400, constants.error.ERROR_UNAUTHORIZED, false);
+        const createUser = await configs.db.user.update({
+            data: {
+                is_deleted: false,
+            },
+            where: {
+                id: Number(id),
+            },
+        });
+        if (createUser) return new ResponseSuccess(200, constants.success.SUCCESS_UPDATE_DATA, true);
+        else return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    } catch (error) {
+        console.error("Lỗi xảy ra:", error);
+        if (error instanceof PrismaClientKnownRequestError) {
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+        }
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
 const UserServices = {
     changeAvatar,
     getProfile,
@@ -389,5 +420,6 @@ const UserServices = {
     createNewUser,
     deleteUser,
     editUser,
+    activeUser,
 };
 export default UserServices;

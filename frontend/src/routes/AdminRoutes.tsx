@@ -16,7 +16,7 @@ const AdminRoute: React.FC = () => {
         <>
             {/* <Header isLogin={true} /> */}
             <Sidebar />
-            <div className="relative  bg-blueGray-100">
+            <div className="relative bg-background_2">
                 {/* Header */}
                 <div className="px-4  ml-80">
                     <AdminNavbar />

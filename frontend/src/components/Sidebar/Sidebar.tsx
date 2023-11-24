@@ -6,6 +6,7 @@ import {
     XMarkIcon,
     ClipboardDocumentListIcon,
     HeartIcon,
+    PlusCircleIcon,
 } from "@heroicons/react/24/outline";
 // import { LogoutIcon } from "../../assets/icons";
 import { Button, Typography } from "@material-tailwind/react";
@@ -86,6 +87,24 @@ export function Sidebar() {
                                 <UserCircleIcon className="h-6 w-6" />
                                 <Typography color="inherit" className="font-medium capitalize">
                                     {"User"}
+                                </Typography>
+                            </Button>
+                        </NavLink>
+                    </li>
+                    <li key={"admin/user/create"}>
+                        <NavLink to="/admin/user/create">
+                            <Button
+                                className={`flex items-center  gap-4 px-4 capitalize ${
+                                    selected === "UserCreate"
+                                        ? "btn-info hover:shadow-lightblue/80"
+                                        : "hover:bg-white/10"
+                                } `}
+                                fullWidth
+                                onClick={() => handleClick("UserCreate")}
+                            >
+                                <PlusCircleIcon className="h-6 w-6" />
+                                <Typography color="inherit" className="font-medium capitalize">
+                                    {"Create User"}
                                 </Typography>
                             </Button>
                         </NavLink>
