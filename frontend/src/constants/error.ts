@@ -2,7 +2,7 @@ const error = {
     //etc
     ERROR_INTERNAL_SERVER: "Internal server",
     ERROR_BAD_REQUEST: " Bad request",
-    ERROR_UNAUTHORZIED: "Unauthorized",
+    ERROR_UNAUTHORIZED: "Unauthorized",
     ERROR_MISSING_REQUEST_BODY: "Missing request body",
     ERROR_DATA_NOT_FOUND: "Data not found",
     ERROR_LOGIN_AGAIN: "Please login again",
@@ -23,6 +23,7 @@ const error = {
     ERROR_PASSWORD_MAX: "Password must be under 20 chars",
     ERROR_PASSWORD_MIN: "Password must be more than 8 chars",
     ERROR_WRONG_PASSWORD: "Wrong password",
+    ERROR_WEAK_PASSWORD: "Weak password",
     // current passsword
     ERROR_CURRENT_PASSWORD_STRING: "Current password must be string",
     ERROR_CURRENT_PASSWORD_REQUIRED: "Current password is required",
@@ -34,17 +35,18 @@ const error = {
     ERROR_NEW_PASSWORD_REQUIRED: "New password is required",
     ERROR_NEW_PASSWORD_MAX: "New password must be under 20 chars",
     ERROR_NEW_PASSWORD_MIN: "New password must be more than 20 chars",
+    ERROR_NEW_PASSWORD_DIFFERENT_OLD_PASSWORD: "New password must be different from old password",
     //token
     ERROR_BAD_TOKEN: "Bad token",
     ERROR_TOKEN_STRING: "Token must be a string",
     ERROR_TOKEN_REQUIRED: "Token is requried",
     //first name
     ERROR_FIRST_NAME_STRING: "First name must be string",
-    ERROR_FIRST_NAME_REQURIED: "First name is required",
+    ERROR_FIRST_NAME_REQUIRED: "First name is required",
     ERROR_FIRST_NAME_MAX: "First name must be under 30 chars",
     //last name
     ERROR_LAST_NAME_STRING: "Last name must be string",
-    ERROR_LAST_NAME_REQURIED: "Last name is requried",
+    ERROR_LAST_NAME_REQUIRED: "Last name is required",
     ERROR_LAST_NAME_MAX: "Last name must be under 30 chars",
     //user
     ERROR_USER_NOT_FOUND: "Wrong email or user doesn't exist",
@@ -81,6 +83,14 @@ const error = {
     ERROR_COURSE_PRICE_REQUIRED: "Price is required",
     ERROR_COURSE_PRICE_NUMBER: "Price must be number",
     ERROR_CREATE_COURSE_FAILED: "Create course failed",
+    ERROR_COURSE_SUMMARY_MAX: "Summry is too long",
+    ERROR_CATEGORY_MAX: "Maximum is 4 categories",
+    ERROR_CATEGORY_REQUIRED: "Atleast 1 category",
+    ERROR_IMAGE_TOO_BIG: "Image is too big, maximum 4 MB",
+    ERROR_IMAGE_NOT_SUPPORTED: "Wrong image type, JPG JPEG PNG only",
+    ERROR_VIDEO_TOO_BIG: "Video is too big, maximum 100 MB",
+    ERROR_VIDEO_NOT_SUPPORTED: "Wrong video type, MP4 MOV MKV only",
+    ERROR_VIDEO_IS_REQUIRED: "Video is required",
 
     //rating
     ERROR_RATING_NOT_FOUND: "Rating doesn't exist",
@@ -108,5 +118,13 @@ const error = {
     ERROR_TITLE_REQUIRED: "Title is required",
     ERROR_TITLE_MAX: "Title must be under 50 chars",
     ERROR_CATEGORY_ALREADY_EXISTS: "Category is already existed",
+
+    //promotion
+    ERROR_SALE_PRICE_NUMBER: "Sale price must be a number",
+    ERROR_SALE_PRICE_REQUIRED: "Sale price is required",
+    ERROR_SALE_UNTIL_MIN: "Sale until must be later than today",
+    ERROR_SALE_UNTIL_REQUIRED: "Sale until is required",
+    ERROR_SALE_UNTIL_DATE: "Sale until must be a date",
+    ERROR_SALE_MORE_EXP_THAN_PRICE: "Sale price must be cheaper than original price",
 };
 export default error;

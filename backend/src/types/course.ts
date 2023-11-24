@@ -1,7 +1,7 @@
 import { Author } from "./user";
 import { Section } from "./section";
 export type CourseDetail = {
-    id: number;
+    course_id: number;
     title: string;
     slug: string;
     categories: Category[];
@@ -9,17 +9,18 @@ export type CourseDetail = {
     description: string;
     thumbnail: string;
     summary: string;
-    is_delete: boolean;
-    created_at: Date;
-    updated_at: Date;
+    // is_delete: boolean;
+    // created_at: Date;
+    // updated_at: Date;
     sections: Section[];
-    total_rating: number;
+    average_rating: number;
+    number_of_section?: number;
     number_of_rating: number;
     number_of_enrolled: number;
     author: Author;
     price: number;
-    sale_price: number;
-    sale_until: Date;
+    sale_price: number | null;
+    sale_until: Date | null;
 };
 
 export type CourseInfo = {
@@ -49,10 +50,10 @@ export type CourseEdit = {
 };
 
 export type Category = {
-    id: number;
+    category_id: number;
     title?: string;
     url_image: string;
-    description: string;
+    //description: string;
 };
 
 export type OutstandingCourse = {
@@ -73,12 +74,16 @@ export type CourseCard = {
     categories: Category[];
     summary: string;
     author: Author;
-    rating: number;
-    attendees: number;
-    number_section: number;
     thumbnail: string;
-    description: string;
-    created_at: Date;
-    updated_at: Date;
-    status: boolean;
+    total_of_rating: number;
+    number_of_enrolled: number;
+};
+
+export type CourseOrderByWithRelationInput = {
+    [x: string]: "asc" | "desc" | { _count?: "asc" | "desc" } | undefined;
+    created_at?: "asc" | "desc" | undefined;
+    price?: "asc" | "desc" | undefined;
+    ratings?: { _count?: "asc" | "desc" } | undefined;
+    enrolleds?: { _count?: "asc" | "desc" } | undefined;
+    sections?: { _count?: "asc" | "desc" } | undefined;
 };

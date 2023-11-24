@@ -1,5 +1,6 @@
 import { FC, useRef } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+// import { UpdateInformation as UpdateInformationType, User as UserType } from "../../types/user";
 import { Formik, ErrorMessage, Field, Form } from "formik";
 import { Login as LoginType } from "../../types/auth";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
