@@ -31,3 +31,35 @@ export const updateProfileValidationSchema = Yup.object({
         .max(200, constants.error.ERROR_DESCRIPTION_TOO_MAX)
         .required(constants.error.ERROR_DESCRIPTION_REQUIRED),
 });
+export const editUserValidationSchema = Yup.object({
+    first_name: Yup.string()
+        .trim()
+        .max(32, constants.error.ERROR_FIRST_NAME_MAX)
+        .required(constants.error.ERROR_FIRST_NAME_REQUIRED),
+    last_name: Yup.string()
+        .trim()
+        .max(32, constants.error.ERROR_LAST_NAME_MAX)
+        .required(constants.error.ERROR_LAST_NAME_REQUIRED),
+    is_admin: Yup.boolean().required(constants.error.ERROR_ROLE_REQUIRED),
+});
+export const createUserValidationSchema = Yup.object({
+    email: Yup.string().trim().email().required(constants.error.ERROR_EMAIL_REQUIRED),
+    password: Yup.string()
+        .trim()
+        .required(constants.error.ERROR_PASSWORD_REQUIRED)
+        .max(20, constants.error.ERROR_PASSWORD_MAX)
+        .min(8, constants.error.ERROR_PASSWORD_MIN),
+    confirm_password: Yup.string()
+        .trim()
+        .required(constants.error.ERROR_CONFIRM_PASSWORD_REQUIRED)
+        .oneOf([Yup.ref("password")], constants.error.ERROR_CONFIRM_PASSWORD),
+    first_name: Yup.string()
+        .trim()
+        .required(constants.error.ERROR_FIRST_NAME_REQUIRED)
+        .max(30, constants.error.ERROR_FIRST_NAME_MAX),
+    last_name: Yup.string()
+        .trim()
+        .required(constants.error.ERROR_LAST_NAME_REQUIRED)
+        .max(30, constants.error.ERROR_LAST_NAME_MAX),
+    is_admin: Yup.boolean().required(constants.error.ERROR_ROLE_REQUIRED),
+});

@@ -13,9 +13,10 @@ const login = async (req: Request): Promise<ResponseBase> => {
     try {
         const { email, password }: any = req.body;
 
-        const isFoundUser = await configs.db.user.findUnique({
+        const isFoundUser = await configs.db.user.findFirst({
             where: {
                 email: email,
+                is_deleted: false,
             },
         });
 

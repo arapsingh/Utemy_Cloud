@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import toast, { Toaster } from "react-hot-toast";
 import { previewImage } from "../../../utils/helper";
 import { NewCategory as CreateCategoryType } from "../../../types/category";
+import { createCategoryValidationSchema } from "../../../validations/category";
 import logoUtemy from "../../../assets/images/utemy_logo_notext.png";
 
 // const FILE_TOO_BIG = 1;
@@ -81,7 +82,7 @@ const PopupAddCategory: React.FC<PopupAddCategoryProps> = (props) => {
                         </h1>
                         <Formik
                             initialValues={initialValues}
-                            // validationSchema={createCourseValidationSchema}
+                            validationSchema={createCategoryValidationSchema}
                             onSubmit={handleOnSubmit}
                             innerRef={formikRef}
                         >

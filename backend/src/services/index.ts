@@ -9,6 +9,7 @@ import RatingServices from "./rating.services";
 import CartServices from "./cart.services";
 import VnpayServices from "./vnpay_services";
 import InvoiceServices from "./invoice.services";
+import StatisticServices from "./statistic.services";
 export default {
     AuthServices,
     UserService,
@@ -21,4 +22,5 @@ export default {
     CartServices,
     VnpayServices,
     InvoiceServices,
+    StatisticServices,
 };

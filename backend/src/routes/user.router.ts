@@ -15,13 +15,14 @@ userRouter.patch("/update-profile", isLogin, controllers.userController.updatePr
 // 10. Change Avatar
 userRouter.post("/avatar", isLogin, uploadAvatar, controllers.userController.changeAvatar); //
 
+userRouter.post("/", isLogin, controllers.userController.createNewUser);
 // 11. Get author profile
 userRouter.get("/:id", controllers.userController.getAuthorProfile);
 
 userRouter.patch("/:id", isLogin, controllers.userController.editUser);
 
-userRouter.post("/:id", isLogin, controllers.userController.createNewUser);
-
 userRouter.delete("/:id", isLogin, controllers.userController.deleteUser);
+
+userRouter.put("/:id", isLogin, controllers.userController.activeUser);
 
 export default userRouter;

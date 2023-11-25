@@ -18,12 +18,12 @@ export function FooterAdmin() {
                     <li key={"about"}>
                         <Typography
                             as="a"
-                            // href={path}
+                            href={"https://www.facebook.com/profile.php?id=100040927081687"}
                             target="_blank"
                             variant="small"
                             className="py-0.5 px-1 font-normal text-inherit transition-colors hover:text-blue-500"
                         >
-                            "About us"
+                            About us
                         </Typography>
                     </li>
                 </ul>

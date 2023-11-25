@@ -9,6 +9,7 @@ import ratingRouter from "./rating.router";
 import cartRouter from "./cart.router";
 import invoiceRouter from "./invoice.router";
 import vnpayRouter from "./vnpay.router";
+import statRouter from "./statistic.router";
 
 export default {
     authRouter,
@@ -22,4 +23,5 @@ export default {
     cartRouter,
     invoiceRouter,
     vnpayRouter,
+    statRouter,
 };

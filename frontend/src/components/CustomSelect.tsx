@@ -15,7 +15,7 @@ const CustomeSelect: FC<SelectProps> = (props) => {
     const animatedComponents = makeAnimated();
     return (
         <Select
-            closeMenuOnSelect={false}
+            closeMenuOnSelect={props.isMulti ? false : true}
             components={animatedComponents}
             defaultValue={props.defautlValues}
             placeholder={props.placeholder}

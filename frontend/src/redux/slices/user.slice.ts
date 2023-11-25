@@ -6,6 +6,7 @@ import {
     CreateNewUser as CreateNewUserType,
     AuthorInformation,
     UpdateInformation,
+    EditUser,
 } from "../../types/user";
 import apis from "../../api";
 import { Course } from "../../types/course";
@@ -41,11 +42,33 @@ export const createNewUser = createAsyncThunk<Response<null>, CreateNewUserType,
         }
     },
 );
+export const editUser = createAsyncThunk<Response<null>, EditUser, { rejectValue: Response<null> }>(
+    "user/edit",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.userApis.editUser(body);
+            return response.data as Response<null>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
 export const deleteUser = createAsyncThunk<Response<null>, number, { rejectValue: Response<null> }>(
     "user/delete",
     async (body, ThunkAPI) => {
         try {
             const response = await apis.userApis.deleteUser(body);
+            return response.data as Response<null>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
+export const activeUser = createAsyncThunk<Response<null>, number, { rejectValue: Response<null> }>(
+    "user/active",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.userApis.activeUser(body);
             return response.data as Response<null>;
         } catch (error: any) {
             return ThunkAPI.rejectWithValue(error.data as Response<null>);
@@ -177,7 +200,6 @@ export const userSlice = createSlice({
             state.isLoading = true;
         });
         builder.addCase(createNewUser.fulfilled, (state, action: any) => {
-            state.users = action.payload.data?.data as User[];
             state.isLoading = false;
         });
         builder.addCase(createNewUser.rejected, (state) => {
@@ -221,6 +243,24 @@ export const userSlice = createSlice({
             state.isLoading = false;
         });
         builder.addCase(changeAvatar.rejected, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(activeUser.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(activeUser.fulfilled, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(activeUser.rejected, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(editUser.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(editUser.fulfilled, (state) => {
+            state.isLoading = false;
+        });
+        builder.addCase(editUser.rejected, (state) => {
             state.isLoading = false;
         });
     },

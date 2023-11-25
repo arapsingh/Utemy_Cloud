@@ -45,10 +45,6 @@ export default class CourseController {
         return res.status(response.getStatusCode()).json(response);
     }
 
-    async buyCourse(req: IRequestWithId, res: Response): Promise<Response> {
-        return res;
-    }
-
     async getListRatingOfCourse(req: IRequestWithId, res: Response): Promise<Response> {
         const response: ResponseBase = await services.CourseService.getListRatingOfCourse(req);
         return res.status(response.getStatusCode()).json(response);

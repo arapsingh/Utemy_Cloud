@@ -1,7 +1,8 @@
 export type Author = {
     first_name: string;
     last_name: string;
-    id: number;
+    user_id: number;
+    is_admin?: boolean;
 };
 export type User = {
     first_name: string;

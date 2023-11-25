@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { componentActions } from "../../../redux/slices";
+import { componentActions, statisticActions } from "../../../redux/slices";
 import {
     Typography,
     Card,
@@ -18,7 +18,6 @@ import {
     EllipsisVerticalIcon,
     ArrowUpIcon,
     BanknotesIcon,
-    UserPlusIcon,
     UsersIcon,
     ChartBarIcon,
     BellIcon, // orderoverview
@@ -32,7 +31,7 @@ import { StatisticsChart } from "../../../components/Chart/StatisticsChart";
 import { CheckCircleIcon, ClockIcon } from "@heroicons/react/24/solid";
 
 import { chartsConfig } from "../../../config/chartsConfig";
-import { useAppDispatch } from "../../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 
 const websiteViewsChart = {
     type: "bar",
@@ -142,52 +141,6 @@ export const statisticsChartsData = [
     },
 ];
 
-const statisticsCardsData = [
-    {
-        color: "gray",
-        icon: BanknotesIcon,
-        title: "Today's Money",
-        value: "$53k",
-        footer: {
-            color: "text-green-500",
-            value: "+55%",
-            label: "than last week",
-        },
-    },
-    {
-        color: "gray",
-        icon: UsersIcon,
-        title: "Today's Users",
-        value: "2,300",
-        footer: {
-            color: "text-green-500",
-            value: "+3%",
-            label: "than last month",
-        },
-    },
-    {
-        color: "gray",
-        icon: UserPlusIcon,
-        title: "New Clients",
-        value: "3,462",
-        footer: {
-            color: "text-red-500",
-            value: "-2%",
-            label: "than yesterday",
-        },
-    },
-    {
-        color: "gray",
-        icon: ChartBarIcon,
-        title: "Sales",
-        value: "$103,430",
-        footer: {
-            color: "text-green-500",
-            value: "+5%",
-            label: "than yesterday",
-        },
-    },
-];
 const projectsTableData = [
     {
         img: "/img/logo-xd.svg",
@@ -292,12 +245,56 @@ const ordersOverviewData = [
 
 export function Home() {
     const dispatch = useAppDispatch();
+    const totalMoney = useAppSelector((state) => state.statisticSlice.totalMoney);
+    const totalCourse = useAppSelector((state) => state.statisticSlice.totalCourse);
+    const totalUser = useAppSelector((state) => state.statisticSlice.totalUser);
+    // const categoryCourse = useAppSelector((state) => state.statisticSlice.categoryCourse);
+    // const categoryEnrolled = useAppSelector((state) => state.statisticSlice.categoryEnrolled);
+    // const categoryMoney = useAppSelector((state) => state.statisticSlice.categoryMoney);
+    const statisticsCardsData = [
+        {
+            color: "gray",
+            icon: BanknotesIcon,
+            title: "Total Money",
+            value: totalMoney,
+            // footer: {
+            //     color: "text-green-500",
+            //     value: "+55%",
+            //     label: "than last week",
+            // },
+        },
+        {
+            color: "green",
+            icon: UsersIcon,
+            title: "Total Users",
+            value: totalUser,
+            footer: {
+                color: "text-green-500",
+                value: "+3%",
+                label: "than last month",
+            },
+        },
+        {
+            color: "red",
+            icon: ChartBarIcon,
+            title: "Total course",
+            value: totalCourse,
+            footer: {
+                color: "text-green-500",
+                value: "+5%",
+                label: "than yesterday",
+            },
+        },
+    ];
     useEffect(() => {
         dispatch(componentActions.setAdminNavPlace("dashboard"));
+        dispatch(statisticActions.getTotalCourse());
+        dispatch(statisticActions.getTotalMoney());
+        dispatch(statisticActions.getTotalUser());
     });
     return (
-        <div className="pt-[15px]">
-            <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
+        <div className="pt-[15px] bg-background_2">
+            <div className="mb-12 grid gap-y-10 items-center gap-x-6 md:grid-cols-2 xl:grid-cols-4">
                 {statisticsCardsData.map(({ icon, title, footer, ...rest }) => (
                     <StatisticsCard
                         key={title}
@@ -307,12 +304,6 @@ export function Home() {
                         icon={React.createElement(icon, {
                             className: "w-6 h-6 text-white",
                         })}
-                        footer={
-                            <Typography className="font-normal text-blue-gray-600">
-                                <strong className={footer.color}>{footer.value}</strong>
-                                &nbsp;{footer.label}
-                            </Typography>
-                        }
                     />
                 ))}
             </div>
