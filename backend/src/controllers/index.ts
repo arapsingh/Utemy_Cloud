@@ -9,6 +9,7 @@ import RatingController from "./rating.controller";
 import CartController from "./cart.controller";
 import InvoiceController from "./invoice.controller,";
 import VnpayController from "./vnpay.controller";
+import StatisticController from "./statistic.controller";
 
 export default {
     authController: new AuthController(),
@@ -22,4 +23,5 @@ export default {
     cartController: new CartController(),
     invoiceController: new InvoiceController(),
     vnpayController: new VnpayController(),
+    statisticController: new StatisticController(),
 };
