@@ -7,35 +7,33 @@ import { User } from "../../types/user";
 import { useParams } from "react-router-dom";
 import { Course } from "../../types/course";
 import NotFound from "../NotFound";
+import { useNavigate } from "react-router-dom";
 
 const AuthorProfile: React.FC = () => {
     const [isNotFound, setIsNotFound] = useState<boolean>(false);
-
+    const navigate = useNavigate();
     const user: User = useAppSelector((state) => state.userSlice.user);
+    const loginId = useAppSelector((state) => state.authSlice.user.user_id);
     let courseList: Course[] = useAppSelector((state) => state.userSlice.courses) ?? [];
-    console.log("Course List:", courseList);
     const dispatch = useAppDispatch();
     const { id } = useParams();
-
     useEffect(() => {
-        // @ts-ignore
-        dispatch(userActions.getAuthorProfile(id)).then((response) => {
+        dispatch(userActions.getAuthorProfile(Number(id))).then((response) => {
             if (response.payload && response.payload.status_code !== 200) {
                 setIsNotFound(true);
             } else {
-                // Handle the case where response.payload is undefined
                 setIsNotFound(false);
             }
         });
     }, [dispatch, id]);
-
+    if (Number(id) === Number(loginId)) navigate("/my-profile");
     if (isNotFound) return <NotFound />;
 
     return (
         <>
             <Navbar />
             <div className="container mx-auto px-4 mt-[100px] laptop:mt-0">
-                <div className="px-4 tablet:px-[60px] flex gap-4 bg-secondary mt-4 p-4 rounded-lg">
+                <div className="px-4 tablet:px-[60px] flex gap-4 bg-lightblue/30 mt-4 p-4 rounded-lg">
                     <div className="w-32 h-32 rounded-full border">
                         <img
                             src={user.url_avatar || DefaultAvatar}
@@ -45,7 +43,7 @@ const AuthorProfile: React.FC = () => {
                     </div>
                     <div className="">
                         <h1 className="text-3xl font-bold mb-2">
-                            {((user.first_name as string) + " " + user.last_name) as string}
+                            Hello from {((user.first_name as string) + " " + user.last_name) as string}
                         </h1>
                         <p className="text-lg">
                             <span className="font-bold">About me: </span>

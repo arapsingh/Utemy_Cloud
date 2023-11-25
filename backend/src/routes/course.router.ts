@@ -21,7 +21,6 @@ courseRouter.patch("/", isLogin, uploadThumbnail, isAuthor, controllers.courseCo
 courseRouter.delete("/:course_id", isLogin, isAuthor, controllers.courseController.deleteCourse);
 
 //17. Buy course
-courseRouter.post("/buy", isLogin, isAuthor, controllers.courseController.buyCourse);
 courseRouter.post("/promotion", isLogin, isAuthor, controllers.courseController.addPromotion);
 courseRouter.delete("/promotion/:course_id", isLogin, isAuthor, controllers.courseController.stopPromotion);
 //18. Rating course
