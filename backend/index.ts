@@ -8,7 +8,7 @@ const app: Application = express();
 const port: number = configs.general.PORT;
 
 const corsOptions = {
-    "access-control-allow-origin": "https://utemy-cloud-bkrb8xn2x-bui-van-huu-phuocs-projects.vercel.app",
+    "access-control-allow-origin": "https://utemy-cloud-frontend.vercel.app",
     origin: "*",
     optionsSuccessStatus: 200,
 };
