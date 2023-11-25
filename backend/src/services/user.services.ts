@@ -84,6 +84,8 @@ const getAuthorProfile = async (req: Request): Promise<ResponseBase> => {
                 last_name: true,
                 url_avatar: true,
                 description: true,
+                id: true,
+                is_admin: true,
                 courses: {
                     where: {
                         is_delete: false,
@@ -119,7 +121,7 @@ const getAuthorProfile = async (req: Request): Promise<ResponseBase> => {
                 author: {
                     first_name: user.first_name,
                     last_name: user.last_name,
-                    id: user_id,
+                    user_id: user.id,
                 },
                 created_at: course.created_at,
                 updated_at: course.updated_at,
@@ -135,6 +137,7 @@ const getAuthorProfile = async (req: Request): Promise<ResponseBase> => {
                 last_name: user.last_name,
                 url_avatar: user.url_avatar,
                 description: user.description,
+                is_admin: user.is_admin,
             },
             courses: courses,
         };

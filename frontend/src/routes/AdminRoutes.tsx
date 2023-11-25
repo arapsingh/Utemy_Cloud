@@ -2,28 +2,24 @@ import Cookies from "js-cookie";
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "../hooks/hooks";
-import Sidebar from "../components/Sidebar/Sidebar";
-import FooterAdmin from "../components/Footer/FooterAdmin";
-import { AdminNavbar } from "../components/Navbar/AdminNavbar";
-// import Header from "../components/Header";
-
-// import Footer from "../components/Footer";
+// import Sidebar from "../components/Sidebar/Sidebar";
+// import FooterAdmin from "../components/Footer/FooterAdmin";
+// import { AdminNavbar } from "../components/Navbar/AdminNavbar";
 
 const AdminRoute: React.FC = () => {
     const accessToken = Cookies.get("accessToken");
     const isAdmin = useAppSelector((state) => state.authSlice.user.is_admin);
-    return isAdmin && accessToken ? (
+    const isLoading = useAppSelector((state) => state.authSlice.isLoading);
+    return isAdmin && accessToken && !isLoading ? (
         <>
-            {/* <Header isLogin={true} /> */}
-            <Sidebar />
+            {/* <Sidebar />
             <div className="relative bg-background_2">
-                {/* Header */}
                 <div className="px-4  ml-80">
-                    <AdminNavbar />
-                    <Outlet />
-                    <FooterAdmin />
+                    <AdminNavbar /> */}
+            <Outlet />
+            {/* <FooterAdmin />
                 </div>
-            </div>
+            </div> */}
         </>
     ) : (
         <Navigate to={"/"} />
