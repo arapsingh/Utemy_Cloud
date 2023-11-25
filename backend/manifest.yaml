@@ -9,11 +9,11 @@ applications:
   env:
       DATABASE_URL: 'mysql://uztjmgrs2besbup3:xtv1SbYq8tZyzBUOkebi@b4ymigpkiljspcq3m76y-mysql.services.clever-cloud.com:3306/b4ymigpkiljspcq3m76y'
       DOMAIN_NAME : "https://utemy-cloud-frontend.vercel.app"
-      BACKEND_DOMAIN_NAME : "https:\\\\backend2-tired-lion-xr.cfapps.ap21.hana.ondemand.com"
+      BACKEND_DOMAIN_NAME : "https:\\\\backend1-tired-vicuna-fv.cfapps.ap21.hana.ondemand.com"
       TOKEN_ACCESS_EXPIRED_TIME : "15m"
       TOKEN_REFRESH_EXPIRED_TIME : "10d"
-      PUBLIC_URL : "https://backend2-tired-lion-xr.cfapps.ap21.hana.ondemand.com"
-      PUBLIC_API_URL : "https://backend2-tired-lion-xr.cfapps.ap21.hana.ondemand.com/api"
+      PUBLIC_URL : "https://backend1-tired-vicuna-fv.cfapps.ap21.hana.ondemand.com"
+      PUBLIC_API_URL : "https://backend1-tired-vicuna-fv.cfapps.ap21.hana.ondemand.com/api"
       JWT_SECRET_KEY : "Utemy"
       HASH_SALT : "10"
       EMAIL_SERVER : "utemyvietnam@gmail.com"
