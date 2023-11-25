@@ -50,6 +50,7 @@ const error = {
     ERROR_LAST_NAME_MAX: "Last name must be under 30 chars",
     //user
     ERROR_USER_NOT_FOUND: "Wrong email or user doesn't exist",
+    ERROR_ROLE_REQUIRED: "Role is required",
     //category
     ERROR_CATEGORY_NOT_FOUND: "Category doesn't exist",
     //lesson
@@ -114,6 +115,7 @@ const error = {
     //category
     ERROR_CATEGORY_ID_NUMBER: "Category id must be an integer",
     ERROR_CATEGORY_ID_REQUIRED: "Category id is required",
+    ERROR_CATEGORY_IMAGE_REQUIRED: "Category image is required",
     ERROR_TITLE_STRING: "Title must be string",
     ERROR_TITLE_REQUIRED: "Title is required",
     ERROR_TITLE_MAX: "Title must be under 50 chars",

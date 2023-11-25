@@ -1,5 +1,5 @@
-import { DefaultAvatar, Logo, FooterLogo } from "./images";
+import { DefaultAvatar, Logo, FooterLogo, FeedbackLogo, CreateUser } from "./images";
 
-const images = { DefaultAvatar, Logo, FooterLogo };
+const images = { DefaultAvatar, Logo, FooterLogo, CreateUser, FeedbackLogo };
 
 export { images, DefaultAvatar };

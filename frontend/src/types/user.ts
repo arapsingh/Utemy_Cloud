@@ -35,3 +35,9 @@ export type GetAllUser = {
     role: string;
     searchItem: string;
 };
+export type EditUser = {
+    first_name: string;
+    last_name: string;
+    is_admin: boolean;
+    id?: number;
+};

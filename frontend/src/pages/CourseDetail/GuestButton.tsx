@@ -11,11 +11,7 @@ type GuestButtonProps = {
 
 const GuestButton: React.FC<GuestButtonProps> = ({ isLogin, course_id }) => {
     const dispatch = useAppDispatch();
-    console.log("course_id", course_id);
-    const isCourseInCart = useAppSelector((state) => state.cartSlice.isCourseInCart);
-    console.log("isCourseInCart", isCourseInCart);
-    const carts = useAppSelector((state) => state.cartSlice.userCart);
-    console.log(carts);
+    const isCourseInCart = useAppSelector((state) => state.cartSlice.isCourseInCart) ?? false;
     const isGetLoading = useAppSelector((state) => state.courseSlice.isGetLoading) ?? false;
     const handleGetItClick = () => {
         if (!isLogin || isCourseInCart) {
@@ -34,8 +30,6 @@ const GuestButton: React.FC<GuestButtonProps> = ({ isLogin, course_id }) => {
         }
     };
     useEffect(() => {
-        console.log("dispatch");
-        dispatch(cartActions.getAllCart());
         dispatch(cartActions.setIsCourseInCart(course_id));
     }, [dispatch, course_id]);
     return (

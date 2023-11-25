@@ -6,6 +6,7 @@ import {
     XMarkIcon,
     ClipboardDocumentListIcon,
     HeartIcon,
+    PlusCircleIcon,
 } from "@heroicons/react/24/outline";
 // import { LogoutIcon } from "../../assets/icons";
 import { Button, Typography } from "@material-tailwind/react";
@@ -41,7 +42,7 @@ export function Sidebar() {
             <div className="m-4">
                 <ul key={"nav-list"} className="mb-4 flex flex-col gap-1">
                     <li key={"admin"}>
-                        <NavLink to="/admin">
+                        <Link to="/admin">
                             <Button
                                 className={`flex items-center  gap-4 px-4 capitalize ${
                                     selected === "dashboard"
@@ -56,10 +57,10 @@ export function Sidebar() {
                                     {"Dashboard"}
                                 </Typography>
                             </Button>
-                        </NavLink>
+                        </Link>
                     </li>
                     <li key={"admin/category"}>
-                        <NavLink to="/admin/category">
+                        <Link to="/admin/category">
                             <Button
                                 className={`flex items-center  gap-4 px-4 capitalize ${
                                     selected === "Category" ? "btn-info hover:shadow-lightblue/80" : "hover:bg-white/10"
@@ -72,7 +73,7 @@ export function Sidebar() {
                                     {"Category"}
                                 </Typography>
                             </Button>
-                        </NavLink>
+                        </Link>
                     </li>
                     <li key={"admin/user"}>
                         <NavLink to="/admin/user">
@@ -86,6 +87,24 @@ export function Sidebar() {
                                 <UserCircleIcon className="h-6 w-6" />
                                 <Typography color="inherit" className="font-medium capitalize">
                                     {"User"}
+                                </Typography>
+                            </Button>
+                        </NavLink>
+                    </li>
+                    <li key={"admin/user/create"}>
+                        <NavLink to="/admin/user/create">
+                            <Button
+                                className={`flex items-center  gap-4 px-4 capitalize ${
+                                    selected === "UserCreate"
+                                        ? "btn-info hover:shadow-lightblue/80"
+                                        : "hover:bg-white/10"
+                                } `}
+                                fullWidth
+                                onClick={() => handleClick("UserCreate")}
+                            >
+                                <PlusCircleIcon className="h-6 w-6" />
+                                <Typography color="inherit" className="font-medium capitalize">
+                                    {"Create User"}
                                 </Typography>
                             </Button>
                         </NavLink>
