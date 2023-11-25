@@ -607,7 +607,7 @@ const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase
                 created_at: enroll.course.created_at,
                 number_of_section: enroll.course.sections.length,
                 author: {
-                    id: enroll.course?.user.id,
+                    user_id: enroll.course?.user.id,
                     first_name: enroll.course?.user.first_name,
                     last_name: enroll.course?.user.last_name,
                 },
@@ -734,7 +734,7 @@ const getAllCourse = async (req: Request): Promise<ResponseBase> => {
                 sale_until: data.sale_until,
                 status: data.status,
                 author: {
-                    id: data.user.id,
+                    user_id: data.user.id,
                     first_name: data.user.first_name,
                     last_name: data.user.last_name,
                 },

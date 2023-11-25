@@ -135,6 +135,7 @@ export const authSlice = createSlice({
         builder.addCase(login.rejected, (state) => {
             state.isLoading = false;
         });
+
         builder.addCase(verifyEmail.pending, (state) => {
             state.error = "";
             state.success = "";

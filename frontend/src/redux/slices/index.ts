@@ -10,3 +10,4 @@ export * as cartActions from "./cart.slice";
 export * as invoiceActions from "./invoice.slice";
 export * as vnpayActions from "./vnpay.slice";
 export * as componentActions from "./component.slice";
+export * as statisticActions from "./statistic.slice";

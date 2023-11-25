@@ -27,6 +27,7 @@ app.use("/api/feedback", routes.feedbackRouter);
 app.use("/api/rating", routes.ratingRouter);
 app.use("/api/cart", routes.cartRouter);
 app.use("/api/invoice", routes.invoiceRouter);
+app.use("/api/stat", routes.statRouter);
 app.use("/IPN", routes.vnpayRouter);
 
 app.listen(port, () => {

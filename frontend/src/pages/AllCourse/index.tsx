@@ -81,6 +81,7 @@ const AllCourses: React.FC = () => {
     };
 
     useEffect(() => {
+        setCategoryChecked(categoryQuery);
         const query: SearchAllCourses = {
             pageIndex: 1,
             category: categoryQuery,

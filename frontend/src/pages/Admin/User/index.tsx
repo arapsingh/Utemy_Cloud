@@ -21,6 +21,7 @@ import ActiveUserModal from "./ActiveUserModal";
 import { User } from "../../../types/user";
 import toast, { Toaster } from "react-hot-toast";
 import PopupEditUser from "./PopupEditUser";
+import { Link } from "react-router-dom";
 
 const UserAdmin = () => {
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
@@ -219,28 +220,30 @@ const UserAdmin = () => {
                                     return (
                                         <tr key={user.user_id}>
                                             <td className={className}>
-                                                <div className="flex items-center gap-4">
-                                                    <Avatar
-                                                        src={user.url_avatar || Logo}
-                                                        alt={user.user_id?.toString()}
-                                                        size="xs"
-                                                        variant="rounded"
-                                                    />
-                                                    <div>
-                                                        <Typography
-                                                            variant="small"
-                                                            color="blue-gray"
-                                                            className={`font-semibold ${
-                                                                user.user_id === currentId ? "text-lightblue" : ""
-                                                            }`}
-                                                        >
-                                                            {user.first_name} {user.last_name}
-                                                        </Typography>
-                                                        <Typography className="text-xs font-normal text-blue-gray-500">
-                                                            {user.email}
-                                                        </Typography>
+                                                <Link to={`/admin/user-profile/${user.user_id}`}>
+                                                    <div className="flex items-center gap-4">
+                                                        <Avatar
+                                                            src={user.url_avatar || Logo}
+                                                            alt={user.user_id?.toString()}
+                                                            size="xs"
+                                                            variant="rounded"
+                                                        />
+                                                        <div>
+                                                            <Typography
+                                                                variant="small"
+                                                                color="blue-gray"
+                                                                className={`font-semibold ${
+                                                                    user.user_id === currentId ? "text-lightblue" : ""
+                                                                }`}
+                                                            >
+                                                                {user.first_name} {user.last_name}
+                                                            </Typography>
+                                                            <Typography className="text-xs font-normal text-blue-gray-500">
+                                                                {user.email}
+                                                            </Typography>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                </Link>
                                             </td>
                                             <td className={className}>
                                                 <div
