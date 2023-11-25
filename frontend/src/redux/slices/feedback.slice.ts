@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Response } from "../../types/response";
-import { Feedback } from "../../types/feedback";
+import { Feedback, FeedbackContent } from "../../types/feedback";
 import apis from "../../api";
 type FeedbackSliceType = {
     feedbacks: Feedback[];
+    feedback: Feedback;
     isGetLoading: boolean;
     totalPage: number;
     totalRecord: number;
@@ -20,8 +21,28 @@ export const getAllFeedbacks = createAsyncThunk<Response<Feedback[]>, number, { 
         }
     },
 );
+export const createMyFeedback = createAsyncThunk<Response<Feedback>, FeedbackContent, { rejectValue: Response<null> }>(
+    "feedback/",
+    async (body, ThunkAPI) => {
+        try {
+            const response = await apis.feedbackApis.createMyFeedback(body);
+            return response.data as Response<Feedback>;
+        } catch (error: any) {
+            return ThunkAPI.rejectWithValue(error.data as Response<null>);
+        }
+    },
+);
 const initialState: FeedbackSliceType = {
     feedbacks: [],
+    feedback:{
+        feedback_id: 0,
+        user_id: 0,
+        first_name: "",
+        last_name: "",
+        url_avatar: "",
+        content: "",
+        created_at: ""
+    },
     totalPage: 0,
     totalRecord: 0,
     isGetLoading: false,
@@ -44,6 +65,16 @@ export const feedbackSlice = createSlice({
         builder.addCase(getAllFeedbacks.rejected, (state) => {
             state.isGetLoading = false;
         });
+        builder.addCase(createMyFeedback.pending, (state) => {
+            state.isGetLoading = true;
+        });
+        builder.addCase(createMyFeedback.fulfilled, (state, action: any) =>{
+            state.feedback = action.payload.data as Feedback;
+            state.isGetLoading = false;
+        });
+        builder.addCase(createMyFeedback.rejected, (state)=> {
+            state.isGetLoading = false;
+        })
     },
 });
 

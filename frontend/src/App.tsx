@@ -35,6 +35,7 @@ import PrivateRoute from "./routes/PrivateRoutes";
 import UserAppLayout from "./layout/userAppLayout";
 import AdminRoute from "./routes/AdminRoutes";
 import AuthorProfile from "./pages/AuthorProfile";
+import Feedback from "./pages/Feedback";
 function App() {
     const dispatch = useAppDispatch();
 
@@ -63,6 +64,7 @@ function App() {
                                 <Route path="/checkout" element={<Checkout />}></Route>
                                 <Route path="/checkout/vnpay_return" element={<VnPayReturn />}></Route>
                                 <Route path="/my-profile" element={<MyProfile />}></Route>
+                                <Route path="/my-feedback" element={<Feedback />}></Route>
                             </Route>
                             <Route index element={<HomePage />}></Route>
                             <Route path="/login" element={<Login />}></Route>
