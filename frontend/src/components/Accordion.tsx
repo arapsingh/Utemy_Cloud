@@ -5,6 +5,7 @@ import DeleteIcon from "../assets/icons/DeleteIcon";
 import EditSectionIcon from "../assets/icons/EditSectionIcon";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { PlayIcon, BookOpenIcon } from "@heroicons/react/24/outline";
 
 import { Course } from "../types/course";
 import { lessonActions } from "../redux/slices";
@@ -55,7 +56,10 @@ const Accordion: React.FC<AccordionType> = (props) => {
                                     d="M9 5 5 1 1 5"
                                 />
                             </svg>
-                            <span className="max-w-[400px] text-white truncate ...">{props.section.title}</span>
+                            <span className="max-w-[400px] text-white truncate ... flex items-center gap-2">
+                                <BookOpenIcon className="w-4 h-4" />
+                                {props.section.title}
+                            </span>
                         </div>
                         {props.isDisplayBtn && (
                             <div className="flex gap-2">
@@ -113,8 +117,10 @@ const Accordion: React.FC<AccordionType> = (props) => {
                         }}
                         key={`${lesson.id}`}
                     >
-                        <p>{lesson.title}</p>
-
+                        {" "}
+                        <p className="flex items-center gap-2">
+                            <PlayIcon className="w-4 h-4" /> {lesson.title}
+                        </p>
                         {props.isDisplayBtn && (
                             <div className="flex gap-2">
                                 <div

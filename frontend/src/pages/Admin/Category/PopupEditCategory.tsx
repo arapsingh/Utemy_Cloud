@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { previewImage } from "../../../utils/helper";
 import { NewCategory as CreateCategoryType } from "../../../types/category";
 import { categoryActions } from "../../../redux/slices";
+import { editCategoryValidationSchema } from "../../../validations/category";
 // const FILE_TOO_BIG = 1;
 // const FILE_IS_NOT_SUPPORT = 2;
 // const FILE_IS_EMPTY = 3;
@@ -81,7 +82,7 @@ const PopupEditCategory: React.FC<PopupEditCategoryProps> = (props) => {
                         <Formik
                             initialValues={initialValues}
                             enableReinitialize //!@$@$$#^%
-                            // validationSchema={createCourseValidationSchema}
+                            validationSchema={editCategoryValidationSchema}
                             onSubmit={handleOnSubmit}
                             innerRef={formikRef}
                         >
