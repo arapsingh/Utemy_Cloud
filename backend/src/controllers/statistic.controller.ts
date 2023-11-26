@@ -15,6 +15,10 @@ export default class StatisticController {
         const response: ResponseBase = await services.StatisticServices.courseCount(req);
         return res.status(response.getStatusCode()).json(response);
     }
+    async invoiceCount(req: IRequestWithId, res: Response): Promise<Response> {
+        const response: ResponseBase = await services.StatisticServices.invoiceCount(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
     async categoryEnrolledCount(req: IRequestWithId, res: Response): Promise<Response> {
         const response: ResponseBase = await services.StatisticServices.categoryEnrolledCount(req);
         return res.status(response.getStatusCode()).json(response);
@@ -29,6 +33,14 @@ export default class StatisticController {
     }
     async userCount(req: IRequestWithId, res: Response): Promise<Response> {
         const response: ResponseBase = await services.StatisticServices.userCount(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async ratingPercent(req: IRequestWithId, res: Response): Promise<Response> {
+        const response: ResponseBase = await services.StatisticServices.ratingPercent(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async moneyByMonth(req: IRequestWithId, res: Response): Promise<Response> {
+        const response: ResponseBase = await services.StatisticServices.moneyByMonth(req);
         return res.status(response.getStatusCode()).json(response);
     }
 }
