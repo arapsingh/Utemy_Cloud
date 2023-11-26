@@ -30,6 +30,21 @@ const getTotalCourse = async () => {
     const reponse = await apiCaller("GET", path);
     return reponse;
 };
+const getTotalInvoice = async () => {
+    const path = "stat/total-invoice";
+    const reponse = await apiCaller("GET", path);
+    return reponse;
+};
+const getRatingPercent = async () => {
+    const path = "stat/rating-percent";
+    const reponse = await apiCaller("GET", path);
+    return reponse;
+};
+const getMoneyByMonth = async (values: number) => {
+    const path = `stat/money-by-month/${values}`;
+    const reponse = await apiCaller("GET", path);
+    return reponse;
+};
 
 const statisticApis = {
     getCategoryCourse,
@@ -38,6 +53,9 @@ const statisticApis = {
     getTotalUser,
     getTotalMoney,
     getTotalCourse,
+    getRatingPercent,
+    getMoneyByMonth,
+    getTotalInvoice,
 };
 
 export default statisticApis;
