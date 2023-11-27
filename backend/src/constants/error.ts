@@ -124,5 +124,8 @@ const error = {
     ERROR_ALREADY_ENROLLED: "Course already enrolled ",
     ERROR_COURSE_NOT_FOUND_IN_CART: "Course not found in cart",
     ERROR_CART_NOT_FOUND: "Cart not found",
+
+    //Invoice
+    ERROR_INVOICE_NOT_FOUND: "Invoice not found",
 };
 export default error;

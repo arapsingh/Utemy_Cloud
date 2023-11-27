@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import PopupRatingFeedback from "./PopupRatingFeedback";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { feedbackActions } from "../../redux/slices";
 import { images } from "../../assets";
+import RatingInPopup from "../CourseDetail/RatingInPopup";
 
 const Feedback: React.FC = () => {
     const [feedbackContent, setFeedbackContent] = useState<string>("");
-    const [isRatingPopupOpen, setIsRatingPopupOpen] = useState<boolean>(false);
+    const [ratingValue, setRatingValue] = useState(5); // Default rating value
+
     const dispatch = useAppDispatch();
     const isLogin = useAppSelector((state) => state.authSlice.isLogin);
-
+    const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const rating = parseInt(event.target.id);
+        setRatingValue(rating);
+    };
     const handleFeedbackSubmit = async () => {
         try {
             if (!isLogin) {
@@ -30,18 +34,11 @@ const Feedback: React.FC = () => {
 
     return (
         <>
-            <div className="bg-gray-100 h-[calc(80vh-100px)] flex items-center flex-col mt-[100px] space-y-[10px] ">
+            <div className="bg-gradient-to-b from-gray-200 via-gray-300 to-gray-400 h-[calc(80vh-100px)] flex items-center flex-col mt-[100px] space-y-[10px] ">
                 <center className="grid grid-cols-3">
-                    {/* Column 1: Image */}
-                    <div className="col-span-1">
-                        <img
-                            src={images.FeedbackLogo}
-                            alt="Feedback"
-                            style={{ width: "648px", height: "699px" }}
-                        />
-                    </div>
                     {/* Column 2: Form */}
                     <div className="col-span-1">
+                        <img src={images.FeedbackLogo} alt="Feedback" style={{ width: "130px", height: "140px" }} />
                         <div className=" tracking-widest" style={{ marginLeft: "20px" }}>
                             <span className="text-gray-500 text-6xl block">
                                 <span>Feedback</span>
@@ -50,7 +47,7 @@ const Feedback: React.FC = () => {
                         </div>
                         <div className="mt-6">
                             <textarea
-                                rows={20}
+                                rows={10}
                                 cols={60}
                                 value={feedbackContent}
                                 onChange={(e) => setFeedbackContent(e.target.value)}
@@ -59,12 +56,12 @@ const Feedback: React.FC = () => {
                             />
                         </div>
                         <div className="mt-4">
-                            <button
-                                onClick={() => setIsRatingPopupOpen(true)}
-                                className="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-700"
-                            >
-                                Vote
-                            </button>
+                            <span className="text-gray-500 text-xl ">Rating Us here</span>
+                        </div>
+                        <div>
+                            <RatingInPopup score={ratingValue} handleCheck={handleCheck} />
+                        </div>
+                        <div className="mt-4">
                             <button
                                 onClick={handleFeedbackSubmit}
                                 className="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-700"
@@ -81,14 +78,28 @@ const Feedback: React.FC = () => {
                             </Link>
                         </div>
                     </div>
+                    {/* Column 4: Thank You Form */}
+                    <div className="col-span-1">
+                        {/* Thank You Form Content */}
+                        <img src={images.ThankLetter} alt="ThankLetter" style={{ width: "780px", height: "780px" }} />
+                        {/* Additional Thank You Content or Form */}
+                    </div>
                     {/* Column 3: Contact Information */}
                     <div>
+                        <img src={images.ContactLogo} alt="Contact" style={{ width: "160px", height: "160px" }} />
                         <h2 className="text-gray-400 text-6xl block">Contact Information</h2>
-                        <div className="col-span-1 contact-info text-left text-base" style={{ marginTop: "100px", marginBottom: "50px", marginLeft: "70px", fontSize: "20px" }}>
-                            <ul className="space-y-4">
+                        <div
+                            className="col-span-1 contact-info text-left text-base"
+                            style={{ marginTop: "100px", marginBottom: "50px", marginLeft: "70px", fontSize: "20px" }}
+                        >
+                            <ul className="space-y-4" style={{marginLeft: "50px"}}>
                                 <li>
                                     Website:{" "}
-                                    <a href="https://utemy-cloud-frontend.vercel.app/" target="_blank" rel="noopener noreferrer">
+                                    <a
+                                        href="https://utemy-cloud-frontend.vercel.app/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
                                         utemy.com
                                     </a>
                                 </li>
@@ -98,7 +109,11 @@ const Feedback: React.FC = () => {
                                 <li>Phone: +84 xxx xxx xxx</li>
                                 <li>
                                     Facebook:{" "}
-                                    <a href="https://web.facebook.com/luvsfakeaf" target="_blank" rel="noopener noreferrer">
+                                    <a
+                                        href="https://web.facebook.com/luvsfakeaf"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
                                         utemy
                                     </a>
                                 </li>
@@ -109,18 +124,12 @@ const Feedback: React.FC = () => {
                                     </a>
                                 </li>
                             </ul>
-                            <h3 className="my-4">Office Address:</h3>
-                            <p className="mb-4">So 1 Vo Van Ngan, TP Thu Duc, Ho Chi Minh, Viet Nam</p>
+                            <h3 className="my-4" style={{marginLeft: "50px"}}>Office Address:</h3>
+                            <p className="mb-4" style={{marginLeft: "50px"}}>So 1 Vo Van Ngan, TP Thu Duc, Ho Chi Minh, Viet Nam</p>
                         </div>
                     </div>
                 </center>
             </div>
-            {isRatingPopupOpen && (
-                <PopupRatingFeedback
-                    handleAfterVote={() => setIsRatingPopupOpen(false)}
-                    handleCancel={() => setIsRatingPopupOpen(false)}
-                />
-            )}
         </>
     );
 };
