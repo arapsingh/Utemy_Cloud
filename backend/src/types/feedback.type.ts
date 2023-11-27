@@ -6,4 +6,5 @@ export type FeedbackResponse = {
     url_avatar: string | null;
     user_id: number;
     created_at: Date | string;
+    score: number;
 };

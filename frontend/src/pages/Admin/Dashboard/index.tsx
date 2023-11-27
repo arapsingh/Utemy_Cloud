@@ -40,7 +40,7 @@ export function Home() {
             color: "gray",
             icon: BanknotesIcon,
             title: "Total Money",
-            value: totalMoney,
+            value: `đ${totalMoney?.toLocaleString() || 0}`,
             footer: {
                 color: "text-green-500",
                 value: "+55%",
@@ -51,7 +51,7 @@ export function Home() {
             color: "green",
             icon: UsersIcon,
             title: "Total Users",
-            value: totalUser,
+            value: totalUser || 0,
             footer: {
                 color: "text-green-500",
                 value: "+3%",
@@ -62,7 +62,7 @@ export function Home() {
             color: "red",
             icon: BookOpenIcon,
             title: "Total course",
-            value: totalCourse,
+            value: totalCourse || 0,
             footer: {
                 color: "text-green-500",
                 value: "+5%",
@@ -73,7 +73,7 @@ export function Home() {
             color: "blue-gray",
             icon: DocumentCheckIcon,
             title: "Total order",
-            value: totalInvoice,
+            value: totalInvoice || 0,
             footer: {
                 color: "text-green-500",
                 value: "+5%",
