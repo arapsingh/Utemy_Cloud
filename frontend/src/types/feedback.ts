@@ -6,4 +6,9 @@ export type Feedback = {
     url_avatar: string;
     content: string;
     created_at: string | Date;
+    score: number;
+};
+export type GetAllFeedback = {
+    pageIndex: number;
+    evaluate: number;
 };
