@@ -73,20 +73,31 @@ const Cart: React.FC = () => {
                                     />
                                 );
                         })}
+                        {carts.cart_items.length === 0 && (
+                            <p className="text-black font-OpenSans text-2xl">
+                                So empty, let's add some course into your cart
+                            </p>
+                        )}
                     </div>
 
-                    <div className="w-full flex flex-col  h-fit gap-4 p-4 ">
-                        <p className="text-black font-OpenSans text-2xl">Saved for later</p>
-                        {carts.cart_items.map((cartItem) => {
-                            if (cartItem.saved_for_later)
-                                return (
-                                    <OutCartCourse
-                                        cartItem={cartItem}
-                                        handleChangeSaveForLater={handleChangeSaveForLater}
-                                        handleRemoveFromCart={handleRemoveFromCart}
-                                    />
-                                );
-                        })}
+                    <div className="w-full flex flex-col h-fit gap-4 p-4">
+                        {carts.cart_items.some((cartItem) => cartItem.saved_for_later) && (
+                            <>
+                                <p className="text-black font-OpenSans text-2xl">Saved for later</p>
+                                {carts.cart_items.map((cartItem) => {
+                                    if (cartItem.saved_for_later) {
+                                        return (
+                                            <OutCartCourse
+                                                cartItem={cartItem}
+                                                handleChangeSaveForLater={handleChangeSaveForLater}
+                                                handleRemoveFromCart={handleRemoveFromCart}
+                                            />
+                                        );
+                                    }
+                                    return null; // Bỏ qua các phần tử không được lưu để mua sau
+                                })}
+                            </>
+                        )}
                     </div>
                 </div>
 
