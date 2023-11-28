@@ -1,16 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Response } from "../../types/response";
-import { Feedback, FeedbackContent } from "../../types/feedback";
+import { Feedback, FeedbackContent, GetAllFeedback } from "../../types/feedback";
 import apis from "../../api";
 type FeedbackSliceType = {
     feedbacks: Feedback[];
     feedback: Feedback;
     isGetLoading: boolean;
     totalPage: number;
+    averageRating: number;
     totalRecord: number;
 };
 
-export const getAllFeedbacks = createAsyncThunk<Response<Feedback[]>, number, { rejectValue: Response<null> }>(
+export const getAllFeedbacks = createAsyncThunk<Response<Feedback[]>, GetAllFeedback, { rejectValue: Response<null> }>(
     "feedback/all",
     async (body, ThunkAPI) => {
         try {
@@ -41,10 +42,12 @@ const initialState: FeedbackSliceType = {
         last_name: "",
         url_avatar: "",
         content: "",
-        created_at: ""
+        created_at: "",
+        score: 0,
     },
     totalPage: 0,
     totalRecord: 0,
+    averageRating: 0,
     isGetLoading: false,
 };
 
@@ -60,6 +63,7 @@ export const feedbackSlice = createSlice({
             state.feedbacks = action.payload.data.data as Feedback[];
             state.totalPage = action.payload.data.total_page;
             state.totalRecord = action.payload.data.total_record;
+            state.averageRating = action.payload.data.average_rating;
             state.isGetLoading = false;
         });
         builder.addCase(getAllFeedbacks.rejected, (state) => {

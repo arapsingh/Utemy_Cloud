@@ -1,8 +1,8 @@
 import apiCaller from "../api-config/apiCaller";
-import { FeedbackContent } from "../types/feedback";
+import { FeedbackContent, GetAllFeedback } from "../types/feedback";
 
-const getAllFeedbacks = async (values: number) => {
-    const path = `feedback?page_index=${values}`;
+const getAllFeedbacks = async (values: GetAllFeedback) => {
+    const path = `feedback?page_index=${values.pageIndex}&evaluate=${values.evaluate}`;
     const reponse = await apiCaller("GET", path);
     return reponse;
 };

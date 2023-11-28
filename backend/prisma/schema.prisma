@@ -200,6 +200,7 @@ model Feedback {
   id         Int      @id @default(autoincrement())
   content    String   @db.Text
   user_id    Int
+  score      Int
   created_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
