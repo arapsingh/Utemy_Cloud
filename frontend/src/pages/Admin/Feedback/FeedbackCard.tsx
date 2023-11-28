@@ -1,6 +1,7 @@
 import React from "react";
 import { images } from "../../../assets";
 import { Feedback } from "../../../types/feedback";
+import { TotalRating } from "../../../components";
 type FeedbackCardProps = {
     feedback: Feedback;
 };
@@ -25,6 +26,11 @@ const FeedbackCard: React.FC<FeedbackCardProps> = (props) => {
                         <p className="comment w-full flex text-black flex-wrap line-height:1.5 max-height:1.5 ">
                             {props.feedback.content !== "" && props.feedback.content}
                         </p>
+                        <TotalRating
+                            ratingId={Number(props.feedback.feedback_id)}
+                            totalScore={Number(props.feedback.score)}
+                            isForCourse={false}
+                        />
                     </div>
                 </div>
             </div>
