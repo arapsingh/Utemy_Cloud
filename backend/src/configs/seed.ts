@@ -12,4 +12,15 @@ const seed = async () => {
             password: hashedPassword,
         },
     });
+    console.log(createAdmin);
 };
+
+seed()
+    .then(async () => {
+        await configs.db.$disconnect();
+    })
+    .catch(async (e) => {
+        console.error(e);
+        await configs.db.$disconnect();
+        process.exit(1);
+    });
