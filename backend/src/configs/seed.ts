@@ -1,5 +1,5 @@
 import configs from ".";
-import bcrpyt from "bcrypt";
+import bcrpyt from "bcryptjs";
 const seed = async () => {
     const hashedPassword = await bcrpyt.hash("2011069020110701", configs.general.HASH_SALT);
     const createAdmin = await configs.db.user.create({

@@ -9,7 +9,7 @@ import { PagingResponse } from "../types/response";
 import constants from "../constants";
 import helper from "../helper";
 import { User } from "../types/user";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const getProfile = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {

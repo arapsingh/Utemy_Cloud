@@ -3,7 +3,9 @@ import ffmpeg from "fluent-ffmpeg";
 import path from "path";
 import fs from "fs";
 import ffmpegpath from "@ffmpeg-installer/ffmpeg";
+import ffprobePath from "@ffprobe-installer/ffprobe";
 ffmpeg.setFfmpegPath(ffmpegpath.path);
+ffmpeg.setFfprobePath(ffprobePath.path);
 
 const bandwidthCalculation = (inputVideo: Express.Multer.File): Promise<number> => {
     return new Promise((resolve, rejects) => {
@@ -31,7 +33,7 @@ const createFileM3U8AndTS = async (
         if (!fs.existsSync(videoFolderPath)) {
             fs.mkdirSync(videoFolderPath, { recursive: true });
         } // nếu folder trên ko tồn tại thì tạo
-        const videoPath = `${videoFolderPath}\\video_${resolution}.m3u8`; // địa chỉ file m3u8 của mỗi resolution, video path = folder path + tên file
+        const videoPath = path.join(videoFolderPath, `video_${resolution}.m3u8`); // địa chỉ file m3u8 của mỗi resolution, video path = folder path + tên file
 
         ffmpeg(inputFileVideo.path)
             .output(videoPath)
@@ -59,7 +61,7 @@ const createMainM3U8 = async (
     outputFolderPath: string,
     uuid: string,
 ) => {
-    const outputMainM3U8 = `${outputFolderPath}\\${uuid}\\main.m3u8`; //tạo output là path dẫn đến file main.m3u8
+    const outputMainM3U8 = path.resolve(outputFolderPath, uuid, `main.m3u8`); //tạo output là path dẫn đến file main.m3u8
 
     const bandwidth = bandwidthCalculation(inputFileVideo);
     //với mỗi resolution tạo 1 stream info làm nội dung trong file main.m3u8
@@ -73,7 +75,7 @@ const createMainM3U8 = async (
     //tạo file main và ghi nội dung vào file main
     fs.writeFileSync(outputMainM3U8, mainM3U8Content);
     //trả về url của video là path tơi file main
-    const urlVideo = configs.general.PATH_TO_PUBLIC_FOLDER_VIDEOS + `\\${uuid}\\main.m3u8`;
+    const urlVideo = configs.general.PATH_TO_PUBLIC_FOLDER_VIDEOS + `//${uuid}//main.m3u8`;
     return urlVideo;
 };
 const destroyedVideoIfFailed = async (filePath: string): Promise<boolean> => {

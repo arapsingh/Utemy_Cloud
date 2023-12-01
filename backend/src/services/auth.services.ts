@@ -1,7 +1,7 @@
 import { ResponseSuccess, ResponseError, ResponseBase } from "../common/response";
 import { sendMail } from "../common";
 import configs from "../configs";
-import bcrpyt from "bcrypt";
+import bcrpyt from "bcryptjs";
 import jwt, { JsonWebTokenError, TokenExpiredError, NotBeforeError, JwtPayload } from "jsonwebtoken";
 import { IRequestWithId } from "../types/request";
 import { Request } from "express";
