@@ -126,7 +126,7 @@ const Feedback: React.FC = () => {
                             <li>
                                 Website:{" "}
                                 <a
-                                    href="https://utemy-cloud-frontend.vercel.app/"
+                                    href="https://utemy.vercel.app/"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
