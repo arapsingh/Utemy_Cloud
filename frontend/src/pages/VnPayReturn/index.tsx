@@ -55,9 +55,9 @@ const VnPayReturn = () => {
                     </p>
                 )}
 
-                <Link className="flex flex-col items-center justify-center" to="/">
-                    <button className="  text-white btn-info btn hover:bg-lightblue/60 focus:outline-none">
-                        Back to Home
+                <Link to="/history-transaction" className="flex flex-col items-center justify-center">
+                    <button className="text-white btn-info btn hover:bg-lightblue/60 focus:outline-none">
+                        Back to History
                     </button>
                 </Link>
             </div>

@@ -1,3 +1,4 @@
+// import Feedback from "../pages/Feedback";
 export type Feedback = {
     feedback_id: number;
     user_id: number;
@@ -8,7 +9,16 @@ export type Feedback = {
     created_at: string | Date;
     score: number;
 };
+// export type GetAllFeedback = {
+//     pageIndex: number;
+//     evaluate: number;
+//     score: number;
+// };
 export type GetAllFeedback = {
     pageIndex: number;
     evaluate: number;
 };
+export type FeedbackContent = {
+    content: string;
+    score: number;
+}

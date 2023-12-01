@@ -16,4 +16,8 @@ export default class InvoiceController {
         const response: ResponseBase = await services.InvoiceServices.createInvoice(req);
         return res.status(response.getStatusCode()).json(response);
     }
+    async getInvoiceById(req: IRequestWithId, res: Response): Promise<Response> {
+        const response: ResponseBase = await services.InvoiceServices.getInvoiceById(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
 }
