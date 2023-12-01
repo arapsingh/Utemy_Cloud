@@ -12,6 +12,11 @@ export type Feedback = {
 export type GetAllFeedback = {
     pageIndex: number;
     evaluate: number;
+    score: number;
+};
+export type GetAllFeedback = {
+    pageIndex: number;
+    evaluate: number;
 };
 export type FeedbackContent = {
     content: string;
