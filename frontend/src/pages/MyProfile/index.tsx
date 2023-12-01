@@ -125,20 +125,27 @@ const MyProfile: React.FC = () => {
                                     >
                                         {/* Avatar frame */}
                                         <div className="w-auto h-auto mr-8 overflow-hidden">
-                                            {/* Display the selected avatar */}
-                                            {(selectedFile || user.url_avatar) && (
+                                            {/* Display the selected avatar or default avatar if none */}
+                                            {selectedFile || user.url_avatar ? (
                                                 <img
                                                     src={
                                                         selectedFile
                                                             ? URL.createObjectURL(selectedFile)
                                                             : user.url_avatar
-                                                            ? user.url_avatar
-                                                            : DefaultAvatar
+                                                              ? user.url_avatar
+                                                              : DefaultAvatar
                                                     }
                                                     alt="Avatar"
                                                     className="max-w-xs max-h-80 min-h-full min-w-full border-4 rounded-lg"
                                                 />
+                                            ) : (
+                                                <img
+                                                    src={DefaultAvatar}
+                                                    alt="Default Avatar"
+                                                    className="max-w-xs max-h-80 min-h-full min-w-full border-4 rounded-lg"
+                                                />
                                             )}
+
                                             {/* Avatar input */}
                                             <label
                                                 htmlFor="avatar"
@@ -155,6 +162,7 @@ const MyProfile: React.FC = () => {
                                                 className="px-2 py-1 rounded-lg border-[1px] outline-none"
                                             />
                                         </div>
+
                                         <div className="bg-white m-4 rounded-xl shadow-lg p-4">
                                             <div className="flex flex-col mobile:flex-row gap-2">
                                                 <div className="flex flex-col mb-3">
