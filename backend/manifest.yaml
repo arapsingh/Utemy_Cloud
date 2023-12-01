@@ -1,0 +1,29 @@
+---
+applications:
+- name: backend
+  random-route: true
+  path: C:\TieuLuanChuyenNganh\Utemy_Cloud\backend
+  memory: 4096M
+  buildpacks:
+  - nodejs_buildpack
+  routes:
+  - route: utemy.cfapps.ap21.hana.ondemand.com
+  env:
+      DATABASE_URL: 'mysql://ui17cxw8bmmnzhax:uCogtk41IO13sWk0d5cj@bzlregyl97opwygxpa67-mysql.services.clever-cloud.com:3306/bzlregyl97opwygxpa67'
+      DOMAIN_NAME : "https://utemy.vercel.app"
+      BACKEND_DOMAIN_NAME : "https:\\\\utemy.cfapps.ap21.hana.ondemand.com"
+      TOKEN_ACCESS_EXPIRED_TIME : "15m"
+      TOKEN_REFRESH_EXPIRED_TIME : "10d"
+      PUBLIC_URL : "https://utemy.cfapps.ap21.hana.ondemand.com"
+      PUBLIC_API_URL : "https://utemy.cfapps.ap21.hana.ondemand.com/api"
+      JWT_SECRET_KEY : "Utemy"
+      HASH_SALT : "10"
+      EMAIL_SERVER : "utemyvietnam@gmail.com"
+      PASSWORD_SERVER : "xmxfhgajalgcxxtk"
+      PAGE_SIZE : "10"
+      TZ : "Asia/Ho_Chi_Minh"
+      VNP_TMN_CODE : "R82FFIOK"
+      VNP_HASH_SECRET : "XINOGPPZANTAUEQIRJFBYXDKHHXCHQAQ"
+      VNP_URL : "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
+      VNP_API : "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction"
+      VNP_RETURN_URL : "https://utemy.vercel.app/checkout/vnpay_return"

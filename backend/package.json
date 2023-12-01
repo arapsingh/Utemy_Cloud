@@ -14,11 +14,15 @@
     "prisma": {
         "seed": "ts-node src/configs/seed.ts"
     },
+    "engines": {
+        "node": "18.18.0",
+        "npm": "10.2.4"
+    },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "@types/bcrypt": "^5.0.0",
+        "@types/bcryptjs": "^2.4.6",
         "@types/cors": "^2.8.14",
         "@types/express": "^4.17.17",
         "@types/fluent-ffmpeg": "^2.1.22",
@@ -47,7 +51,7 @@
         "@ffmpeg-installer/ffmpeg": "^1.1.0",
         "@ffprobe-installer/ffprobe": "^2.1.1",
         "@prisma/client": "^4.16.2",
-        "bcrypt": "^5.1.0",
+        "bcryptjs": "^2.4.3",
         "cloudinary": "^1.38.0",
         "concurrently": "^8.2.0",
         "cookie-parser": "^1.4.6",
