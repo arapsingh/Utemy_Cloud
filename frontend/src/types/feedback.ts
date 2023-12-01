@@ -9,11 +9,11 @@ export type Feedback = {
     created_at: string | Date;
     score: number;
 };
-export type GetAllFeedback = {
-    pageIndex: number;
-    evaluate: number;
-    score: number;
-};
+// export type GetAllFeedback = {
+//     pageIndex: number;
+//     evaluate: number;
+//     score: number;
+// };
 export type GetAllFeedback = {
     pageIndex: number;
     evaluate: number;
