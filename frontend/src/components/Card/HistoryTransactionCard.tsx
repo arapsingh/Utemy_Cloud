@@ -15,11 +15,11 @@ const TransactionCard: React.FC<TransactionCardProps> = ({ historyTran }) => {
         setIsTableVisible(!isTableVisible);
     };
     const truncateString = (str: string, maxLength: number): string => {
-      if (str.length > maxLength) {
-          return str.substring(0, maxLength) + "...";
-      } else {
-          return str;
-      }
+        if (str.length > maxLength) {
+            return str.substring(0, maxLength) + "...";
+        } else {
+            return str;
+        }
     };
     const [showFullTitle, setShowFullTitle] = useState(false);
 
@@ -31,7 +31,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({ historyTran }) => {
         <div className="py-2">
             <div className="flex flex-col gap-2 tablet:gap-4 tablet:flex-row rounded-2xl hover:bg-lightblue/25 transition ease-in-out hover:shadow-lg duration-200 shadow-lg">
                 <div className="flex justify-between tablet:flex-1 px-2 pb-2 tablet:px-0">
-                    <div className="w-[90%] tablet:w-full">
+                    <div className="w-[90%] tablet:w-full p-3">
                         <h2 className="tablet:w-[300px] xl:w-[600px] text-xl font-bold text-title truncate ...">
                             Invoice ID: {historyTran.id}
                         </h2>
@@ -75,23 +75,20 @@ const TransactionCard: React.FC<TransactionCardProps> = ({ historyTran }) => {
                                                             )}
                                                         </td>
                                                         <td className="py-2 whitespace-pre-line overflow-hidden max-w-200 text-overflow-ellipsis">
-                                                        {item.course.title.length > 30 ? (
-                                                                        showFullTitle ? (
-                                                                            <span>{item.course.title}</span>
-                                                                        ) : (
-                                                                            <span
-                                                                                className="cursor-pointer text-gray-500"
-                                                                                onClick={handleClickEllipsis}
-                                                                            >
-                                                                                {truncateString(
-                                                                                    item.course.title,
-                                                                                    30
-                                                                                )}
-                                                                            </span>
-                                                                        )
-                                                                    ) : (
-                                                                        <span>{item.course.title}</span>
-                                                                    )}
+                                                            {item.course.title.length > 30 ? (
+                                                                showFullTitle ? (
+                                                                    <span>{item.course.title}</span>
+                                                                ) : (
+                                                                    <span
+                                                                        className="cursor-pointer text-gray-500"
+                                                                        onClick={handleClickEllipsis}
+                                                                    >
+                                                                        {truncateString(item.course.title, 30)}
+                                                                    </span>
+                                                                )
+                                                            ) : (
+                                                                <span>{item.course.title}</span>
+                                                            )}
                                                         </td>
 
                                                         <td className="py-2 whitespace-nowrap">
