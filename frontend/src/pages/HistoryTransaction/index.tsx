@@ -78,7 +78,7 @@ const HistoryTransaction = () => {
                         id="invoiceId"
                         value={searchInvoiceId}
                         onChange={(e) => setSearchInvoiceId(e.target.value)}
-                        className="border p-2 rounded mr-2"
+                        className="border p-2 rounded mx-2"
                     />
                     <button onClick={handleSearch} className="bg-blue-500 text-white p-2 rounded">
                         Search

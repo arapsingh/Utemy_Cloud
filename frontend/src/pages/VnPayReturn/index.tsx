@@ -34,7 +34,7 @@ const VnPayReturn = () => {
     };
     useEffect(() => {
         dispatch(vnpayActions.vnpayIpn(data));
-    });
+    }, [dispatch]);
     const success = vnp_ResponseCode === "00" && vnp_TransactionStatus === "00";
     const invoiceId = vnp_OrderInfo.split(":")[1];
     return (
