@@ -59,7 +59,7 @@ const CardVideo: React.FC<CardVideoProps> = (props) => {
                         {hasPrice &&
                             (hasSalePrice ? (
                                 <p className="text-base font-bold">
-                                    Price:
+                                    Giá:
                                     <span className=" font-extrabold font-OpenSans text-lightblue ">
                                         {" "}
                                         đ{props.salePrice?.toLocaleString()}{" "}
@@ -71,7 +71,7 @@ const CardVideo: React.FC<CardVideoProps> = (props) => {
                                 </p>
                             ) : (
                                 <p className="text-base font-bold">
-                                    Price:
+                                    Giá:
                                     <span className="font-extrabold font-OpenSans">
                                         {" "}
                                         đ{props.price?.toLocaleString()}{" "}

@@ -43,10 +43,10 @@ const AuthorProfile: React.FC = () => {
                     </div>
                     <div className="">
                         <h1 className="text-3xl font-bold mb-2">
-                            Hello from {((user.first_name as string) + " " + user.last_name) as string}
+                            Xin chào, tôi là {((user.first_name as string) + " " + user.last_name) as string}
                         </h1>
                         <p className="text-lg">
-                            <span className="font-bold">About me: </span>
+                            <span className="font-bold">Về tôi: </span>
                             {user.description}
                         </p>
                     </div>
@@ -72,6 +72,7 @@ const AuthorProfile: React.FC = () => {
                                         summary={course.summary}
                                         author={course.author as User}
                                         isEditCourse={false}
+                                        enrolled={true}
                                     />
                                 </div>
                             );
