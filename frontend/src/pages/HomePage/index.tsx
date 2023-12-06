@@ -91,8 +91,8 @@ const Home: React.FC = () => {
                 </div>
             </div>
             <div className="w-full h-[120px] bg-backgroundHover flex flex-col justify-center items-center mt-4">
-                <p className="text-xl mb-2 font-bold">Trusted by more than 1000000 amazing students</p>
-                <p className="text-lg">Improve your knowledge today</p>
+                <p className="text-xl mb-2 font-bold">Tin tưởng bởi hơn 100000 học viên trên toàn thế giới</p>
+                <p className="text-lg">Chinh phục tri thức ngay hôm nay</p>
             </div>
         </>
     );

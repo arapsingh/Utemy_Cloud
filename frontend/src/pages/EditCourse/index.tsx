@@ -188,7 +188,7 @@ const EditCourse: React.FC = () => {
                                     type="text"
                                     maxLength={100}
                                     className="px-2 py-2 rounded-lg border-[1px] outline-none flex-1 max-w-2xl"
-                                    placeholder="Name's section"
+                                    placeholder="Tên của chương học..."
                                     value={section}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                         setSection(e.target.value);
