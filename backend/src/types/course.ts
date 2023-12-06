@@ -71,6 +71,8 @@ export type OutstandingCourse = {
     updated_at: Date;
     status: boolean;
     average_rating: number;
+    number_of_enrolled?: number;
+    number_of_rating?: number;
 };
 
 export type CourseCard = {
