@@ -85,7 +85,6 @@ const CreateCourse: FC = () => {
     };
 
     const handleOnSubmit = async (values: CreateCourseType) => {
-        console.log(values);
         const slug = slugify(values.title.toLowerCase());
         const categories = values.categories.map((item: any) => item.value);
         // const data = {
@@ -266,6 +265,7 @@ const CreateCourse: FC = () => {
                                                             handleOnchange={(e: any) =>
                                                                 handleChangeCategories(e, formik)
                                                             }
+                                                            placeholder={"Chọn danh mục"}
                                                             options={categoriesOptions}
                                                             isMulti={true}
                                                             defautlValues={""}

@@ -210,9 +210,9 @@ const EditForm: React.FC<props> = (props) => {
                                 </div>
                                 <div className="flex flex-col gap-3">
                                     <div className="text-center tablet:text-start">
-                                        <p className="text-lg font-medium">Upload thumbnail</p>
+                                        <p className="text-lg font-medium">Tải lên hình ảnh bìa</p>
                                         <p className={`${errorImage ? "text-red-500" : ""}  italic`}>
-                                            Size of the image is less than 4MB
+                                            Kích cỡ hình nhỏ hơn 4MB
                                         </p>
                                     </div>
                                     <input
@@ -242,7 +242,7 @@ const EditForm: React.FC<props> = (props) => {
                                                     htmlFor="title"
                                                     className="text-sm mb-1 font-medium tablet:text-xl"
                                                 >
-                                                    Title
+                                                    Tên khóa học
                                                 </label>
                                                 <Field
                                                     id="title"
@@ -266,7 +266,7 @@ const EditForm: React.FC<props> = (props) => {
                                                     htmlFor="price"
                                                     className="text-sm mb-1 font-medium tablet:text-xl"
                                                 >
-                                                    Price
+                                                    Giá
                                                 </label>
                                                 <Field
                                                     id="price"
@@ -291,7 +291,7 @@ const EditForm: React.FC<props> = (props) => {
                                                     htmlFor="title"
                                                     className="text-sm mb-1 font-medium tablet:text-xl"
                                                 >
-                                                    Categories
+                                                    Danh mục
                                                 </label>
                                                 <div
                                                     className={`${
@@ -305,6 +305,7 @@ const EditForm: React.FC<props> = (props) => {
                                                         component={CustomeSelect}
                                                         handleOnchange={(e: any) => handleChangeCategories(e, formik)}
                                                         options={categoriesOptions}
+                                                        placeholder={"Chọn danh mục"}
                                                         isMulti={true}
                                                         defautlValues={chosenOptionsCategories}
                                                         styles={customStyles}
@@ -321,7 +322,7 @@ const EditForm: React.FC<props> = (props) => {
                                                     htmlFor="status"
                                                     className="text-sm mb-1 font-medium tablet:text-xl"
                                                 >
-                                                    Status
+                                                    Trạng thái
                                                 </label>
                                                 <Field
                                                     className="w-full"
@@ -362,7 +363,7 @@ const EditForm: React.FC<props> = (props) => {
                                                 htmlFor="summary"
                                                 className="text-sm mb-1 font-medium tablet:text-xl"
                                             >
-                                                Summary
+                                                Tóm tắt
                                             </label>
                                             <Field
                                                 id="summary"
@@ -386,7 +387,7 @@ const EditForm: React.FC<props> = (props) => {
                                                 htmlFor="description"
                                                 className="text-sm mb-1 font-medium tablet:text-xl"
                                             >
-                                                Description
+                                                Mô tả
                                             </label>
                                             <ErrorMessage
                                                 name="description"

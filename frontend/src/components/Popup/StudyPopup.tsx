@@ -111,10 +111,10 @@ const StudyPopup: React.FC<props> = (props) => {
                             closeModal();
                         }}
                     >
-                        Save
+                        Lưu
                     </button>
                     <button type="button" className="btn" onClick={closeModal}>
-                        Cancel
+                        Hủy
                     </button>
                 </div>
             </dialog>

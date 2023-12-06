@@ -47,7 +47,7 @@ function Checkout() {
                 <div className="flex flex-col w-3/5 px-0 mx-auto md:flex-row">
                     <div className="flex flex-col w-3/5 border-right border-black">
                         <h1 className="mb-4 font-bold md:text-5xl font-OpenSans text-black text-heading ">
-                            Thanh toán toán
+                            Thanh toán
                         </h1>
                         <h2 className="text-xl font-bold font-OpenSans text-black">Hóa đơn</h2>
                         <form className="justify-center w-full mx-auto mb-10">

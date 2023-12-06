@@ -52,7 +52,7 @@ const CourseCard: FC<Course> = (props: Course) => {
                 </div>
                 <div className="flex justify-between tablet:flex-1 px-2 pb-2 tablet:px-0">
                     <div className="w-[90%] tablet:w-full">
-                        <h2 className="tablet:w-[300px] xl:w-[600px] text-xl font-bold text-title truncate ...">
+                        <h2 className="tablet:w-[300px] xl:w-[600px] text-xl font-bold text-title truncate">
                             {props.title}
                         </h2>
                         <p className="text-base italic">{props.summary}</p>
