@@ -118,7 +118,7 @@ const Accordion: React.FC<AccordionType> = (props) => {
                         key={`${lesson.id}`}
                     >
                         {" "}
-                        <div className="flex items-center justify-between w-full">
+                        <div className="flex items-center justify-between w-full mr-2">
                             <div className="flex items-center gap-2">
                                 <PlayIcon className="w-4 h-4 shrink-0" /> <p>{lesson.title}</p>
                             </div>

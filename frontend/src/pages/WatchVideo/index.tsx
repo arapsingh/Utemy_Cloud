@@ -50,27 +50,28 @@ const WatchVideo: React.FC = () => {
             {isLoading && <Spin />}
             <WatchVideoHeader course={courseDetail} role={role} />
 
-            <div className="container mx-auto mt-[100px] mb-[100px]">
-                <div className="mt-[32px]">
-                    <div className="flex flex-col laptop:flex-row justify-center gap-4">
+            <div className=" w-full  mt-[66px] mb-[100px] justify-center  flex flex-col">
+                <div className="flex flex-col laptop:flex-row justify-center w-full">
+                    <div className="w-3/4 shrink-0 mt-1 bg-[#2D2F31] ">
                         <VideoPlayer sourse={lesson.url_video ? lesson.url_video : ""} />
-                        <div className="flex-2 w-full mt-[-8px] laptop:w-[540px] laptop:max-h-[480px] laptop:mt-0 laptop:overflow-y-auto">
-                            {courseDetail.sections?.map((section: Section, index) => {
-                                return (
-                                    <Accordion
-                                        disable={true}
-                                        key={index}
-                                        source={lesson.url_video}
-                                        handleChangeLesson={handleChangeLesson}
-                                        isDisplayBtn={isDisplayBtn}
-                                        section={section}
-                                    />
-                                );
-                            })}
-                        </div>
+                    </div>
+                    <div className="flex-2   laptop:max-h-[480px]  laptop:overflow-y-auto shrink-0 w-1/4">
+                        {courseDetail.sections?.map((section: Section, index) => {
+                            return (
+                                <Accordion
+                                    disable={true}
+                                    key={index}
+                                    source={lesson.url_video}
+                                    handleChangeLesson={handleChangeLesson}
+                                    isDisplayBtn={isDisplayBtn}
+                                    section={section}
+                                />
+                            );
+                        })}
                     </div>
                 </div>
-                <div className="my-4 ml-10 w-1/2 description-course">
+
+                <div className="my-4 ml-10 w-1/2 description-course ">
                     <h2 className=" tablet:text-2xl font-bold mb-3">Mô tả bài học</h2>
                     <div className="" dangerouslySetInnerHTML={{ __html: lesson.description }}></div>
                 </div>
