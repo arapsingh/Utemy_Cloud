@@ -42,42 +42,55 @@ export function FeedbackAdmin() {
             <div className="pt-[15px] flex flex-col items-center min-h-screen bg-background_2 ">
                 <Toaster />
                 <div className="flex flex-row w-full items-start justify-center gap-10">
-                    <div className="mt-3 flex flex-col justify-center">
+                    <div className="mt-3 flex flex-col justify-center items-center w-1/4">
                         <TotalRating ratingId={Number(5)} totalScore={Number(averageRating)} isForCourse={true} />
-                        <p className="mt-4 text-2xl text-center font-bold">for Utemy</p>
+                        <p className="mt-4 text-2xl text-center font-bold">Utemy đạt được</p>
                         <div className="hidden tablet:flex divider my-1"></div>
-                        <div className="flex justify-between ">
-                            <div>
-                                <h2 className="text-2xl font-bold mb-2">Evaluate</h2>
+                        <div className="flex justify-between gap-3 ">
+                            <div className="gap-3">
+                                <h2 className="text-2xl font-bold mb-2">Lọc theo điểm số</h2>
                                 {eveluateList.map((evaluateItem, index) => {
                                     return (
-                                        <div className="flex items-center gap-2 mb-1" key={index}>
-                                            <input
-                                                type="radio"
-                                                className="radio radio-info"
-                                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                                    setEvaluate(Number(event.target.value));
-                                                }}
-                                                name="evaluate"
-                                                value={evaluateItem.value}
-                                                id={evaluateItem.title}
-                                                checked={evaluate === evaluateItem.value}
+                                        <div
+                                            className={`flex items-center justify-between mb-1 ${
+                                                evaluate ? (evaluate === 5 - index ? "" : "opacity-30") : ""
+                                            } `}
+                                            key={index}
+                                        >
+                                            <div className="flex  gap-2">
+                                                <input
+                                                    type="radio"
+                                                    className="radio radio-info"
+                                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                                        setEvaluate(Number(event.target.value));
+                                                    }}
+                                                    name="evaluate"
+                                                    value={evaluateItem.value}
+                                                    id={evaluateItem.title}
+                                                    checked={evaluate === evaluateItem.value}
+                                                />
+                                                <span className="text-xl">{evaluateItem.title}</span>
+                                            </div>
+
+                                            <TotalRating
+                                                ratingId={`evaluate-${index}`}
+                                                totalScore={5 - index}
+                                                isForCourse={false}
                                             />
-                                            <span className="text-xl">{evaluateItem.title}</span>
                                         </div>
                                     );
                                 })}
                             </div>
                             <button className="btn btn-outline text-lg" onClick={handleResetFilter}>
-                                Reset
+                                Làm mới
                             </button>
                         </div>
                     </div>
                     <div className="flex my-1  flex-col justify-between w-3/4 px-10 gap border-l-[1px]">
                         {feedbacks.length === 0 ? (
-                            <p className="mt-4 text-2xl text-error text-center font-bold">Such empty!!!</p>
+                            <p className="mt-4 text-2xl text-error text-center font-bold">Không tìm thấy phản hồi</p>
                         ) : (
-                            <p className="mt-4 text-2xl text-center font-bold">There are {totalRecord} feedback(s) </p>
+                            <p className="mt-4 text-2xl text-center font-bold">Tìm thấy {totalRecord} phản hồi </p>
                         )}
                         <div>
                             {feedbacks.map((feedback, index) => {

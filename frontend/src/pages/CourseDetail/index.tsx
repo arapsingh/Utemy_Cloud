@@ -52,7 +52,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
     const courseDetail: CourseDetailType = useAppSelector((state) => state.courseSlice.courseDetail) ?? {};
     const ratings: RatingType[] = useAppSelector((state) => state.ratingSlice.ratings) ?? [];
     const totalRatingPage: number = useAppSelector((state) => state.ratingSlice.totalPage) ?? Number(1);
-    const [activeTab, setActiveTab] = useState("Study");
+    const [activeTab, setActiveTab] = useState("Description");
     const { duration, lessonCount } = getCourseIncludes(courseDetail);
     // const orderLesson: orderLesson[] = useAppSelector((state) => state.courseSlice.orderLesson);
     const role: string = useAppSelector((state) => state.courseSlice.role) ?? "Unenrolled";
@@ -224,7 +224,8 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                             totalScore={Number(courseDetail.average_rating)}
                                             isForCourse={true}
                                         />
-                                        <p
+                                        <a
+                                            href="#Rating"
                                             className="text-m  ml-2 hover:cursor-pointer underline text-lightblue"
                                             onClick={() => {
                                                 const button = document.getElementById("Rating");
@@ -232,7 +233,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                             }}
                                         >
                                             ({courseDetail.number_of_rating} xếp hạng)
-                                        </p>
+                                        </a>
                                         <p className="text-m  ml-2 ">{courseDetail.number_of_enrolled} học viên</p>
                                     </div>
                                     <div className="flex items-center text-xl font-medium mb-3">
@@ -248,11 +249,11 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                             Giá:
                                             <span className=" font-extrabold font-OpenSans text-lightblue ">
                                                 {" "}
-                                                đ{courseDetail.sale_price?.toLocaleString()}{" "}
+                                                {courseDetail.sale_price?.toLocaleString()}đ{" "}
                                             </span>{" "}
                                             <span className="font-normal italic text-sm line-through ">
                                                 {" "}
-                                                đ{courseDetail.price?.toLocaleString()}{" "}
+                                                {courseDetail.price?.toLocaleString()}đ{" "}
                                             </span>{" "}
                                             <span className=" font-extrabold font-OpenSans ml-2 text-lightblue ">
                                                 {" "}
@@ -264,7 +265,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                             Giá:
                                             <span className="font-extrabold font-OpenSans">
                                                 {" "}
-                                                đ{courseDetail.price?.toLocaleString()}{" "}
+                                                {courseDetail.price?.toLocaleString()}đ{" "}
                                             </span>{" "}
                                         </div>
                                     )}
@@ -301,14 +302,6 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                     }}
                                 >
                                     <Tab
-                                        key={"Study"}
-                                        value={"Study"}
-                                        onClick={() => setActiveTab("Study")}
-                                        className={activeTab === "Study" ? "text-gray-900" : ""}
-                                    >
-                                        Nội dung bài học
-                                    </Tab>
-                                    <Tab
                                         key={"Description"}
                                         value={"Description"}
                                         onClick={() => setActiveTab("Description")}
@@ -316,6 +309,15 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                     >
                                         Nội dung khóa học
                                     </Tab>
+                                    <Tab
+                                        key={"Study"}
+                                        value={"Study"}
+                                        onClick={() => setActiveTab("Study")}
+                                        className={activeTab === "Study" ? "text-gray-900" : ""}
+                                    >
+                                        Nội dung bài học
+                                    </Tab>
+
                                     <Tab
                                         id="Rating"
                                         key={"Rating"}
@@ -434,7 +436,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                         </div>
                                     </TabPanel>
                                     <TabPanel key="Rating" value="Rating">
-                                        <div>
+                                        <div id="#Rating">
                                             {isGetLoadingCourse ? (
                                                 <p className="mt-4 text-2x text-center font-bold">Loading</p>
                                             ) : (
