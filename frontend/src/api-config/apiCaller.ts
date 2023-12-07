@@ -75,7 +75,7 @@ export const apiCaller = async (method: string, path: string, data?: any) => {
         return response;
     } catch (error: any) {
         // Nếu URL không được tìm thấy, thử lại với URL khác
-        if (error?.response && error?.response.status === 404) {
+        if (error.request && error.request.method === 'OPTIONS') {
             const refreshToken = Cookies.get("refreshToken");
             return axiosAlter({
                 method,
@@ -109,7 +109,7 @@ export const apiCallerVnpay = async (method: string, path: string, data?: any) =
         return response;
     } catch (error: any) {
         // Nếu URL không được tìm thấy, thử lại với URL khác
-        if (error?.response && error?.response.status === 404) {
+        if (error.request && error.request.method === 'OPTIONS') {
             const refreshToken = Cookies.get("refreshToken");
             return axiosAlter({
                 method,
