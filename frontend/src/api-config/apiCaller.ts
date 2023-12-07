@@ -22,7 +22,11 @@ const handleResponseError = async (error: any) => {
                 ...config.headers,
                 authorization: `Bearer ${accessToken}`,
             };
-            return axiosPublic(config);
+            if (config.baseURL === axiosPublic.defaults.baseURL) {
+                return axiosAlter(config);
+            } else {
+                return axiosPublic(config);
+            }
         }
     }
     if (error) {
@@ -39,9 +43,8 @@ const handleResponseError = async (error: any) => {
 axiosPublic.interceptors.response.use((response) => response, handleResponseError);
 axiosAlter.interceptors.response.use((response) => response, handleResponseError);
 
-
 // Interceptor xử lý request
-axiosPublic.interceptors.request.use(async (config:any) => {
+const requestInterceptor = (config: any) => {
     const accessToken = Cookies.get("accessToken");
     if (accessToken) {
         config.headers = {
@@ -50,20 +53,13 @@ axiosPublic.interceptors.request.use(async (config:any) => {
         };
     }
     return config;
-}, (error) => Promise.reject(error));
-axiosAlter.interceptors.request.use(async (config:any) => {
-    const accessToken = Cookies.get("accessToken");
-    if (accessToken) {
-        config.headers = {
-            ...config.headers,
-            authorization: `Bearer ${accessToken}`,
-        };
-    }
-    return config;
-}, (error) => Promise.reject(error));
+};
+
+axiosPublic.interceptors.request.use(requestInterceptor, (error) => Promise.reject(error));
+axiosAlter.interceptors.request.use(requestInterceptor, (error) => Promise.reject(error));
 
 // Hàm gọi API với khả năng retry
-export const apiCaller = async (method:string, path: string, data?: any) => {
+export const apiCaller = async (method: string, path: string, data?: any) => {
     try {
         const refreshToken = Cookies.get("refreshToken");
         const response = await axiosPublic({
@@ -77,7 +73,7 @@ export const apiCaller = async (method:string, path: string, data?: any) => {
             data,
         });
         return response;
-    } catch (error:any) {
+    } catch (error: any) {
         // Nếu URL không được tìm thấy, thử lại với URL khác
         if (error?.response && error?.response.status === 404) {
             const alternateURL = process.env.API_APP_ALTERNATE_URL || "https://utemy.cfapps.ap21.hana.ondemand.com";
@@ -98,7 +94,7 @@ export const apiCaller = async (method:string, path: string, data?: any) => {
 };
 
 // Hàm gọi API cho Vnpay
-export const apiCallerVnpay = async (method: string, path: string, data?: any ) => {
+export const apiCallerVnpay = async (method: string, path: string, data?: any) => {
     try {
         const refreshToken = Cookies.get("refreshToken");
         const response = await axiosPublic({
@@ -112,7 +108,7 @@ export const apiCallerVnpay = async (method: string, path: string, data?: any ) 
             data,
         });
         return response;
-    } catch (error:any) {
+    } catch (error: any) {
         // Nếu URL không được tìm thấy, thử lại với URL khác
         if (error?.response && error?.response.status === 404) {
             const alternateURL = process.env.API_APP_ALTERNATE_URL || "https://utemy.cfapps.ap21.hana.ondemand.com";
