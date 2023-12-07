@@ -2,15 +2,16 @@ import express, { Application } from "express";
 import configs from "./src/configs";
 import cors from "cors";
 import routes from "./src/routes";
-// import { text } from "stream/consumers";
 
 const app: Application = express();
 const port: number = configs.general.PORT;
 
+// Chỉ định cấu hình CORS
 const corsOptions = {
-    "Access-Control-Allow-Origin": "*",
-    origin: "*",
-    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    origin: "http://localhost:3000", // Chỉ cho phép yêu cầu từ trang web này
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Các phương thức được phép
+    credentials: true, // Cho phép sử dụng cookie hoặc header xác thực
+    optionsSuccessStatus: 204, // Mã trạng thái cho các yêu cầu OPTIONS thành công
 };
 
 app.use(cors(corsOptions));
