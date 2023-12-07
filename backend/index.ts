@@ -8,7 +8,7 @@ const port: number = configs.general.PORT;
 
 // Chỉ định cấu hình CORS
 const corsOptions = {
-    origin: ["https://utemyvietnam.cfapps.ap21.hana.ondemand.com", "https://utemy.cfapps.ap21.hana.ondemand.com"], // Mảng chứa các nguồn cho phép
+    origin: "*", // Chỉ cho phép yêu cầu từ trang web này
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Các phương thức được phép
     credentials: true, // Cho phép sử dụng cookie hoặc header xác thực
     optionsSuccessStatus: 200, // Mã trạng thái cho các yêu cầu OPTIONS thành công
