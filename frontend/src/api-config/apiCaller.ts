@@ -74,7 +74,6 @@ export const apiCaller = async (method: string, path: string, data?: any) => {
         });
     } catch (error: any) {
         // Nếu URL không được tìm thấy, thử lại với URL khác
-        if (error?.response && error?.response.status === 404) {
             const refreshToken = Cookies.get("refreshToken");
             return await axiosPublic({
                 method,
@@ -86,8 +85,6 @@ export const apiCaller = async (method: string, path: string, data?: any) => {
                 url: `/api/${path}`,
                 data,
             });
-        }
-        throw error;
     }
 };
 
@@ -107,7 +104,6 @@ export const apiCallerVnpay = async (method: string, path: string, data?: any) =
         });
     } catch (error: any) {
         // Nếu URL không được tìm thấy, thử lại với URL khác
-        if (error?.response && error?.response.status === 404) {
             const refreshToken = Cookies.get("refreshToken");
             return await axiosPublic({
                 method,
@@ -119,9 +115,8 @@ export const apiCallerVnpay = async (method: string, path: string, data?: any) =
                 url: `/${path}`,
                 data,
             });
-        }
-        throw error;
     }
+    
 };
 
 export default apiCaller;
