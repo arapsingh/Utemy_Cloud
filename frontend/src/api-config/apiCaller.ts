@@ -76,16 +76,15 @@ export const apiCaller = async (method: string, path: string, data?: any) => {
     } catch (error: any) {
         // Nếu URL không được tìm thấy, thử lại với URL khác
         if (error?.response && error?.response.status === 404) {
-            const alternateURL = process.env.API_APP_ALTERNATE_URL || "https://utemy.cfapps.ap21.hana.ondemand.com";
             const refreshToken = Cookies.get("refreshToken");
-            return axiosPublic({
+            return axiosAlter({
                 method,
                 headers: {
                     "Access-Control-Allow-Credentials": true,
                     "Access-Control-Allow-Origin": "*",
                     rftoken: `rfToken ${refreshToken}`,
                 },
-                url: `${alternateURL}/api/${path}`,
+                url: `/api/${path}`,
                 data,
             });
         }
@@ -111,16 +110,15 @@ export const apiCallerVnpay = async (method: string, path: string, data?: any) =
     } catch (error: any) {
         // Nếu URL không được tìm thấy, thử lại với URL khác
         if (error?.response && error?.response.status === 404) {
-            const alternateURL = process.env.API_APP_ALTERNATE_URL || "https://utemy.cfapps.ap21.hana.ondemand.com";
             const refreshToken = Cookies.get("refreshToken");
-            return axiosPublic({
+            return axiosAlter({
                 method,
                 headers: {
                     "Access-Control-Allow-Credentials": true,
                     "Access-Control-Allow-Origin": "*",
                     rftoken: `rfToken ${refreshToken}`,
                 },
-                url: `${alternateURL}/${path}`,
+                url: `/${path}`,
                 data,
             });
         }
