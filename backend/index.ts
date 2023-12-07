@@ -8,10 +8,10 @@ const port: number = configs.general.PORT;
 
 // Chỉ định cấu hình CORS
 const corsOptions = {
-    origin: "http://localhost:3000", // Chỉ cho phép yêu cầu từ trang web này
+    origin: ["https://utemyvietnam.cfapps.ap21.hana.ondemand.com", "https://utemy.cfapps.ap21.hana.ondemand.com"], // Mảng chứa các nguồn cho phép
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Các phương thức được phép
     credentials: true, // Cho phép sử dụng cookie hoặc header xác thực
-    optionsSuccessStatus: 204, // Mã trạng thái cho các yêu cầu OPTIONS thành công
+    optionsSuccessStatus: 200, // Mã trạng thái cho các yêu cầu OPTIONS thành công
 };
 
 app.use(cors(corsOptions));
