@@ -57,6 +57,14 @@ const vnpayIpn = async (req: IRequestWithId): Promise<ResponseBase> => {
                     cart_id: cartDetail.id,
                     saved_for_later: false,
                 },
+                include: {
+                    course: {
+                        select: {
+                            id: true,
+                            number_of_enrolled: true,
+                        },
+                    },
+                },
             });
             const createEnrolledData = boughtCourses.map((course) => {
                 const temp = {
@@ -65,9 +73,28 @@ const vnpayIpn = async (req: IRequestWithId): Promise<ResponseBase> => {
                 };
                 return temp;
             });
+            // console.log("create enrolled data", createEnrolledData);
+            const updateCourseEnrolledData = boughtCourses.map((course) => {
+                return course.course_id;
+            });
+            // console.log("update data", updateCourseEnrolledData);
             const createEnrolled = await configs.db.enrolled.createMany({
                 data: createEnrolledData,
             });
+            // console.log("createEnrolled", createEnrolled);
+            const updateCourseEnrolled = await configs.db.course.updateMany({
+                where: {
+                    id: {
+                        in: updateCourseEnrolledData,
+                    },
+                },
+                data: {
+                    number_of_enrolled: {
+                        increment: 1,
+                    },
+                },
+            });
+            // console.log("update enrolled", updateCourseEnrolled);
             const clearCart = await configs.db.cartDetail.deleteMany({
                 where: {
                     cart_id: cartDetail.id,
