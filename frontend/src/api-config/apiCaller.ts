@@ -62,7 +62,7 @@ axiosAlter.interceptors.request.use(requestInterceptor, (error) => Promise.rejec
 export const apiCaller = async (method: string, path: string, data?: any) => {
     try {
         const refreshToken = Cookies.get("refreshToken");
-        return await axiosPublic({
+        return await axiosAlter({
             method,
             headers: {
                 "Access-Control-Allow-Credentials": true,
@@ -76,7 +76,7 @@ export const apiCaller = async (method: string, path: string, data?: any) => {
         // Nếu URL không được tìm thấy, thử lại với URL khác
         if (error?.response && error?.response.status === 404) {
             const refreshToken = Cookies.get("refreshToken");
-            return await axiosAlter({
+            return await axiosPublic({
                 method,
                 headers: {
                     "Access-Control-Allow-Credentials": true,
@@ -95,7 +95,7 @@ export const apiCaller = async (method: string, path: string, data?: any) => {
 export const apiCallerVnpay = async (method: string, path: string, data?: any) => {
     try {
         const refreshToken = Cookies.get("refreshToken");
-        return await axiosPublic({
+        return await axiosAlter({
             method,
             headers: {
                 "Access-Control-Allow-Credentials": true,
@@ -109,7 +109,7 @@ export const apiCallerVnpay = async (method: string, path: string, data?: any) =
         // Nếu URL không được tìm thấy, thử lại với URL khác
         if (error?.response && error?.response.status === 404) {
             const refreshToken = Cookies.get("refreshToken");
-            return await axiosAlter({
+            return await axiosPublic({
                 method,
                 headers: {
                     "Access-Control-Allow-Credentials": true,
