@@ -4,7 +4,7 @@ import constants from "../constants";
 import apis from "../api";
 
 const axiosPublic = axios.create({
-    baseURL: process.env.API_APP_BASE_URL || "https://utemy.cfapps.ap21.hana.ondemand.com",
+    baseURL: process.env.API_APP_BASE_URL || "https://utemyvietnam.cfapps.ap21.hana.ondemand.com",
 });
 
 const axiosInstance = axios.create();
