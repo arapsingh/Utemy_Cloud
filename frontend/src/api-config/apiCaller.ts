@@ -3,14 +3,12 @@ import Cookies from "js-cookie";
 import constants from "../constants";
 import apis from "../api";
 
-// Hàm thực hiện retry với một số lần thử nghiệm và khoảng thời gian giữa các lần thử nghiệm
-const axiosRetry = require("axios-retry");
-axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
-
 const axiosPublic = axios.create({
     baseURL: process.env.API_APP_BASE_URL || "https://utemyvietnam.cfapps.ap21.hana.ondemand.com",
 });
-
+const axiosAlter = axios.create({
+    baseURL: process.env.API_APP_ALTERNATE_URL || "https://utemy.cfapps.ap21.hana.ondemand.com",
+});
 // Hàm xử lý lỗi trong interceptor của axiosPublic
 const handleResponseError = async (error: any) => {
     const config = error?.config;
@@ -39,9 +37,21 @@ const handleResponseError = async (error: any) => {
 
 // Interceptor xử lý response
 axiosPublic.interceptors.response.use((response) => response, handleResponseError);
+axiosAlter.interceptors.response.use((response) => response, handleResponseError);
+
 
 // Interceptor xử lý request
 axiosPublic.interceptors.request.use(async (config:any) => {
+    const accessToken = Cookies.get("accessToken");
+    if (accessToken) {
+        config.headers = {
+            ...config.headers,
+            authorization: `Bearer ${accessToken}`,
+        };
+    }
+    return config;
+}, (error) => Promise.reject(error));
+axiosAlter.interceptors.request.use(async (config:any) => {
     const accessToken = Cookies.get("accessToken");
     if (accessToken) {
         config.headers = {
