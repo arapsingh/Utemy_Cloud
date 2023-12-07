@@ -62,7 +62,7 @@ axiosAlter.interceptors.request.use(requestInterceptor, (error) => Promise.rejec
 export const apiCaller = async (method: string, path: string, data?: any) => {
     try {
         const refreshToken = Cookies.get("refreshToken");
-        const response = await axiosPublic({
+        return await axiosPublic({
             method,
             headers: {
                 "Access-Control-Allow-Credentials": true,
@@ -72,12 +72,11 @@ export const apiCaller = async (method: string, path: string, data?: any) => {
             url: `/api/${path}`,
             data,
         });
-        return response;
     } catch (error: any) {
         // Nếu URL không được tìm thấy, thử lại với URL khác
-        if (error.request && error.request.method === 'OPTIONS') {
+        if (error?.response && error?.response.status === 404) {
             const refreshToken = Cookies.get("refreshToken");
-            return axiosAlter({
+            return await axiosAlter({
                 method,
                 headers: {
                     "Access-Control-Allow-Credentials": true,
@@ -96,7 +95,7 @@ export const apiCaller = async (method: string, path: string, data?: any) => {
 export const apiCallerVnpay = async (method: string, path: string, data?: any) => {
     try {
         const refreshToken = Cookies.get("refreshToken");
-        const response = await axiosPublic({
+        return await axiosPublic({
             method,
             headers: {
                 "Access-Control-Allow-Credentials": true,
@@ -106,12 +105,11 @@ export const apiCallerVnpay = async (method: string, path: string, data?: any) =
             url: `/${path}`,
             data,
         });
-        return response;
     } catch (error: any) {
         // Nếu URL không được tìm thấy, thử lại với URL khác
-        if (error.request && error.request.method === 'OPTIONS') {
+        if (error?.response && error?.response.status === 404) {
             const refreshToken = Cookies.get("refreshToken");
-            return axiosAlter({
+            return await axiosAlter({
                 method,
                 headers: {
                     "Access-Control-Allow-Credentials": true,
