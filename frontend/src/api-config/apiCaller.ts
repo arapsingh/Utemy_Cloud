@@ -12,13 +12,13 @@ const axiosAlter = axios.create({
 // const axiosInstance = axios.create();
 const checkUrlExists = async (url: any) => {
     try {
-        // Thực hiện HEAD request để kiểm tra tồn tại của URL
-        await axios.head(url);
-        return true; // Nếu không có lỗi, URL tồn tại
+        const response = await fetch(url, { method: 'HEAD' });
+        return response.ok;
     } catch (error) {
-        return false; // Nếu có lỗi, URL không tồn tại
+        return false;
     }
 };
+
 // Hàm xử lý lỗi trong interceptor của axiosPublic
 const handleResponseError = async (error: any) => {
     const config = error?.config;
