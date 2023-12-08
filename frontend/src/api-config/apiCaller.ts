@@ -9,7 +9,7 @@ const axiosPublic = axios.create({
 const axiosAlter = axios.create({
     baseURL: process.env.API_APP_ALTERNATE_URL || "https://utemy.cfapps.ap21.hana.ondemand.com",
 });
-// const axiosInstance = axios.create();
+const axiosInstance = axios.create();
 const checkUrlExists = async (url: any) => {
     try {
         const response = await fetch(url, { method: "OPTIONS" });
@@ -33,13 +33,15 @@ const handleResponseError = async (error: any) => {
                 authorization: `Bearer ${accessToken}`,
             };
 
-            // Check the baseURL and return the appropriate axios instance
-            const isAlterUrlExists = await checkUrlExists(axiosAlter.defaults.baseURL);
-            if (isAlterUrlExists && config?.baseURL === axiosPublic.defaults.baseURL) {
-                return axiosAlter(config);
-            } else {
-                return axiosPublic(config);
-            }
+            // // Check the baseURL and return the appropriate axios instance
+            // const isAlterUrlExists = await checkUrlExists(axiosAlter.defaults.baseURL);
+            // if (isAlterUrlExists && config?.baseURL === axiosPublic.defaults.baseURL) {
+            //     return axiosAlter(config);
+            // } else {
+            //     return axiosPublic(config);
+            // }
+            return axiosInstance(config);
+
         }
     }
     if (error) {
