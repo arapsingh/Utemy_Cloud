@@ -1,21 +1,33 @@
 import React, { useRef } from "react";
 import { Formik, Field, ErrorMessage } from "formik";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { QuizGroupType } from "../../types/quiz";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { quizActions } from "../../redux/slices";
 type QuizGroupEditPopupProps = {
     handleCancelEdit(): void;
     group: QuizGroupType;
 };
 
 const QuizGroupEditPopup: React.FC<QuizGroupEditPopupProps> = (props) => {
+    const dispatch = useAppDispatch();
+    const isLoading = useAppSelector((state) => state.quizSlice.isLoading) ?? false;
     const formikRef = useRef(null);
     const initialValue: QuizGroupType = props.group;
     const handleOnSubmit = (values: QuizGroupType) => {
         const data: QuizGroupType = {
             ...values,
         };
-        console.log(data);
         //dispatch edit group
+        dispatch(quizActions.updateQuizGroup(data)).then((response) => {
+            if (response.payload?.status_code === 200) {
+                toast.success(response.payload.message);
+                dispatch(quizActions.getAllQuizGroup());
+                props.handleCancelEdit();
+            } else {
+                if (response.payload) toast.error(response.payload.message);
+            }
+        });
     };
     return (
         <div className="fixed z-50 top-0 left-0 right-0 bottom-0 bg-black/50 flex items-center justify-center">
@@ -78,17 +90,17 @@ const QuizGroupEditPopup: React.FC<QuizGroupEditPopupProps> = (props) => {
                                         type="submit"
                                         name="save_button"
                                         className="text-white btn btn-info text-lg"
-                                        disabled={false}
+                                        disabled={isLoading}
                                     >
-                                        {false ? "Loading..." : "Lưu"}
+                                        {isLoading ? "Loading..." : "Lưu"}
                                     </button>
                                     <button
                                         onClick={props.handleCancelEdit}
                                         type="button"
                                         className="btn text-lg ml-2"
-                                        disabled={false}
+                                        disabled={isLoading}
                                     >
-                                        {false ? "Loading" : "Hủy"}
+                                        {isLoading ? "Loading" : "Hủy"}
                                     </button>
                                 </div>
                             </form>

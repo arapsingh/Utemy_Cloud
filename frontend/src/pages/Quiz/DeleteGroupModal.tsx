@@ -1,7 +1,9 @@
 import React from "react";
 import { WarningIcon } from "../../assets/icons";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { QuizGroupType } from "../../types/quiz";
+import { quizActions } from "../../redux/slices";
+import toast from "react-hot-toast";
 
 type DeleteGroupModalProps = {
     group: QuizGroupType;
@@ -9,10 +11,19 @@ type DeleteGroupModalProps = {
 };
 
 const DeleteGroupModal: React.FC<DeleteGroupModalProps> = (props: DeleteGroupModalProps) => {
+    const dispatch = useAppDispatch();
+    const isLoading = useAppSelector((state) => state.quizSlice.isLoading);
     const handleDelete = () => {
-        console.log(props.group);
+        dispatch(quizActions.deleteQuizGroup(props.group.quiz_group_id)).then((response) => {
+            if (response.payload?.status_code === 200) {
+                toast.success(response.payload.message);
+                dispatch(quizActions.getAllQuizGroup());
+                props.handleCancel();
+            } else {
+                if (response.payload) toast.error(response.payload.message);
+            }
+        });
     };
-    const isLoading = useAppSelector((state) => state.courseSlice.isLoading) ?? false;
     return (
         <>
             <div className="fixed z-50 w-full h-full top-0 bottom-0 right-0 left-0 bg-black/50 flex justify-center items-center">
@@ -26,11 +37,19 @@ const DeleteGroupModal: React.FC<DeleteGroupModalProps> = (props: DeleteGroupMod
                         <span className="text-xl">Hành động này không thể hoàn tác</span>
                     </div>
                     <div className="">
-                        <button className="text-white btn btn-error text-lg" onClick={handleDelete}>
+                        <button
+                            className="text-white btn btn-error text-lg"
+                            onClick={handleDelete}
+                            disabled={isLoading}
+                        >
                             {isLoading ? "Loading..." : " Có, tôi muốn xóa "}
                         </button>
-                        <button className="btn text-lg ml-2 text-black" onClick={props.handleCancel}>
-                            Hủy
+                        <button
+                            className="btn text-lg ml-2 text-black"
+                            onClick={props.handleCancel}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? "Loading..." : "Hủy "}
                         </button>
                     </div>
                 </div>

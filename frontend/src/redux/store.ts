@@ -12,6 +12,7 @@ import invoiceSlice from "./slices/invoice.slice";
 import vnpaySlice from "./slices/vnpay.slice";
 import componentSlice from "./slices/component.slice";
 import statisticSlice from "./slices/statistic.slice";
+import quizSlice from "./slices/quiz.slice";
 
 // import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
 
@@ -30,6 +31,7 @@ const store = configureStore({
         vnpaySlice,
         componentSlice,
         statisticSlice,
+        quizSlice,
         // fileStorageSlice: fileStorageSlice,
     },
     middleware: (getDefaultMiddleware) =>
