@@ -14,7 +14,6 @@ const WatchVideo: React.FC = () => {
     const isLoading = useAppSelector((state) => state.courseSlice.isLoading);
     const courseDetail: Course = useAppSelector((state) => state.courseSlice.courseDetail);
     const lesson = useAppSelector((state) => state.lessonSlice.lesson);
-    console.log("lesson", lesson);
     const [isNotFound, setIsNotFound] = useState<boolean>(false);
 
     // const orderLesson: orderLesson[] = useAppSelector((state) => state.courseSlice.orderLesson);
