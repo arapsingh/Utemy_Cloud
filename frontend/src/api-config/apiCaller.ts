@@ -12,7 +12,7 @@ const axiosAlter = axios.create({
 // const axiosInstance = axios.create();
 const checkUrlExists = async (url: any) => {
     try {
-        const response = await fetch(url, { method: 'HEAD' });
+        const response = await fetch(url, { method: "OPTIONS" });
         return response.ok;
     } catch (error) {
         return false;
