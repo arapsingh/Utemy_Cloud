@@ -10,6 +10,8 @@ import cartRouter from "./cart.router";
 import invoiceRouter from "./invoice.router";
 import vnpayRouter from "./vnpay.router";
 import statRouter from "./statistic.router";
+import quizRouter from "./quiz.router";
+import lectureRouter from "./lecture.router";
 
 export default {
     authRouter,
@@ -24,4 +26,6 @@ export default {
     invoiceRouter,
     vnpayRouter,
     statRouter,
+    quizRouter,
+    lectureRouter,
 };

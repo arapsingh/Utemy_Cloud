@@ -8,9 +8,11 @@ import {
     XCircleIcon,
     HandThumbDownIcon,
 } from "@heroicons/react/24/solid";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { QuizAnswerType, QuizType } from "../../types/quiz";
 import { CustomeSelect } from "../../components";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { quizActions } from "../../redux/slices";
 // import { orderLesson } from "../../types/lesson";
 // trc khi thêm answer mới thì xóa hết anwser cũ
 type QuizEditPopupProps = {
@@ -38,6 +40,8 @@ const customStyles = {
 };
 
 const QuizEditPopup: React.FC<QuizEditPopupProps> = (props) => {
+    const dispatch = useAppDispatch();
+    const isLoading = useAppSelector((state) => state.quizSlice.isLoading) ?? false;
     const typeOptions = [
         {
             value: 1,
@@ -61,13 +65,24 @@ const QuizEditPopup: React.FC<QuizEditPopupProps> = (props) => {
             quiz_id: props.quiz.quiz_id,
             quiz_answer: answer,
         };
-        console.log(data);
         if (answer.length !== 4) {
             setError("Loại câu hỏi trắc nghiệm yêu cầu 4 câu trả lời");
             return;
         }
-        console.log("không lỗi mới hiện");
-        //dispatch edit quiz
+        dispatch(quizActions.updateQuiz(data)).then((response) => {
+            if (response.payload?.status_code === 200) {
+                toast.success(response.payload.message);
+                dispatch(
+                    quizActions.getAllQuizByGroupId({
+                        searchItem: "",
+                        quiz_group_id: props.quiz.quiz_group_id,
+                    }),
+                );
+                props.handleCancelEdit();
+            } else {
+                if (response.payload) toast.error(response.payload.message);
+            }
+        });
     };
     const handleChangeStatus = (event: any, formik: any) => {
         formik.setFieldValue("type", event.value);
@@ -98,7 +113,6 @@ const QuizEditPopup: React.FC<QuizEditPopupProps> = (props) => {
         setAdd(!add);
         setError("");
     };
-    console.log("type sync", props.quiz.type);
     return (
         <div className="fixed z-50 top-0 left-0 right-0 bottom-0 bg-black/50 flex items-center justify-center">
             <Toaster />
@@ -253,9 +267,9 @@ const QuizEditPopup: React.FC<QuizEditPopupProps> = (props) => {
                                         type="submit"
                                         name="save_button"
                                         className="text-white btn btn-info text-lg"
-                                        disabled={error !== "" || add}
+                                        disabled={error !== "" || add || isLoading}
                                     >
-                                        {add || error ? "Loading..." : "Lưu"}
+                                        {add || error || isLoading ? "Loading..." : "Lưu"}
                                     </button>
                                     <button
                                         onClick={props.handleCancelEdit}
@@ -263,7 +277,7 @@ const QuizEditPopup: React.FC<QuizEditPopupProps> = (props) => {
                                         className="btn text-lg ml-2"
                                         disabled={add}
                                     >
-                                        {add ? "Loading" : "Hủy"}
+                                        {add || isLoading ? "Loading" : "Hủy"}
                                     </button>
                                 </div>
                             </form>

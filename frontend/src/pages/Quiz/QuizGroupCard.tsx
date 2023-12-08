@@ -8,11 +8,15 @@ import { QuizGroupType } from "../../types/quiz";
 type QuizGroupCardProps = {
     handleOpenEdit(group: QuizGroupType): void;
     handleOpenDelete(group: QuizGroupType): void;
+    handleOpenGroup(): void;
     group: QuizGroupType;
 };
 const QuizGroupCard: React.FC<QuizGroupCardProps> = (props) => {
     const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(!open);
+    const handleOpen = () => {
+        props.handleOpenGroup();
+        setOpen(!open);
+    };
     return (
         <>
             <div className="flex gap-2 mx-3">

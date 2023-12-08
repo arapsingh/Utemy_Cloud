@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import QuizGroupCard from "./QuizGroupCard";
 import QuizCard from "./QuizCard";
 import { QuizGroupType, QuizType } from "../../types/quiz";
@@ -8,128 +8,151 @@ import DeleteGroupModal from "./DeleteGroupModal";
 import DeleteQuizModal from "./DeleteQuizModal";
 import QuizGroupAddPopup from "./QuizGroupAddPopup";
 import QuizGroupEditPopup from "./QuizGroupEditPopup";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { quizActions } from "../../redux/slices";
+import { SearchIcon } from "../../assets/icons";
+// const data: QuizType[] = [
+//     {
+//         quiz_id: 1,
+//         quiz_group_id: 1,
+//         type: 1,
+//         question: "Con voi có màu gì",
+//         updated_at: new Date().toString(),
+//         quiz_answer: [
+//             {
+//                 quiz_answer_id: 1,
+//                 answer: "Câu trả lời",
+//                 is_correct: true,
+//             },
+//             {
+//                 quiz_answer_id: 2,
+//                 answer: "Câu trả sai 1",
+//                 is_correct: false,
+//             },
+//             {
+//                 quiz_answer_id: 3,
+//                 answer: "Câu trả sai 2",
+//                 is_correct: false,
+//             },
+//             {
+//                 quiz_answer_id: 4,
+//                 answer: "Câu trả sai 3",
+//                 is_correct: false,
+//             },
+//         ],
+//     },
+//     {
+//         quiz_id: 2,
+//         quiz_group_id: 1,
+//         type: 1,
+//         question: "Con chó có màu gì",
+//         updated_at: new Date().toString(),
+//         quiz_answer: [
+//             {
+//                 quiz_answer_id: 5,
+//                 answer: "Câu trả lời",
+//                 is_correct: true,
+//             },
+//             {
+//                 quiz_answer_id: 6,
+//                 answer: "Câu trả sai 1",
+//                 is_correct: false,
+//             },
+//             {
+//                 quiz_answer_id: 7,
+//                 answer: "Câu trả sai 2",
+//                 is_correct: false,
+//             },
+//             {
+//                 quiz_answer_id: 8,
+//                 answer: "Câu trả sai 3",
+//                 is_correct: false,
+//             },
+//         ],
+//     },
+//     {
+//         quiz_id: 3,
+//         quiz_group_id: 1,
+//         type: 1,
+//         question: "Con gà có màu gì",
+//         updated_at: new Date().toString(),
+//         quiz_answer: [
+//             {
+//                 quiz_answer_id: 9,
+//                 answer: "Câu trả lời",
+//                 is_correct: true,
+//             },
+//             {
+//                 quiz_answer_id: 10,
+//                 answer: "Câu trả sai 1",
+//                 is_correct: false,
+//             },
+//             {
+//                 quiz_answer_id: 11,
+//                 answer: "Câu trả sai 2",
+//                 is_correct: false,
+//             },
+//             {
+//                 quiz_answer_id: 12,
+//                 answer: "Câu trả sai 3",
+//                 is_correct: false,
+//             },
+//         ],
+//     },
+// ];
 
-const data: QuizType[] = [
-    {
-        quiz_id: 1,
-        quiz_group_id: 1,
-        type: 1,
-        question: "Con voi có màu gì",
-        updated_at: new Date().toString(),
-        quiz_answer: [
-            {
-                quiz_answer_id: 1,
-                answer: "Câu trả lời",
-                is_correct: true,
-            },
-            {
-                quiz_answer_id: 2,
-                answer: "Câu trả sai 1",
-                is_correct: false,
-            },
-            {
-                quiz_answer_id: 3,
-                answer: "Câu trả sai 2",
-                is_correct: false,
-            },
-            {
-                quiz_answer_id: 4,
-                answer: "Câu trả sai 3",
-                is_correct: false,
-            },
-        ],
-    },
-    {
-        quiz_id: 2,
-        quiz_group_id: 1,
-        type: 1,
-        question: "Con chó có màu gì",
-        updated_at: new Date().toString(),
-        quiz_answer: [
-            {
-                quiz_answer_id: 5,
-                answer: "Câu trả lời",
-                is_correct: true,
-            },
-            {
-                quiz_answer_id: 6,
-                answer: "Câu trả sai 1",
-                is_correct: false,
-            },
-            {
-                quiz_answer_id: 7,
-                answer: "Câu trả sai 2",
-                is_correct: false,
-            },
-            {
-                quiz_answer_id: 8,
-                answer: "Câu trả sai 3",
-                is_correct: false,
-            },
-        ],
-    },
-    {
-        quiz_id: 3,
-        quiz_group_id: 1,
-        type: 1,
-        question: "Con gà có màu gì",
-        updated_at: new Date().toString(),
-        quiz_answer: [
-            {
-                quiz_answer_id: 9,
-                answer: "Câu trả lời",
-                is_correct: true,
-            },
-            {
-                quiz_answer_id: 10,
-                answer: "Câu trả sai 1",
-                is_correct: false,
-            },
-            {
-                quiz_answer_id: 11,
-                answer: "Câu trả sai 2",
-                is_correct: false,
-            },
-            {
-                quiz_answer_id: 12,
-                answer: "Câu trả sai 3",
-                is_correct: false,
-            },
-        ],
-    },
-];
-
-const dataGroup: QuizGroupType[] = [
-    {
-        quiz_group_id: 1,
-        title: "Bộ câu hỏi 1 Bộ câu hỏi 1 Bộ câu hỏi 1 Bộ câu hỏi 1",
-        description: "Đây là bộ câu hỏi về chủ đề 1",
-    },
-    {
-        quiz_group_id: 2,
-        title: "Bộ câu hỏi 2",
-        description:
-            "Đây là bộ câu hỏi về chủ đề 2 Đây là bộ câu hỏi về chủ đề 2 Đây là bộ câu hỏi về chủ đề 2 Đây là bộ câu hỏi về chủ đề 2",
-    },
-    {
-        quiz_group_id: 3,
-        title: "Bộ câu hỏi 3",
-        description: "Đây là bộ câu hỏi về chủ đề 3",
-    },
-];
+// const dataGroup: QuizGroupType[] = [
+//     {
+//         quiz_group_id: 1,
+//         title: "Bộ câu hỏi 1 Bộ câu hỏi 1 Bộ câu hỏi 1 Bộ câu hỏi 1",
+//         description: "Đây là bộ câu hỏi về chủ đề 1",
+//     },
+//     {
+//         quiz_group_id: 2,
+//         title: "Bộ câu hỏi 2",
+//         description:
+//             "Đây là bộ câu hỏi về chủ đề 2 Đây là bộ câu hỏi về chủ đề 2 Đây là bộ câu hỏi về chủ đề 2 Đây là bộ câu hỏi về chủ đề 2",
+//     },
+//     {
+//         quiz_group_id: 3,
+//         title: "Bộ câu hỏi 3",
+//         description: "Đây là bộ câu hỏi về chủ đề 3",
+//     },
+// ];
 
 const QuizHome: React.FC = () => {
+    const dispatch = useAppDispatch();
     const [openEditPopup, setOpenEditPopup] = useState(false);
     const [openAddPopup, setOpenAddPopup] = useState(false);
     const [openEditGroupPopup, setOpenEditGroupPopup] = useState(false);
     const [openAddGroupPopup, setOpenAddGroupPopup] = useState(false);
     const [openDeleteQuizModal, setOpenDeleteQuizModal] = useState(false);
     const [openDeleteGroupModal, setOpenDeleteGroupModal] = useState(false);
-    const [editQuiz, setEditQuiz] = useState<QuizType>(data[0]);
-    const [editGroup, setEditGroup] = useState<QuizGroupType>(dataGroup[0]);
-    const [groupId, setGroupId] = useState(1);
-    console.log(setGroupId);
-    console.log(openEditGroupPopup);
+    const [userInput, setUserInput] = useState<string>("");
+    const [searchItem, setSearchItem] = useState<string>("");
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [groupId, setGroupId] = useState(0);
+    const quizGroupList = useAppSelector((state) => state.quizSlice.quizGroupList);
+    const quizList = useAppSelector((state) => state.quizSlice.quizList);
+    const [editQuiz, setEditQuiz] = useState<QuizType>(quizList[0]);
+    const [editGroup, setEditGroup] = useState<QuizGroupType>(quizGroupList[0]);
+
+    useEffect(() => {
+        dispatch(quizActions.getAllQuizGroup()).then((response) => {
+            if (response.payload?.status_code === 200) {
+                if (quizGroupList.length > 0) setGroupId(quizGroupList[0].quiz_group_id);
+            }
+        });
+    }, [dispatch]);
+    useEffect(() => {
+        if (groupId === 0) return;
+        const data = {
+            quiz_group_id: groupId,
+            searchItem: searchItem,
+        };
+        dispatch(quizActions.getAllQuizByGroupId(data));
+    }, [groupId, dispatch, searchItem]);
+
     //edit quiz
     const handleOpenEditQuiz = (quiz: QuizType) => {
         setEditQuiz(quiz);
@@ -171,6 +194,17 @@ const QuizHome: React.FC = () => {
     const handleToggleAddGroup = () => {
         setOpenAddGroupPopup(!openAddGroupPopup);
     };
+    //
+    const handleKeyWordSearch = () => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+        setSearchItem(userInput);
+    };
+    //
+    const handleReset = () => {
+        setSearchItem("");
+    };
     return (
         <>
             {/* {isLoading && <Spin />} */}
@@ -196,10 +230,12 @@ const QuizHome: React.FC = () => {
                         </button>
                     </div>
                     <div className="h-[90%] overflow-auto w-[98%] justify-center grid-rows-1">
-                        {dataGroup.length > 0 &&
-                            dataGroup.map((group) => {
+                        {quizGroupList.length > 0 &&
+                            quizGroupList.map((group, index) => {
                                 return (
                                     <QuizGroupCard
+                                        handleOpenGroup={() => setGroupId(group.quiz_group_id)}
+                                        key={index}
                                         group={group}
                                         handleOpenDelete={handleOpenDeleteGroup}
                                         handleOpenEdit={handleOpenEditGroup}
@@ -210,15 +246,28 @@ const QuizHome: React.FC = () => {
                 </div>
                 <div className="w-1/2 h-full bg-footer shadow-lg pt-[20px]">
                     <div className="h-[10%] flex  items-center justify-between mx-3 pl-5 text-black border-b">
-                        <div>
-                            <h1 className="text-xl text-black ">
-                                Thanh search bar: Chọn một bộ câu hỏi để xem các câu hỏi
-                            </h1>
+                        <div className="flex-1">
+                            <div className="relative">
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    placeholder="Điền từ khóa ở đây..."
+                                    className="rounded-full py-4 px-10 w-full tablet:w-[70%] border-[1px] border-black"
+                                    value={userInput}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserInput(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") handleKeyWordSearch();
+                                    }}
+                                />
+                                <div className="cursor-pointer" onClick={handleKeyWordSearch}>
+                                    <SearchIcon />
+                                </div>
+                            </div>
                         </div>
                         <div className="gap-2 flex">
                             <button
                                 type="button"
-                                onClick={handleToggleAdd}
+                                onClick={handleReset}
                                 className="btn border-1 border-gray-600 text-black "
                             >
                                 Làm mới
@@ -233,10 +282,11 @@ const QuizHome: React.FC = () => {
                         </div>
                     </div>
                     <div className="h-[90%] flex flex-col  overflow-auto">
-                        {data.length > 0 &&
-                            data.map((data) => {
+                        {quizList.length > 0 &&
+                            quizList.map((data, index) => {
                                 return (
                                     <QuizCard
+                                        key={index}
                                         quiz={data}
                                         handleOpenEdit={handleOpenEditQuiz}
                                         handleOpenDelete={handleOpenDeleteQuiz}

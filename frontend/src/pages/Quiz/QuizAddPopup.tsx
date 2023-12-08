@@ -8,10 +8,11 @@ import {
     XCircleIcon,
     HandThumbDownIcon,
 } from "@heroicons/react/24/solid";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { QuizAnswerType, QuizType } from "../../types/quiz";
 import { CustomeSelect } from "../../components";
-// import { orderLesson } from "../../types/lesson";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { quizActions } from "../../redux/slices";
 // trc khi thêm answer mới thì xóa hết anwser cũ
 type QuizAddPopupProps = {
     handleCancelAdd(): void;
@@ -38,6 +39,8 @@ const customStyles = {
 };
 
 const QuizAddPopup: React.FC<QuizAddPopupProps> = (props) => {
+    const dispatch = useAppDispatch();
+    const isLoading = useAppSelector((state) => state.quizSlice.isLoading);
     const typeOptions = [
         {
             value: 1,
@@ -60,13 +63,20 @@ const QuizAddPopup: React.FC<QuizAddPopupProps> = (props) => {
             quiz_group_id: props.groupId,
             quiz_answer: answer,
         };
-        console.log(data);
         if (answer.length !== 4) {
             setError("Loại câu hỏi trắc nghiệm yêu cầu 4 câu trả lời");
             return;
         }
-        console.log("không lỗi mới hiện");
         //dispatch add quiz
+        dispatch(quizActions.createQuiz(data)).then((response) => {
+            if (response.payload?.status_code === 200) {
+                toast.success(response.payload.message);
+                dispatch(quizActions.getAllQuizByGroupId({ searchItem: "", quiz_group_id: props.groupId }));
+                props.handleCancelAdd();
+            } else {
+                if (response.payload) toast.error(response.payload.message);
+            }
+        });
     };
     const handleChangeStatus = (event: any, formik: any) => {
         formik.setFieldValue("type", event.value);
@@ -252,17 +262,17 @@ const QuizAddPopup: React.FC<QuizAddPopupProps> = (props) => {
                                         type="submit"
                                         name="save_button"
                                         className="text-white btn btn-info text-lg"
-                                        disabled={error !== "" || add}
+                                        disabled={error !== "" || add || isLoading}
                                     >
-                                        {add || error ? "Loading..." : "Lưu"}
+                                        {add || error || isLoading ? "Loading..." : "Lưu"}
                                     </button>
                                     <button
                                         onClick={props.handleCancelAdd}
                                         type="button"
                                         className="btn text-lg ml-2"
-                                        disabled={add}
+                                        disabled={add || isLoading}
                                     >
-                                        {add ? "Loading" : "Hủy"}
+                                        {add || isLoading ? "Loading" : "Hủy"}
                                     </button>
                                 </div>
                             </form>
