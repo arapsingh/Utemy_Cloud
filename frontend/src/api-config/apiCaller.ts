@@ -90,7 +90,7 @@ export const apiCaller = async (method: string, path: string, data?: any) => {
     // Kiểm tra xem URL có tồn tại không
     const isAlterUrlExists = await checkUrlExists(axiosAlter.defaults.baseURL);
 
-    return await axios({
+    return axios({
         method,
         headers: {
             "Access-Control-Allow-Credentials": true,
@@ -109,7 +109,7 @@ export const apiCallerVnpay = async (method: string, path: string, data?: any) =
     const refreshToken = Cookies.get("refreshToken");
     const isAlterUrlExists = await checkUrlExists(axiosAlter.defaults.baseURL);
 
-    return await axios({
+    return axios({
         method,
         headers: {
             "Access-Control-Allow-Credentials": true,
