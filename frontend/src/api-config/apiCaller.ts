@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
+import axios from "axios";
 import Cookies from "js-cookie";
 import constants from "../constants";
 import apis from "../api";
@@ -55,12 +55,9 @@ const handleResponseError = async (error: any) => {
 // Interceptor xử lý response
 axiosPublic.interceptors.response.use((response) => response, handleResponseError);
 axiosAlter.interceptors.response.use((response) => response, handleResponseError);
-interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
-    headers: AxiosRequestHeaders;
-}
 
 // Hàm kiểm tra tồn tại của URL và thực hiện interceptor
-const requestInterceptor = async (config: AxiosRequestConfig): Promise<AdaptAxiosRequestConfig> => {
+const requestInterceptor = (config: any) => {
     const accessToken = Cookies.get("accessToken");
     if (accessToken) {
         config.headers = {
@@ -68,20 +65,13 @@ const requestInterceptor = async (config: AxiosRequestConfig): Promise<AdaptAxio
             authorization: `Bearer ${accessToken}`,
         };
     }
-
-    // Kiểm tra xem URL có tồn tại không trước khi thực hiện request interceptor
-    const isAlterUrlExists = await checkUrlExists(axiosAlter.defaults.baseURL);
-
-    // Thực hiện interceptor theo điều kiện
-    if (isAlterUrlExists && config.baseURL === axiosPublic.defaults.baseURL) {
-        return axiosAlter(config);
-    } else {
-        return axiosPublic(config);
-    }
+    return config;
 };
 
 // Thêm interceptor cho request
-axios.interceptors.request.use(requestInterceptor, (error) => Promise.reject(error));
+axiosPublic.interceptors.request.use(requestInterceptor, (error) => Promise.reject(error));
+axiosAlter.interceptors.request.use(requestInterceptor, (error) => Promise.reject(error));
+
 
 // Hàm gọi API với khả năng retry
 export const apiCaller = async (method: string, path: string, data?: any) => {
