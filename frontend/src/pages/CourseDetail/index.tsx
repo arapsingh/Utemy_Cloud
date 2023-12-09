@@ -187,7 +187,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                             <div className=" flex-1 object-right flex flex-col gap-4 px-3 pb-3 laptop:pt-3">
                                 <div className="flex-1">
                                     <div className="flex justify-between">
-                                        <h2 className="text-2xl laptop:text-3xl font-bold text-title mb-3 tablet:w-[300px] xl:w-[600px] truncate ...">
+                                        <h2 className="text-2xl laptop:text-3xl font-bold text-title mb-3 tablet:w-[300px] xl:w-[600px]">
                                             {courseDetail.title}
                                         </h2>
                                         {isLogin && role === constants.util.ROLE_AUTHOR && (

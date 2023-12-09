@@ -13,9 +13,15 @@ const Home: React.FC = () => {
     const top10Enrolled: CourseType[] = useAppSelector((state) => state.courseSlice.top10Enrolled) ?? [];
     const top10Rate: CourseType[] = useAppSelector((state) => state.courseSlice.top10Rate) ?? [];
     const isGetLoading = useAppSelector((state) => state.courseSlice.isGetLoading);
+    
 
     useEffect(() => {
-        dispatch(courseActions.getTop10Rate());
+        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+
+        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        if ('zoom' in document.documentElement.style) {
+          document.documentElement.style.zoom = `${newZoomValue}`;
+        }        dispatch(courseActions.getTop10Rate());
         dispatch(courseActions.getTop10Enrolled());
     }, [dispatch]);
     return (
