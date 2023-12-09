@@ -21,7 +21,6 @@ app.use("/api/auth", routes.authRouter);
 app.use("/api/user", routes.userRouter);
 app.use("/api/section", routes.sectionRouter);
 app.use("/api/course", routes.courseRouter);
-app.use("/api/lesson", routes.lessonRouter);
 app.use("/api/category", routes.categoryRouter);
 app.use("/api/feedback", routes.feedbackRouter);
 app.use("/api/rating", routes.ratingRouter);
