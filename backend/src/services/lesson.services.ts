@@ -114,6 +114,7 @@ const deleteLesson = async (lectureId: number): Promise<ResponseBase> => {
                     where: { lecture_id: lectureId },
                     data: {
                         is_delete: true,
+                        lecture_id: null,
                     },
                 });
                 if (deleteLesson) {
@@ -122,11 +123,13 @@ const deleteLesson = async (lectureId: number): Promise<ResponseBase> => {
                     );
                     return new ResponseSuccess(200, constants.success.SUCCESS_DELETE_LESSON, true);
                 } else {
+                    console.log("del");
                     return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
                 }
             }
         }
     } catch (error) {
+        console.log(error);
         return new ResponseError(500, JSON.stringify(error), false);
     }
 };

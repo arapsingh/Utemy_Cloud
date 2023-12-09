@@ -94,9 +94,9 @@ export const getCourseIncludes = (course: Course) => {
     let durationRaw = 0;
     let lessonCount = 0;
     course.sections?.forEach((section) => {
-        section.Lesson?.forEach((lesson) => {
+        section.lecture?.forEach((lecture) => {
             lessonCount += 1;
-            durationRaw += Number(lesson.duration);
+            durationRaw += Number(lecture.content.duration);
         });
     });
     const temp = {

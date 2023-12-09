@@ -111,6 +111,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
             score: 0,
         };
         dispatch(ratingActions.getListRatingOfCourseBySlug(values));
+        dispatch(ratingActions.getRatingPercentOfCourse(slug as string));
     };
     const handleAfterPromotion = () => {
         dispatch(courseActions.getCourseDetail(slug as string));

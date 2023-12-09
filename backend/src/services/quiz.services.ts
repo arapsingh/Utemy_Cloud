@@ -114,6 +114,36 @@ const getAllQuizGroup = async (req: IRequestWithId): Promise<ResponseBase> => {
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
+const getAllQuizGroupHasQuiz = async (req: IRequestWithId): Promise<ResponseBase> => {
+    try {
+        const user_id = Number(req.user_id);
+        if (!user_id) return new ResponseError(404, constants.error.ERROR_UNAUTHORIZED, false);
+        const getAllQuizGroup = await configs.db.quizGroup.findMany({
+            where: {
+                user_id,
+                is_delete: false,
+                NOT: {
+                    number_of_quiz: 0,
+                },
+            },
+        });
+        if (!getAllQuizGroup) return new ResponseError(500, constants.error.ERROR_DATA_NOT_FOUND, false);
+        const data = getAllQuizGroup.map((group) => {
+            const temp = {
+                quiz_group_id: group.id,
+                title: group.title,
+                description: group.description,
+            };
+            return temp;
+        });
+        return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, data);
+    } catch (error) {
+        if (error instanceof PrismaClientKnownRequestError) {
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+        }
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
 const createQuiz = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const { question, type, quiz_group_id, quiz_answer } = req.body;
@@ -132,6 +162,12 @@ const createQuiz = async (req: IRequestWithId): Promise<ResponseBase> => {
                 type,
                 question,
             },
+        });
+        const updateQuizGroup = await configs.db.quizGroup.update({
+            data: {
+                number_of_quiz: { increment: 1 },
+            },
+            where: { id: isExistQuizGroup.id },
         });
         const createAnswerData = quiz_answer.map((answer: any) => {
             const temp = {
@@ -231,6 +267,12 @@ const deleteQuiz = async (req: IRequestWithId): Promise<ResponseBase> => {
                 id: isExistQuiz.id,
             },
         });
+        const updateQuizGroup = await configs.db.quizGroup.update({
+            data: {
+                number_of_quiz: { decrement: 1 },
+            },
+            where: { id: isExistQuiz.quiz_group_id },
+        });
         const clearAnswer = await configs.db.quizAnswer.deleteMany({
             where: {
                 quiz_id: isExistQuiz.id,
@@ -316,5 +358,6 @@ const QuizServices = {
     deleteQuizGroup,
     getAllQuizByGroupId,
     getAllQuizGroup,
+    getAllQuizGroupHasQuiz,
 };
 export default QuizServices;

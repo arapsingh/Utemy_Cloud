@@ -30,6 +30,7 @@ app.use("/api/invoice", routes.invoiceRouter);
 app.use("/api/stat", routes.statRouter);
 app.use("/api/quiz", routes.quizRouter);
 app.use("/api/lecture", routes.lectureRouter);
+app.use("/api/test", routes.testRouter);
 app.use("/IPN", routes.vnpayRouter);
 
 app.listen(port, () => {
