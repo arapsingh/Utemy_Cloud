@@ -10,6 +10,11 @@ module.exports = {
                 xl: "1280px",
                 "2xl": "1536px",
             },
+            scale: {
+                '70': '0.7',
+                '65': '0.65',
+                '50': '0.50',
+            },
             fontFamily: {
                 OpenSans: ["Open Sans", "sans-serif"],
                 Roboto: ["Roboto", "serif"],

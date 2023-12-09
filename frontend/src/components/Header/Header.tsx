@@ -29,6 +29,7 @@ const Header: React.FC<HeaderProps> = ({ isLogin }) => {
     useEffect(() => {
         dispatch(categoryActions.getCategories());
     }, [dispatch]);
+    
 
     return (
         <>
