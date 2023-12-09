@@ -12,6 +12,12 @@ const HistoryTransaction = () => {
     const [searchResult, setSearchResult] = useState<any[]>([]); // Dữ liệu kết quả tìm kiếm
     const historyTrans = useAppSelector((state) => state.invoiceSlice.invoices);
     useEffect(() => {
+        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+
+        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        if ('zoom' in document.documentElement.style) {
+          document.documentElement.style.zoom = `${newZoomValue}`;
+        }  
         if (!searchMode) {
             // Gọi API với trang hiện tại khi không ở chế độ tìm kiếm
             dispatch(

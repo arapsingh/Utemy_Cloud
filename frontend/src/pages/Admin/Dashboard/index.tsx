@@ -23,6 +23,12 @@ export function Home() {
     const moneyByMonth = useAppSelector((state) => state.statisticSlice.moneyByMonth);
     const currentYear = new Date().getFullYear();
     useEffect(() => {
+        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+
+        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        if ('zoom' in document.documentElement.style) {
+          document.documentElement.style.zoom = `${newZoomValue}`;
+        }  
         dispatch(componentActions.setAdminNavPlace("dashboard"));
         dispatch(statisticActions.getTotalCourse());
         dispatch(statisticActions.getTotalMoney());

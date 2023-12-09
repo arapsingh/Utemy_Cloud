@@ -24,6 +24,12 @@ const MyProfile: React.FC = () => {
         description: user.description,
     };
     useEffect(() => {
+        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+
+        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        if ('zoom' in document.documentElement.style) {
+          document.documentElement.style.zoom = `${newZoomValue}`;
+        }       
         // @ts-ignore
         dispatch(authActions.getMe());
     }, [dispatch]);

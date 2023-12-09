@@ -31,6 +31,12 @@ export function FeedbackAdmin() {
         setPageIndex(1);
     };
     useEffect(() => {
+        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+
+        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        if ('zoom' in document.documentElement.style) {
+          document.documentElement.style.zoom = `${newZoomValue}`;
+        }  
         const data = {
             pageIndex,
             evaluate: Number(evaluate),

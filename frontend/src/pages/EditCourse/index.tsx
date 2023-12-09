@@ -38,6 +38,12 @@ const EditCourse: React.FC = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
+        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+
+        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        if ('zoom' in document.documentElement.style) {
+          document.documentElement.style.zoom = `${newZoomValue}`;
+        }  
         dispatch(courseActions.getCourseDetailById(Number(course_id))).then((response) => {
             if (response && response.payload && response.payload.data && response.payload?.status_code === 200) {
                 dispatch(courseActions.getRightOfCourse(response.payload.data.course_id));

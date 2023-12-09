@@ -27,6 +27,12 @@ const AuthorProfile: React.FC = () => {
     const dispatch = useAppDispatch();
     const { id } = useParams();
     useEffect(() => {
+        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+
+        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        if ('zoom' in document.documentElement.style) {
+          document.documentElement.style.zoom = `${newZoomValue}`;
+        }  
         dispatch(userActions.getAuthorProfile(Number(id))).then((response) => {
             if (response.payload && response.payload.status_code !== 200) {
                 setIsNotFound(true);

@@ -21,7 +21,8 @@ const Home: React.FC = () => {
         // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
         if ('zoom' in document.documentElement.style) {
           document.documentElement.style.zoom = `${newZoomValue}`;
-        }        dispatch(courseActions.getTop10Rate());
+        }        
+        dispatch(courseActions.getTop10Rate());
         dispatch(courseActions.getTop10Enrolled());
     }, [dispatch]);
     return (
