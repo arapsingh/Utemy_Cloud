@@ -4,15 +4,17 @@ import { IRequestWithId } from "../types/request";
 import constants from "../constants";
 import { LectureResponse } from "~/types/lecture";
 import LessonServices from "./lesson.services";
-import { CreateLessonType } from "~/types/lesson";
+import TestServices from "./test.services";
+import { CreateLessonType } from "../types/lesson";
+import { CreateTestType } from "~/types/test";
 const createLecture = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const videoFile = req.file;
-        const { type, section_id, duration, description, title } = req.body;
+        const { type, section_id, duration, description, title, quiz_group_id, pass_percent, is_time_limit } = req.body;
         const createLecture = await configs.db.lecture.create({
             data: {
                 type,
-                section_id,
+                section_id: Number(section_id),
             },
         });
         if (type === "Lesson") {
@@ -25,17 +27,25 @@ const createLecture = async (req: IRequestWithId): Promise<ResponseBase> => {
             };
             return LessonServices.createLesson(lessonContent, createLecture.id);
         } else {
-            return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+            const testContent: CreateTestType = {
+                title,
+                quiz_group_id,
+                pass_percent,
+                is_time_limit,
+                description,
+                duration,
+            };
+            return TestServices.createTest(testContent, createLecture.id);
         }
     } catch (error) {
+        console.log(error);
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const updateLecture = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const videoFile = req.file;
-        const { lecture_id } = req.params;
-        const { type, duration, description, title } = req.body;
+        const { lecture_id, type, duration, description, title, quiz_group_id, pass_percent, is_time_limit } = req.body;
         const isLectureExist = await configs.db.lecture.findFirst({
             where: {
                 id: Number(lecture_id),
@@ -49,30 +59,73 @@ const updateLecture = async (req: IRequestWithId): Promise<ResponseBase> => {
                 title,
                 videoFile,
             };
-            return LessonServices.updateLesson(lessonContent, isLectureExist.id);
+            if (isLectureExist.type === "Lesson") {
+                return LessonServices.updateLesson(lessonContent, isLectureExist.id);
+            } else {
+                TestServices.deleteTest(isLectureExist.id);
+                const updateType = await configs.db.lecture.update({
+                    where: {
+                        id: isLectureExist.id,
+                    },
+                    data: {
+                        type: "Lesson",
+                    },
+                });
+                return LessonServices.createLesson(lessonContent, isLectureExist.id);
+            }
         } else {
-            return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+            const testContent: CreateTestType = {
+                title,
+                quiz_group_id,
+                pass_percent,
+                is_time_limit,
+                description,
+                duration,
+            };
+            if (isLectureExist.type === "Lesson") {
+                LessonServices.deleteLesson(isLectureExist.id);
+                const updateType = await configs.db.lecture.update({
+                    where: {
+                        id: isLectureExist.id,
+                    },
+                    data: {
+                        type: "Test",
+                    },
+                });
+                return TestServices.createTest(testContent, isLectureExist.id);
+            } else {
+                return TestServices.updateTest(testContent, isLectureExist.id);
+            }
         }
     } catch (error) {
+        console.log(error);
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const deleteLecture = async (req: IRequestWithId): Promise<ResponseBase> => {
     try {
         const { lecture_id } = req.params;
-        const { type } = req.body;
         const isLectureExist = await configs.db.lecture.findFirst({
             where: {
                 id: Number(lecture_id),
             },
         });
         if (!isLectureExist) return new ResponseError(500, constants.error.ERROR_DATA_NOT_FOUND, false);
-        if (type === "Lesson") {
+        const deleteLecture = await configs.db.lecture.update({
+            where: {
+                id: Number(lecture_id),
+            },
+            data: {
+                is_delete: true,
+            },
+        });
+        if (isLectureExist.type === "Lesson") {
             return LessonServices.deleteLesson(isLectureExist.id);
         } else {
-            return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+            return TestServices.deleteTest(isLectureExist.id);
         }
     } catch (error) {
+        console.log(error);
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
@@ -83,6 +136,7 @@ const getLectureById = async (req: IRequestWithId): Promise<ResponseBase> => {
         const isFoundLecture = await configs.db.lecture.findFirst({
             where: {
                 id: parseInt(lecture_id),
+                is_delete: false,
             },
             include: {
                 lesson: {
@@ -93,7 +147,16 @@ const getLectureById = async (req: IRequestWithId): Promise<ResponseBase> => {
                         title: true,
                     },
                 },
-                test: true,
+                test: {
+                    select: {
+                        title: true,
+                        duration: true,
+                        description: true,
+                        is_time_limit: true,
+                        pass_percent: true,
+                        quiz_group_id: true,
+                    },
+                },
             },
         });
         if (isFoundLecture) {
@@ -102,12 +165,14 @@ const getLectureById = async (req: IRequestWithId): Promise<ResponseBase> => {
                 type: isFoundLecture.type,
             };
             if (isFoundLecture.type === "Lesson") temp = { ...temp, content: isFoundLecture.lesson };
+            else temp = { ...temp, content: isFoundLecture.test };
 
             return new ResponseSuccess(200, constants.success.SUCCESS_GET_LESSON, true, temp);
         } else {
             return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
         }
     } catch (error) {
+        console.log(error);
         return new ResponseError(500, JSON.stringify(error), false);
     }
 };

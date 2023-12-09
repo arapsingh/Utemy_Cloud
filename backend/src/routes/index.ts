@@ -12,6 +12,7 @@ import vnpayRouter from "./vnpay.router";
 import statRouter from "./statistic.router";
 import quizRouter from "./quiz.router";
 import lectureRouter from "./lecture.router";
+import testRouter from "./test.router";
 
 export default {
     authRouter,
@@ -28,4 +29,5 @@ export default {
     statRouter,
     quizRouter,
     lectureRouter,
+    testRouter,
 };

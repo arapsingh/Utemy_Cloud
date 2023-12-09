@@ -3,7 +3,6 @@ import authSlice from "./slices/auth.slice";
 import userSlice from "./slices/user.slice";
 import sectionSlice from "./slices/section.slice";
 import courseSlice from "./slices/course.slice";
-import lessonSlice from "./slices/lesson.slice";
 import feedbackSlice from "./slices/feedback.slice";
 import categorySlice from "./slices/category.slice";
 import ratingSlice from "./slices/rating.slice";
@@ -13,6 +12,8 @@ import vnpaySlice from "./slices/vnpay.slice";
 import componentSlice from "./slices/component.slice";
 import statisticSlice from "./slices/statistic.slice";
 import quizSlice from "./slices/quiz.slice";
+import lectureSlice from "./slices/lecture.slice";
+import testSlice from "./slices/test.slice";
 
 // import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
 
@@ -22,7 +23,6 @@ const store = configureStore({
         userSlice: userSlice,
         sectionSlice: sectionSlice,
         courseSlice: courseSlice,
-        lessonSlice: lessonSlice,
         feedbackSlice: feedbackSlice,
         categorySlice: categorySlice,
         ratingSlice: ratingSlice,
@@ -32,6 +32,8 @@ const store = configureStore({
         componentSlice,
         statisticSlice,
         quizSlice,
+        lectureSlice,
+        testSlice,
         // fileStorageSlice: fileStorageSlice,
     },
     middleware: (getDefaultMiddleware) =>

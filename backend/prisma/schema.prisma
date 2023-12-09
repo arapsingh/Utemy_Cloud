@@ -114,8 +114,8 @@ model Lesson {
   description String   @db.Text
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
-  lecture_id  Int      @unique
-  lecture     Lecture  @relation(fields: [lecture_id], references: [id], onDelete: Cascade)
+  lecture_id  Int?     @unique
+  lecture     Lecture? @relation(fields: [lecture_id], references: [id], onDelete: Cascade)
 }
 
 model Lecture {
@@ -135,16 +135,19 @@ model Lecture {
 
 model Test {
   id                 Int           @id @default(autoincrement())
+  title              String        @db.VarChar(100)
   is_delete          Boolean       @default(false)
   is_time_limit      Boolean       @default(false)
   duration           String        @db.VarChar(45)
   pass_percent       Float         @default(0.5) @db.Float
   number_of_question Int? //thêm test detail vào rồi thêm vô sau
+  quiz_group_id      Int
   description        String        @db.Text
   created_at         DateTime      @default(now())
   updated_at         DateTime      @updatedAt
-  lecture_id         Int           @unique
-  lecture            Lecture       @relation(fields: [lecture_id], references: [id], onDelete: Cascade)
+  lecture_id         Int?          @unique
+  lecture            Lecture?      @relation(fields: [lecture_id], references: [id], onDelete: Cascade)
+  quiz_group         QuizGroup     @relation(fields: [quiz_group_id], references: [id], onDelete: Cascade)
   test_detail        TestDetail[]
   test_history       TestHistory[]
 }
@@ -191,15 +194,17 @@ model TestHistoryDetail {
 }
 
 model QuizGroup {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(100)
-  description String   @db.Text
-  user_id     Int
-  is_delete   Boolean  @default(false)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  quiz        Quiz[]
-  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id             Int      @id @default(autoincrement())
+  title          String   @db.VarChar(100)
+  description    String   @db.Text
+  user_id        Int
+  number_of_quiz Int?     @default(0)
+  is_delete      Boolean  @default(false)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  quiz           Quiz[]
+  user           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  test           Test[]
 
   @@map(name: "quiz_group")
 }

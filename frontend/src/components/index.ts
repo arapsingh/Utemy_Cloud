@@ -14,6 +14,8 @@ import StudyPopup from "./Popup/StudyPopup";
 import TextEditor from "./TextEditor";
 import WatchVideoHeader from "./Header/HeaderWatchVideo";
 import Carousel from "./CarouselUtemy";
+import PopupChoseLectureType from "./Popup/PopupChoseLectureType";
+import PopupAddTest from "./Popup/PopupAddTest";
 
 export {
     Spin,
@@ -32,4 +34,6 @@ export {
     TextEditor,
     WatchVideoHeader,
     Carousel,
+    PopupChoseLectureType,
+    PopupAddTest,
 };
