@@ -33,6 +33,12 @@ const VnPayReturn = () => {
         vnp_TxnRef,
     };
     useEffect(() => {
+        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+
+        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        if ('zoom' in document.documentElement.style) {
+          document.documentElement.style.zoom = `${newZoomValue}`;
+        }       
         dispatch(vnpayActions.vnpayIpn(data)).then((response) => {
             if (response.payload?.status_code === 200) dispatch(cartActions.getAllCart());
         });

@@ -13,6 +13,12 @@ const Verify: React.FC = () => {
     const { token } = useParams();
 
     useEffect(() => {
+        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+
+        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        if ('zoom' in document.documentElement.style) {
+          document.documentElement.style.zoom = `${newZoomValue}`;
+        }       
         dispatch(authActions.verifyEmail(token as string));
     }, [token, dispatch]);
 

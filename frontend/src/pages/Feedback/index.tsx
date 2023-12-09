@@ -7,6 +7,12 @@ import toast from "react-hot-toast";
 import { PhoneIcon, GlobeAsiaAustraliaIcon, BuildingOfficeIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 
 const Feedback: React.FC = () => {
+    const newZoomValue = 0.6; // Đặt giá trị mong muốn
+
+    // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+    if ('zoom' in document.documentElement.style) {
+      document.documentElement.style.zoom = `${newZoomValue}`;
+    }  
     const [feedbackContent, setFeedbackContent] = useState<string>("");
     const [ratingValue, setRatingValue] = useState(5); // Default rating value
 
