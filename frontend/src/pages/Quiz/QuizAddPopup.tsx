@@ -13,6 +13,7 @@ import { QuizAnswerType, QuizType } from "../../types/quiz";
 import { CustomeSelect } from "../../components";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { quizActions } from "../../redux/slices";
+import { addQuizValidationSchema } from "../../validations/quiz";
 // trc khi thêm answer mới thì xóa hết anwser cũ
 type QuizAddPopupProps = {
     handleCancelAdd(): void;
@@ -55,7 +56,7 @@ const QuizAddPopup: React.FC<QuizAddPopupProps> = (props) => {
     const [answer, setAnswer] = useState<QuizAnswerType[]>([]);
     const initialValue = {
         question: "",
-        type: "",
+        type: null,
     };
     const handleOnSubmit = (values: any) => {
         const data: QuizType = {
@@ -114,7 +115,7 @@ const QuizAddPopup: React.FC<QuizAddPopupProps> = (props) => {
                 <h1 className="text-3xl mb-1 font-bold text-center text-lightblue text-title">Tạo câu hỏi mới</h1>
                 <div className="w-full p-[12px]">
                     <Formik
-                        // validationSchema={addLessonValidationSchema}
+                        validationSchema={addQuizValidationSchema}
                         initialValues={initialValue}
                         onSubmit={handleOnSubmit}
                         innerRef={formikRef}
@@ -149,7 +150,7 @@ const QuizAddPopup: React.FC<QuizAddPopupProps> = (props) => {
                                     <br />
                                     <Field
                                         // className="custom-select"
-                                        name="status"
+                                        name="type"
                                         component={CustomeSelect}
                                         handleOnchange={(e: any) => handleChangeStatus(e, formik)}
                                         options={typeOptions}

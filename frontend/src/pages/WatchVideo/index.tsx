@@ -8,20 +8,22 @@ import { VideoPlayer, Accordion, Spin, WatchVideoHeader } from "../../components
 import { Section } from "../../types/section";
 import constants from "../../constants";
 import { Lecture } from "../../types/lecture";
-
+import TestGround from "./TestGround";
+import AfterTestGround from "./AfterTestGround";
+import BeforeTestGround from "./BeforeTestGround";
+import HistoryTest from "./HistoryTest";
 const WatchVideo: React.FC = () => {
     const isGetLoading = useAppSelector((state) => state.courseSlice.isGetLoading);
     const [getLecture, setGetLecture] = useState(false);
     const courseDetail: Course = useAppSelector((state) => state.courseSlice.courseDetail);
+    const testState: number = useAppSelector((state) => state.testSlice.testState);
     const lecture = useAppSelector((state) => state.lectureSlice.lecture) ?? {
         lecture_id: 0,
         content: {
             description: "",
         },
     };
-    console.log("zz", lecture);
-    const test = useAppSelector((state) => state.testSlice.test) ?? {};
-    console.log(test);
+
     const [isNotFound, setIsNotFound] = useState<boolean>(false);
     const [isDisplayBtn] = useState<boolean>(false);
     const handleChangeLesson = (lecture: Lecture) => {
@@ -80,13 +82,14 @@ const WatchVideo: React.FC = () => {
                             </>
                         ) : (
                             <div className="w-full flex-1 shrink-0">
-                                <div className="w-full h-[700px]">
-                                    <h1 className="text-white">Đây là chỗ làm bài test</h1>
-                                </div>
+                                {testState === 0 && <BeforeTestGround />}
+                                {testState === 1 && <TestGround />}
+                                {testState === 2 && <AfterTestGround />}
+                                {testState === 3 && <HistoryTest />}
                             </div>
                         )}
                     </div>
-                    <div className="flex-2   laptop:max-h-[480px]  laptop:overflow-y-auto shrink-0 w-1/4">
+                    <div className="flex-2 laptop:max-h-[480px]  laptop:overflow-y-auto shrink-0 w-1/4">
                         {courseDetail.sections?.map((section: Section, index) => {
                             return (
                                 <Accordion

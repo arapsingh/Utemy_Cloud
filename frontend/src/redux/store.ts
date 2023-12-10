@@ -16,6 +16,7 @@ import lectureSlice from "./slices/lecture.slice";
 import testSlice from "./slices/test.slice";
 
 // import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
+// import { composeWithDevTools } from "redux-devtools-extension";
 
 const store = configureStore({
     reducer: {
@@ -43,7 +44,6 @@ const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-
 export type AppDispatch = typeof store.dispatch;
 
 export default store;

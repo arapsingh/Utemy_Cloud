@@ -16,6 +16,7 @@ import WatchVideoHeader from "./Header/HeaderWatchVideo";
 import Carousel from "./CarouselUtemy";
 import PopupChoseLectureType from "./Popup/PopupChoseLectureType";
 import PopupAddTest from "./Popup/PopupAddTest";
+import CardVideo from "./Card/CardVideo";
 
 export {
     Spin,
@@ -36,4 +37,5 @@ export {
     Carousel,
     PopupChoseLectureType,
     PopupAddTest,
+    CardVideo,
 };

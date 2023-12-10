@@ -327,7 +327,7 @@ const getAllQuizByGroupId = async (req: IRequestWithId): Promise<ResponseBase> =
                 question: quiz.question,
                 type: quiz.type,
                 created_at: quiz.created_at,
-                updated_at: quiz.updated_at,
+                updated_at: quiz.updated_at.toString(),
                 quiz_group_id: quiz.quiz_group_id,
                 quiz_answer: quiz.quiz_answer.map((answer) => {
                     const temp = { quiz_answer_id: answer.id, answer: answer.answer, is_correct: answer.is_correct };
