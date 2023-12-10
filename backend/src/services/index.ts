@@ -10,6 +10,10 @@ import CartServices from "./cart.services";
 import VnpayServices from "./vnpay_services";
 import InvoiceServices from "./invoice.services";
 import StatisticServices from "./statistic.services";
+import QuizServices from "./quiz.services";
+import LectureServices from "./lecture.services";
+import TestServices from "./test.services";
+
 export default {
     AuthServices,
     UserService,
@@ -23,4 +27,7 @@ export default {
     VnpayServices,
     InvoiceServices,
     StatisticServices,
+    QuizServices,
+    LectureServices,
+    TestServices,
 };
