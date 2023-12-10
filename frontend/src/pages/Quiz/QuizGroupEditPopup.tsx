@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { QuizGroupType } from "../../types/quiz";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { quizActions } from "../../redux/slices";
+import { addQuizGroupValidationSchema } from "../../validations/quiz";
 type QuizGroupEditPopupProps = {
     handleCancelEdit(): void;
     group: QuizGroupType;
@@ -36,7 +37,7 @@ const QuizGroupEditPopup: React.FC<QuizGroupEditPopupProps> = (props) => {
                 <h1 className="text-3xl mb-1 font-bold text-center text-lightblue text-title">Chỉnh sửa bộ câu hỏi</h1>
                 <div className="w-full p-[12px]">
                     <Formik
-                        // validationSchema={EditLessonValidationSchema}
+                        validationSchema={addQuizGroupValidationSchema}
                         initialValues={initialValue}
                         onSubmit={handleOnSubmit}
                         innerRef={formikRef}

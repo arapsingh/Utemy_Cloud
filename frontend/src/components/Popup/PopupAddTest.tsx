@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Formik, Field, ErrorMessage } from "formik";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-
+import { addTestValidationSchema } from "../../validations/lesson";
 import toast, { Toaster } from "react-hot-toast";
 
 import TextEditor from "../TextEditor";
@@ -38,6 +38,10 @@ const limitOptions = [
         value: false,
         label: "Không",
     },
+    {
+        value: true,
+        label: "Có",
+    },
 ];
 
 const PopupAddTest: React.FC<AddTestPopupProps> = (props) => {
@@ -48,10 +52,10 @@ const PopupAddTest: React.FC<AddTestPopupProps> = (props) => {
     const initialValue = {
         title: "",
         description: "",
-        is_time_limit: false,
+        is_time_limit: null,
         duration: "",
         pass_percent: 50,
-        quiz_group_id: 0,
+        quiz_group_id: null,
     };
     const handleDescriptionChange = (description: string, formik: any) => {
         formik.setFieldValue("description", description);
@@ -64,6 +68,7 @@ const PopupAddTest: React.FC<AddTestPopupProps> = (props) => {
     };
     const dispatch = useAppDispatch();
     const handleOnSubmit = (values: any) => {
+        console.log("submit", values);
         let formData = new FormData();
         formData.append("title", values.title);
         formData.append(props.changeType ? "lecture_id" : "section_id", props.sectionId.toString());
@@ -110,7 +115,7 @@ const PopupAddTest: React.FC<AddTestPopupProps> = (props) => {
                         Thêm bài kiểm tra mới
                     </h1>
                     <Formik
-                        // validationSchema={addLessonValidationSchema}
+                        validationSchema={addTestValidationSchema}
                         initialValues={initialValue}
                         onSubmit={handleOnSubmit}
                         innerRef={formikRef}
@@ -192,6 +197,12 @@ const PopupAddTest: React.FC<AddTestPopupProps> = (props) => {
                                         Giới hạn thời gian ?
                                     </label>{" "}
                                     <br />
+                                    <ErrorMessage
+                                        name="is_time_limit"
+                                        component="span"
+                                        className="text-[14px] text-error font-medium"
+                                    />
+                                    <br />
                                     <Field
                                         handleOnchange={(e: any) => handleChangeLimit(e, formik)}
                                         component={CustomeSelect}
@@ -205,17 +216,17 @@ const PopupAddTest: React.FC<AddTestPopupProps> = (props) => {
                                             "border-error"
                                         } `}
                                     />
-                                    <br />
-                                    <ErrorMessage
-                                        name="is_time_limit"
-                                        component="span"
-                                        className="text-[14px] text-error font-medium"
-                                    />
                                 </div>
                                 <div className="px-5 py-1">
                                     <label htmlFor="quiz_group_id" className="text-sm mb-1 tablet:text-xl font-medium">
                                         Chọn bộ câu hỏi
                                     </label>{" "}
+                                    <br />
+                                    <ErrorMessage
+                                        name="quiz_group_id"
+                                        component="span"
+                                        className="text-[14px] text-error font-medium"
+                                    />
                                     <br />
                                     <Field
                                         handleOnchange={(e: any) => handleChangeQuizGroup(e, formik)}
@@ -229,12 +240,6 @@ const PopupAddTest: React.FC<AddTestPopupProps> = (props) => {
                                             formik.touched.quiz_group_id &&
                                             "border-error"
                                         } `}
-                                    />
-                                    <br />
-                                    <ErrorMessage
-                                        name="quiz_group_id"
-                                        component="span"
-                                        className="text-[14px] text-error font-medium"
                                     />
                                 </div>
                                 <div className="px-5 py-3">

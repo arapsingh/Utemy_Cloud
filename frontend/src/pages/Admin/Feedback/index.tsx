@@ -51,8 +51,9 @@ export function FeedbackAdmin() {
                                 <h2 className="text-2xl font-bold mb-2">Lọc theo điểm số</h2>
                                 {eveluateList.map((evaluateItem, index) => {
                                     return (
-                                        <div
-                                            className={`flex items-center justify-between mb-1 ${
+                                        <label
+                                            htmlFor={evaluateItem.title}
+                                            className={`flex items-center justify-between mb-1 hover:cursor-pointer ${
                                                 evaluate ? (evaluate === 5 - index ? "" : "opacity-30") : ""
                                             } `}
                                             key={index}
@@ -77,7 +78,7 @@ export function FeedbackAdmin() {
                                                 totalScore={5 - index}
                                                 isForCourse={false}
                                             />
-                                        </div>
+                                        </label>
                                     );
                                 })}
                             </div>

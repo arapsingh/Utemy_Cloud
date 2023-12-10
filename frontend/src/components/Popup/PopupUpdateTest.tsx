@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Formik, Field, ErrorMessage } from "formik";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-
+import { addTestValidationSchema } from "../../validations/lesson";
 import toast, { Toaster } from "react-hot-toast";
 
 import TextEditor from "../TextEditor";
@@ -36,6 +36,10 @@ const limitOptions = [
     {
         value: false,
         label: "Không",
+    },
+    {
+        value: true,
+        label: "Có",
     },
 ];
 
@@ -116,7 +120,7 @@ const PopupUpdateTest: React.FC<UpdateTestPopupProps> = (props) => {
                 <div className="w-full p-[12px]">
                     <h1 className="text-3xl mb-1 font-bold text-center text-lightblue text-title">Sửa bài kiểm tra</h1>
                     <Formik
-                        // validationSchema={addLessonValidationSchema}
+                        validationSchema={addTestValidationSchema}
                         initialValues={initialValue}
                         onSubmit={handleOnSubmit}
                         innerRef={formikRef}
@@ -199,6 +203,12 @@ const PopupUpdateTest: React.FC<UpdateTestPopupProps> = (props) => {
                                         Giới hạn thời gian ?
                                     </label>{" "}
                                     <br />
+                                    <ErrorMessage
+                                        name="is_time_limit"
+                                        component="span"
+                                        className="text-[14px] text-error font-medium"
+                                    />
+                                    <br />
                                     <Field
                                         handleOnchange={(e: any) => handleChangeLimit(e, formik)}
                                         component={CustomeSelect}
@@ -213,17 +223,17 @@ const PopupUpdateTest: React.FC<UpdateTestPopupProps> = (props) => {
                                             "border-error"
                                         } `}
                                     />
-                                    <br />
-                                    <ErrorMessage
-                                        name="is_time_limit"
-                                        component="span"
-                                        className="text-[14px] text-error font-medium"
-                                    />
                                 </div>
                                 <div className="px-5 py-1">
                                     <label htmlFor="quiz_group_id" className="text-sm mb-1 tablet:text-xl font-medium">
                                         Chọn bộ câu hỏi
                                     </label>{" "}
+                                    <br />
+                                    <ErrorMessage
+                                        name="quiz_group_id"
+                                        component="span"
+                                        className="text-[14px] text-error font-medium"
+                                    />
                                     <br />
                                     <Field
                                         handleOnchange={(e: any) => handleChangeQuizGroup(e, formik)}
@@ -240,12 +250,6 @@ const PopupUpdateTest: React.FC<UpdateTestPopupProps> = (props) => {
                                             formik.touched.quiz_group_id &&
                                             "border-error"
                                         } `}
-                                    />
-                                    <br />
-                                    <ErrorMessage
-                                        name="quiz_group_id"
-                                        component="span"
-                                        className="text-[14px] text-error font-medium"
                                     />
                                 </div>
                                 <div className="px-5 py-3">

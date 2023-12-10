@@ -3,7 +3,7 @@ import { Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/re
 import { ThreedotIcon, EditIcon, DeleteIcon } from "../../assets/icons";
 import { HandThumbUpIcon, HandThumbDownIcon } from "@heroicons/react/24/solid";
 import { QuizType } from "../../types/quiz";
-
+import { convertStringDate } from "../../utils/helper";
 // import { orderLesson } from "../../types/lesson";
 type QuizCardProps = {
     quiz: QuizType;
@@ -28,7 +28,9 @@ const QuizCard: React.FC<QuizCardProps> = (props) => {
                     </AccordionHeader>
                     <AccordionBody className=" flex justify-between items-center text-base font-normal">
                         <h1 className="text-black">Loại câu hỏi: {props.quiz.type === 1 && "Trắc nghiệm"}</h1>
-                        <h1 className="text-black">Ngày chỉnh sửa gần đây: {props.quiz.updated_at}</h1>
+                        <h1 className="text-black">
+                            Ngày chỉnh sửa gần đây: {convertStringDate(props.quiz.updated_at as string)}
+                        </h1>
                     </AccordionBody>
 
                     <div className="gap-2 items-center ">

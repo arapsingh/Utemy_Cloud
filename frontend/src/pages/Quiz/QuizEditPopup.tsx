@@ -13,6 +13,7 @@ import { QuizAnswerType, QuizType } from "../../types/quiz";
 import { CustomeSelect } from "../../components";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { quizActions } from "../../redux/slices";
+import { addQuizValidationSchema } from "../../validations/quiz";
 // import { orderLesson } from "../../types/lesson";
 // trc khi thêm answer mới thì xóa hết anwser cũ
 type QuizEditPopupProps = {
@@ -120,7 +121,7 @@ const QuizEditPopup: React.FC<QuizEditPopupProps> = (props) => {
                 <h1 className="text-3xl mb-1 font-bold text-center text-lightblue text-title">Chỉnh sửa câu hỏi</h1>
                 <div className="w-full p-[12px]">
                     <Formik
-                        // validationSchema={addLessonValidationSchema}
+                        validationSchema={addQuizValidationSchema}
                         initialValues={initialValue}
                         onSubmit={handleOnSubmit}
                         innerRef={formikRef}
