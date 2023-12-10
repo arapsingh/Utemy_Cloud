@@ -10,6 +10,9 @@ import CartController from "./cart.controller";
 import InvoiceController from "./invoice.controller,";
 import VnpayController from "./vnpay.controller";
 import StatisticController from "./statistic.controller";
+import QuizController from "./quiz.controller";
+import LectureController from "./lecture.controller";
+import TestController from "./test.controller";
 
 export default {
     authController: new AuthController(),
@@ -24,4 +27,7 @@ export default {
     invoiceController: new InvoiceController(),
     vnpayController: new VnpayController(),
     statisticController: new StatisticController(),
+    quizController: new QuizController(),
+    lectureController: new LectureController(),
+    testController: new TestController(),
 };
