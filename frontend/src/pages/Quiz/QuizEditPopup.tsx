@@ -14,6 +14,7 @@ import { CustomeSelect } from "../../components";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { quizActions } from "../../redux/slices";
 import { addQuizValidationSchema } from "../../validations/quiz";
+import { checkAnswerArray } from "../../utils/helper";
 // import { orderLesson } from "../../types/lesson";
 // trc khi thêm answer mới thì xóa hết anwser cũ
 type QuizEditPopupProps = {
@@ -68,6 +69,10 @@ const QuizEditPopup: React.FC<QuizEditPopupProps> = (props) => {
         };
         if (answer.length !== 4) {
             setError("Loại câu hỏi trắc nghiệm yêu cầu 4 câu trả lời");
+            return;
+        }
+        if (!checkAnswerArray(answer)) {
+            toast.error("One correct answer required");
             return;
         }
         dispatch(quizActions.updateQuiz(data)).then((response) => {
