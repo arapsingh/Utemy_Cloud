@@ -1,4 +1,5 @@
 import { Course } from "../types/course";
+import { QuizAnswerType } from "../types/quiz";
 
 export const previewImage = (image: File | null, imageRef: React.RefObject<HTMLImageElement>, imageSource?: string) => {
     if (image && image.type.includes("image/")) {
@@ -114,4 +115,11 @@ export const secondsToMinutesAndSeconds = (seconds: number) => {
     const formattedSeconds = remainingSeconds.toString().padStart(2, "0");
 
     return `${formattedMinutes}:${formattedSeconds}`;
+};
+export const checkAnswerArray = (array: QuizAnswerType[]) => {
+    let count = 0;
+    array.forEach((answer) => {
+        if (answer.is_correct) count += 1;
+    });
+    return count === 1;
 };
