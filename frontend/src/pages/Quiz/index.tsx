@@ -11,114 +11,6 @@ import QuizGroupEditPopup from "./QuizGroupEditPopup";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { quizActions } from "../../redux/slices";
 import { SearchIcon } from "../../assets/icons";
-// const data: QuizType[] = [
-//     {
-//         quiz_id: 1,
-//         quiz_group_id: 1,
-//         type: 1,
-//         question: "Con voi có màu gì",
-//         updated_at: new Date().toString(),
-//         quiz_answer: [
-//             {
-//                 quiz_answer_id: 1,
-//                 answer: "Câu trả lời",
-//                 is_correct: true,
-//             },
-//             {
-//                 quiz_answer_id: 2,
-//                 answer: "Câu trả sai 1",
-//                 is_correct: false,
-//             },
-//             {
-//                 quiz_answer_id: 3,
-//                 answer: "Câu trả sai 2",
-//                 is_correct: false,
-//             },
-//             {
-//                 quiz_answer_id: 4,
-//                 answer: "Câu trả sai 3",
-//                 is_correct: false,
-//             },
-//         ],
-//     },
-//     {
-//         quiz_id: 2,
-//         quiz_group_id: 1,
-//         type: 1,
-//         question: "Con chó có màu gì",
-//         updated_at: new Date().toString(),
-//         quiz_answer: [
-//             {
-//                 quiz_answer_id: 5,
-//                 answer: "Câu trả lời",
-//                 is_correct: true,
-//             },
-//             {
-//                 quiz_answer_id: 6,
-//                 answer: "Câu trả sai 1",
-//                 is_correct: false,
-//             },
-//             {
-//                 quiz_answer_id: 7,
-//                 answer: "Câu trả sai 2",
-//                 is_correct: false,
-//             },
-//             {
-//                 quiz_answer_id: 8,
-//                 answer: "Câu trả sai 3",
-//                 is_correct: false,
-//             },
-//         ],
-//     },
-//     {
-//         quiz_id: 3,
-//         quiz_group_id: 1,
-//         type: 1,
-//         question: "Con gà có màu gì",
-//         updated_at: new Date().toString(),
-//         quiz_answer: [
-//             {
-//                 quiz_answer_id: 9,
-//                 answer: "Câu trả lời",
-//                 is_correct: true,
-//             },
-//             {
-//                 quiz_answer_id: 10,
-//                 answer: "Câu trả sai 1",
-//                 is_correct: false,
-//             },
-//             {
-//                 quiz_answer_id: 11,
-//                 answer: "Câu trả sai 2",
-//                 is_correct: false,
-//             },
-//             {
-//                 quiz_answer_id: 12,
-//                 answer: "Câu trả sai 3",
-//                 is_correct: false,
-//             },
-//         ],
-//     },
-// ];
-
-// const dataGroup: QuizGroupType[] = [
-//     {
-//         quiz_group_id: 1,
-//         title: "Bộ câu hỏi 1 Bộ câu hỏi 1 Bộ câu hỏi 1 Bộ câu hỏi 1",
-//         description: "Đây là bộ câu hỏi về chủ đề 1",
-//     },
-//     {
-//         quiz_group_id: 2,
-//         title: "Bộ câu hỏi 2",
-//         description:
-//             "Đây là bộ câu hỏi về chủ đề 2 Đây là bộ câu hỏi về chủ đề 2 Đây là bộ câu hỏi về chủ đề 2 Đây là bộ câu hỏi về chủ đề 2",
-//     },
-//     {
-//         quiz_group_id: 3,
-//         title: "Bộ câu hỏi 3",
-//         description: "Đây là bộ câu hỏi về chủ đề 3",
-//     },
-// ];
 
 const QuizHome: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -146,6 +38,7 @@ const QuizHome: React.FC = () => {
     }, [dispatch]);
     useEffect(() => {
         if (groupId === 0) return;
+
         const data = {
             quiz_group_id: groupId,
             searchItem: searchItem,

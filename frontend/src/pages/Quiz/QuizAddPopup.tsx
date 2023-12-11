@@ -14,6 +14,7 @@ import { CustomeSelect } from "../../components";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { quizActions } from "../../redux/slices";
 import { addQuizValidationSchema } from "../../validations/quiz";
+import { checkAnswerArray } from "../../utils/helper";
 // trc khi thêm answer mới thì xóa hết anwser cũ
 type QuizAddPopupProps = {
     handleCancelAdd(): void;
@@ -59,6 +60,10 @@ const QuizAddPopup: React.FC<QuizAddPopupProps> = (props) => {
         type: null,
     };
     const handleOnSubmit = (values: any) => {
+        if (props.groupId === 0) {
+            toast.error("Please choose group before add quiz");
+            return;
+        }
         const data: QuizType = {
             ...values,
             quiz_group_id: props.groupId,
@@ -66,6 +71,10 @@ const QuizAddPopup: React.FC<QuizAddPopupProps> = (props) => {
         };
         if (answer.length !== 4) {
             setError("Loại câu hỏi trắc nghiệm yêu cầu 4 câu trả lời");
+            return;
+        }
+        if (!checkAnswerArray(answer)) {
+            toast.error("One correct answer required");
             return;
         }
         //dispatch add quiz

@@ -11,27 +11,28 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  first_name   String        @db.VarChar(30)
-  last_name    String        @db.VarChar(30)
-  email        String        @unique @db.VarChar(50)
-  password     String        @db.Text
-  description  String?       @db.Text
-  url_avatar   String?       @db.Text
-  created_at   DateTime      @default(now())
-  updated_at   DateTime      @updatedAt
-  is_verify    Boolean       @default(false)
-  token        String?       @db.Text
-  is_admin     Boolean       @default(false)
-  is_deleted   Boolean       @default(false)
-  courses      Course[]
-  enrolleds    Enrolled[]
-  ratings      Rating[]
-  carts        Cart[]
-  feedbacks    Feedback[]
-  invoices     Invoice[]
-  test_history TestHistory[]
-  quiz_group   QuizGroup[]
+  id             Int             @id @default(autoincrement())
+  first_name     String          @db.VarChar(30)
+  last_name      String          @db.VarChar(30)
+  email          String          @unique @db.VarChar(50)
+  password       String          @db.Text
+  description    String?         @db.Text
+  url_avatar     String?         @db.Text
+  created_at     DateTime        @default(now())
+  updated_at     DateTime        @updatedAt
+  is_verify      Boolean         @default(false)
+  token          String?         @db.Text
+  is_admin       Boolean         @default(false)
+  is_deleted     Boolean         @default(false)
+  courses        Course[]
+  enrolleds      Enrolled[]
+  ratings        Rating[]
+  carts          Cart[]
+  feedbacks      Feedback[]
+  invoices       Invoice[]
+  test_history   TestHistory[]
+  quiz_group     QuizGroup[]
+  coupon_history CouponHistory[]
 
   @@index([email], name: "idx_email")
 }
@@ -327,4 +328,24 @@ model Feedback {
   score      Int
   created_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Coupon {
+  id             Int             @id @default(autoincrement())
+  code           String          @db.VarChar(30)
+  discount       Float
+  is_delete      Boolean         @default(false)
+  valid_start    DateTime        @default(now())
+  valid_until    DateTime
+  coupon_history CouponHistory[]
+}
+
+model CouponHistory {
+  id        Int    @id @default(autoincrement())
+  coupon_id Int
+  coupon    Coupon @relation(fields: [coupon_id], references: [id], onDelete: Cascade)
+  user_id   Int
+  user      User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map(name: "coupon_history")
 }
