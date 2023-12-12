@@ -159,10 +159,10 @@ const Cart: React.FC = () => {
                             <p className="text-gray-600 text-3xl font-bold">Tổng cộng</p>
                             <div>
                                 <p className="text-end text-lightblue text-3xl font-bold">
-                                    đ
                                     {discount
                                         ? (subTotal * (1 - discount)).toLocaleString()
                                         : subTotal.toLocaleString()}
+                                    đ
                                 </p>
                             </div>
                         </div>
