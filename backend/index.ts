@@ -9,7 +9,7 @@ const port: number = configs.general.PORT;
 // Chỉ định cấu hình CORS
 const corsOptions = {
     origin: "*", // Chỉ cho phép yêu cầu từ trang web này
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Các phương thức được phép
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Các phương thức được phép
     credentials: true, // Cho phép sử dụng cookie hoặc header xác thực
     optionsSuccessStatus: 200, // Mã trạng thái cho các yêu cầu OPTIONS thành công
 };
