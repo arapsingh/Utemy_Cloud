@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model User {
@@ -35,6 +36,7 @@ model User {
   coupon_history CouponHistory[]
 
   @@index([email], name: "idx_email")
+  @@map(name: "user")
 }
 
 model Category {
@@ -43,6 +45,7 @@ model Category {
   url_image         String           @db.Text
   description       String           @db.Text
   course_categories CourseCategory[]
+  @@map(name: "category")
 }
 
 model Course {
@@ -82,6 +85,7 @@ model Course {
 
   @@index([slug], name: "idx_slug")
   @@index([title], name: "idx_title")
+  @@map(name: "course")
 }
 
 model CourseCategory {
@@ -104,6 +108,7 @@ model Section {
   course_id  Int
   Course     Course?   @relation(fields: [course_id], references: [id], onDelete: Cascade)
   Lecture    Lecture[]
+  @@map(name: "section")
 }
 
 model Lesson {
@@ -117,6 +122,7 @@ model Lesson {
   updated_at  DateTime @updatedAt
   lecture_id  Int?     @unique
   lecture     Lecture? @relation(fields: [lecture_id], references: [id], onDelete: Cascade)
+  @@map(name: "lesson")
 }
 
 model Lecture {
@@ -132,6 +138,7 @@ model Lecture {
   lesson     Lesson?
   // test_id    Int?
   test       Test?
+  @@map(name: "lecture")
 }
 
 model Test {
@@ -151,6 +158,7 @@ model Test {
   quiz_group         QuizGroup     @relation(fields: [quiz_group_id], references: [id], onDelete: Cascade)
   test_detail        TestDetail[]
   test_history       TestHistory[]
+  @@map(name: "test")
 }
 
 model TestDetail {
@@ -222,6 +230,7 @@ model Quiz {
   test_detail         TestDetail[]
   quiz_answer         QuizAnswer[]
   test_history_detail TestHistoryDetail[]
+  @@map(name: "quiz")
 }
 
 model QuizAnswer {
@@ -248,6 +257,7 @@ model Rating {
   Course     Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
 
   User User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@map(name: "rating")
 }
 
 model Enrolled {
@@ -257,6 +267,7 @@ model Enrolled {
   course_id  Int
   course     Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@map(name: "enrolled")
 }
 
 model Cart {
@@ -264,6 +275,7 @@ model Cart {
   user_id     Int
   user        User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
   cart_detail CartDetail[]
+  @@map(name: "cart")
 }
 
 model CartDetail {
@@ -294,6 +306,7 @@ model Transaction {
   vnp_transaction_no String  @db.Text
   vnp_txn_ref        String  @db.Text
   invoice            Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+  @@map(name: "transaction")
 }
 
 model Invoice {
@@ -305,6 +318,7 @@ model Invoice {
   user           User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
   invoice_detail InvoiceDetail[]
   Transaction    Transaction[]
+  @@map(name: "invoice")
 }
 
 model InvoiceDetail {
@@ -328,6 +342,7 @@ model Feedback {
   score      Int
   created_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@map(name: "feedback")
 }
 
 model Coupon {
@@ -338,6 +353,7 @@ model Coupon {
   valid_start    DateTime        @default(now())
   valid_until    DateTime
   coupon_history CouponHistory[]
+  @@map(name: "coupon")
 }
 
 model CouponHistory {

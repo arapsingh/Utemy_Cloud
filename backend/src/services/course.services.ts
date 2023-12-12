@@ -1138,7 +1138,7 @@ const getRatingPercentOfCourse = async (req: Request): Promise<ResponseBase> => 
         if (!isFoundCourse) return new ResponseError(404, constants.error.ERROR_COURSE_NOT_FOUND, false);
         else {
             const ratingCountPerScore: any[] = await configs.db
-                .$queryRaw`select count(id) as rating_count, score from Rating where Rating.course_id = ${isFoundCourse.id}  group by score  order by score desc;`;
+                .$queryRaw`select count(id) as rating_count, score from rating where rating.course_id = ${isFoundCourse.id}  group by score  order by score desc;`;
             const scoreThatHasPercent: Record<number | string, number> = ratingCountPerScore.reduce(
                 (acc: any, rating: any) => {
                     acc[rating.score] = Number(
