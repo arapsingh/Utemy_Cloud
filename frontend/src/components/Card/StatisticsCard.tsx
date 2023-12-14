@@ -7,8 +7,9 @@ type StatisticCardProps = {
     title: string;
     value: any;
     footer?: any;
+    placeholder?: string;
 };
-const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, value, footer }) => {
+const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, value, footer, placeholder }) => {
     return (
         <Card className="border border-blue-gray-100 shadow-sm" placeholder={undefined}>
             <CardHeader
