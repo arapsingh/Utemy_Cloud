@@ -17,6 +17,7 @@ const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, valu
                 floated={false}
                 shadow={false}
                 className="absolute grid h-12 w-12 place-items-center"
+                placeholder={undefined}
             >
                 {icon && React.createElement(icon, { className: "h-6 w-6 text-black" })}
             </CardHeader>
