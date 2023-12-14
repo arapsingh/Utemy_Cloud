@@ -67,6 +67,7 @@ export function Sidebar() {
                                 } `}
                                 fullWidth
                                 onClick={() => handleClick("Category")}
+                                placeholder={undefined}
                             >
                                 <ServerStackIcon className="h-6 w-6" />
                                 <Typography color="inherit" className="font-medium capitalize" placeholder={undefined}>
@@ -83,6 +84,7 @@ export function Sidebar() {
                                 } `}
                                 fullWidth
                                 onClick={() => handleClick("User")}
+                                placeholder={undefined}
                             >
                                 <UserCircleIcon className="h-6 w-6" />
                                 <Typography color="inherit" className="font-medium capitalize" placeholder={undefined}>
@@ -101,6 +103,7 @@ export function Sidebar() {
                                 } `}
                                 fullWidth
                                 onClick={() => handleClick("UserCreate")}
+                                placeholder={undefined}
                             >
                                 <PlusCircleIcon className="h-6 w-6" />
                                 <Typography color="inherit" className="font-medium capitalize" placeholder={undefined}>
@@ -118,6 +121,7 @@ export function Sidebar() {
                                 } `}
                                 fullWidth
                                 onClick={() => handleClick("Feedback")}
+                                placeholder={undefined}
                             >
                                 <ClipboardDocumentListIcon className="h-6 w-6" />
                                 <Typography color="inherit" className="font-medium capitalize" placeholder={undefined}>
@@ -134,6 +138,7 @@ export function Sidebar() {
                                 } `}
                                 fullWidth
                                 onClick={() => handleClick("Profile")}
+                                placeholder={undefined}
                             >
                                 <HeartIcon className="h-6 w-6" />
                                 <Typography color="inherit" className="font-medium capitalize" placeholder={undefined}>
@@ -148,6 +153,7 @@ export function Sidebar() {
                             className={`flex items-center  gap-4 px-4 capitalize ${"btn-error hover:shadow-red-400/80"} `}
                             fullWidth
                             onClick={() => handleLogout()}
+                            placeholder={undefined}
                         >
                             {/* <LogoutIcon /> */}
                             <XMarkIcon className="h-6 w-6" />
