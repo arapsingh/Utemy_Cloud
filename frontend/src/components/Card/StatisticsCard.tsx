@@ -1,7 +1,6 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography } from "@material-tailwind/react";
 import { color } from "@material-tailwind/react/types/components/alert";
 import React from "react";
-
 type StatisticCardProps = {
     color: string;
     icon: React.ElementType;
@@ -9,16 +8,16 @@ type StatisticCardProps = {
     value: any;
     footer?: any;
 };
-
 const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, value, footer }) => {
     return (
-        <Card className="border border-blue-gray-100 shadow-sm" placeholder="Your Placeholder Value">
+        <Card className="border border-blue-gray-100 shadow-sm">
             <CardHeader
                 variant="gradient"
                 color={color as color}
                 floated={false}
                 shadow={false}
                 className="absolute grid h-12 w-12 place-items-center"
+                placeholder= "" 
             >
                 {icon && React.createElement(icon, { className: "h-6 w-6 text-black" })}
             </CardHeader>
