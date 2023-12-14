@@ -34,7 +34,7 @@ export function Sidebar() {
         >
             <div className={`relative`}>
                 <Link to="/" className="py-6 px-8 text-3xl text-center">
-                    <Typography variant="h1" color="white">
+                    <Typography variant="h1" color="white" placeholder={undefined}>
                         Utemy
                     </Typography>
                 </Link>
@@ -53,7 +53,7 @@ export function Sidebar() {
                                 onClick={() => handleClick("dashboard")}
                             >
                                 <HomeIcon className="w-6 h-6" />
-                                <Typography color="inherit" className="font-medium capitalize">
+                                <Typography color="inherit" className="font-medium capitalize" placeholder={undefined}>
                                     {"Thống kê"}
                                 </Typography>
                             </Button>
@@ -69,7 +69,7 @@ export function Sidebar() {
                                 onClick={() => handleClick("Category")}
                             >
                                 <ServerStackIcon className="h-6 w-6" />
-                                <Typography color="inherit" className="font-medium capitalize">
+                                <Typography color="inherit" className="font-medium capitalize" placeholder={undefined}>
                                     {"Danh mục"}
                                 </Typography>
                             </Button>
@@ -85,7 +85,7 @@ export function Sidebar() {
                                 onClick={() => handleClick("User")}
                             >
                                 <UserCircleIcon className="h-6 w-6" />
-                                <Typography color="inherit" className="font-medium capitalize">
+                                <Typography color="inherit" className="font-medium capitalize" placeholder={undefined}>
                                     {"Người dùng"}
                                 </Typography>
                             </Button>
@@ -103,7 +103,7 @@ export function Sidebar() {
                                 onClick={() => handleClick("UserCreate")}
                             >
                                 <PlusCircleIcon className="h-6 w-6" />
-                                <Typography color="inherit" className="font-medium capitalize">
+                                <Typography color="inherit" className="font-medium capitalize" placeholder={undefined}>
                                     {"Thêm người dùng"}
                                 </Typography>
                             </Button>
@@ -120,7 +120,7 @@ export function Sidebar() {
                                 onClick={() => handleClick("Feedback")}
                             >
                                 <ClipboardDocumentListIcon className="h-6 w-6" />
-                                <Typography color="inherit" className="font-medium capitalize">
+                                <Typography color="inherit" className="font-medium capitalize" placeholder={undefined}>
                                     Phản hồi
                                 </Typography>
                             </Button>
@@ -136,7 +136,7 @@ export function Sidebar() {
                                 onClick={() => handleClick("Profile")}
                             >
                                 <HeartIcon className="h-6 w-6" />
-                                <Typography color="inherit" className="font-medium capitalize">
+                                <Typography color="inherit" className="font-medium capitalize" placeholder={undefined}>
                                     Trang cá nhân
                                 </Typography>
                             </Button>
@@ -151,7 +151,7 @@ export function Sidebar() {
                         >
                             {/* <LogoutIcon /> */}
                             <XMarkIcon className="h-6 w-6" />
-                            <Typography color="white" className="font-medium capitalize">
+                            <Typography color="white" className="font-medium capitalize" placeholder={undefined}>
                                 Đăng xuất
                             </Typography>
                         </Button>
