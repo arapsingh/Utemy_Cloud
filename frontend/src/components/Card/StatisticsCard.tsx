@@ -8,23 +8,21 @@ type StatisticCardProps = {
     title: string;
     value: any;
     footer?: any;
-    // Thêm thuộc tính placeholder vào StatisticCardProps nếu bạn thực sự cần nó
-    placeholder?: string;
+    placeholder?: React.ReactNode; // Adjust the type accordingly
 };
 
 const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, value, footer, placeholder }) => {
     return (
         <Card className="border border-blue-gray-100 shadow-sm">
             <CardHeader
-                variant="gradient"
+                variant="filled"
                 color={color as color}
                 floated={false}
                 shadow={false}
                 className="absolute grid h-12 w-12 place-items-center"
             >
                 {icon && React.createElement(icon, { className: "h-6 w-6 text-black" })}
-                {/* Sử dụng placeholder nếu nó được truyền vào */}
-                {placeholder && <div>{placeholder}</div>}
+                {placeholder}
             </CardHeader>
             <CardBody className="p-4 text-right">
                 <Typography variant="small" className="font-normal text-blue-gray-600">
