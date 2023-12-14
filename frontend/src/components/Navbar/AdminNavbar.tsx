@@ -50,6 +50,7 @@ function ProfileMenu() {
                         withBorder={true}
                         className="border border-gray-400 p-0.5"
                         src={user.url_avatar ? user.url_avatar : Logo}
+                        placeholder={undefined}
                     />
                     <ChevronDownIcon
                         strokeWidth={2.5}
@@ -98,7 +99,7 @@ export function AdminNavbar() {
     return (
         <Navbar className="mx-auto my-2 max-w-screen-xl bg-gray-300 p-2 lg:rounded-full lg:pl-6">
             <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
-                <Avatar src={Utemy} className="rounded-full" />
+                <Avatar src={Utemy} className="rounded-full" placeholder={undefined} />
                 {/* <Typography as="a" href="#" className="mr-4 ml-2 text-black cursor-pointer py-1.5 font-medium">
                     Utemy
                 </Typography> */}
