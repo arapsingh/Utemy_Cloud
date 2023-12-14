@@ -1,26 +1,22 @@
 import { Card, CardHeader, CardBody, CardFooter, Typography } from "@material-tailwind/react";
 import { color } from "@material-tailwind/react/types/components/alert";
 import React from "react";
-
 type StatisticCardProps = {
     color: string;
     icon: React.ElementType;
     title: string;
     value: any;
     footer?: any;
-    placeholder?: string | undefined ; // Adjust the type accordingly
 };
-
-const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, value, footer, placeholder }) => {
+const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, value, footer }) => {
     return (
-        <Card className="border border-blue-gray-100 shadow-sm" placeholder={placeholder}>
+        <Card className="border border-blue-gray-100 shadow-sm">
             <CardHeader
-                variant="filled"
+                variant="gradient"
                 color={color as color}
                 floated={false}
                 shadow={false}
                 className="absolute grid h-12 w-12 place-items-center"
-                placeholder=""
             >
                 {icon && React.createElement(icon, { className: "h-6 w-6 text-black" })}
             </CardHeader>
@@ -36,6 +32,5 @@ const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, valu
         </Card>
     );
 };
-
 
 export default StatisticsCard;
