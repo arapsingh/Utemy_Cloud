@@ -37,7 +37,7 @@ const TimeCounter: React.FC<TimeCounterProps> = (props) => {
     return (
         <>
             <Menu>
-                <MenuHandler>
+                <MenuHandler placeholder={undefined}>
                     <div
                         className={`flex gap-2 items-center border-2 border-black rounded-md p-2 hover:cursor-pointer ${
                             is_time_limit ? "text-error" : "text-success"
@@ -47,8 +47,8 @@ const TimeCounter: React.FC<TimeCounterProps> = (props) => {
                         <span className=" shrink-0">{formatTime(duration)}</span>
                     </div>
                 </MenuHandler>
-                <MenuList>
-                    <MenuItem>
+                <MenuList placeholder={undefined}>
+                    <MenuItem placeholder={undefined}>
                         <button
                             onClick={props.handleOpenFinishPopup}
                             type="button"

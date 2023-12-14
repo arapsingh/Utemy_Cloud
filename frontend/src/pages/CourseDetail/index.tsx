@@ -313,18 +313,20 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                             </div>
                         </div>
                         <div className="mt-8">
-                            <Tabs value={activeTab}>
+                            <Tabs value={activeTab} placeholder={undefined}>
                                 <TabsHeader
                                     className="rounded-none border-b border-blue-gray-50 bg-transparent p-0 w-1/2"
                                     indicatorProps={{
                                         className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                     }}
+                                    placeholder={undefined}
                                 >
                                     <Tab
                                         key={"Description"}
                                         value={"Description"}
                                         onClick={() => setActiveTab("Description")}
                                         className={activeTab === "Description" ? "text-gray-900" : ""}
+                                        placeholder={undefined}
                                     >
                                         Nội dung khóa học
                                     </Tab>
@@ -333,6 +335,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                         value={"Study"}
                                         onClick={() => setActiveTab("Study")}
                                         className={activeTab === "Study" ? "text-gray-900" : ""}
+                                        placeholder={undefined}
                                     >
                                         Nội dung bài học
                                     </Tab>
@@ -343,11 +346,12 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                         value={"Rating"}
                                         onClick={() => setActiveTab("Rating")}
                                         className={activeTab === "Rating" ? "text-gray-900" : ""}
+                                        placeholder={undefined}
                                     >
                                         Đánh giá
                                     </Tab>
                                 </TabsHeader>
-                                <TabsBody>
+                                <TabsBody placeholder={undefined}>
                                     <TabPanel key="Study" value="Study">
                                         <div className="w-1/2">
                                             {courseDetail.study &&
