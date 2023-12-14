@@ -22,11 +22,11 @@ const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, valu
             >
                 {icon && React.createElement(icon, { className: "h-6 w-6 text-black" })}
             </CardHeader>
-            <CardBody className="p-4 text-right">
-                <Typography variant="small" className="font-normal text-blue-gray-600">
+            <CardBody className="p-4 text-right" placeholder={undefined}>
+                <Typography variant="small" className="font-normal text-blue-gray-600" placeholder={undefined}>
                     {title}
                 </Typography>
-                <Typography variant="h4" color="blue-gray">
+                <Typography variant="h4" color="blue-gray" placeholder={undefined}>
                     {value}
                 </Typography>
             </CardBody>
