@@ -578,7 +578,11 @@ const searchMyEnrolledCourse = async (req: IRequestWithId): Promise<ResponseBase
                                 Category: true,
                             },
                         },
-                        sections: true,
+                        sections: {
+                            where: {
+                                is_delete: false,
+                            },
+                        },
                         enrolleds: true,
                     },
                 },

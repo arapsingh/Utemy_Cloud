@@ -114,7 +114,7 @@ const UserAdmin = () => {
         // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
         if ('zoom' in document.documentElement.style) {
           document.documentElement.style.zoom = `${newZoomValue}`;
-        }  
+        }
         dispatch(userActions.getAllUsersWithPagination({ pageIndex, searchItem, role }));
     }, [dispatch, pageIndex, searchItem, role]);
     return (

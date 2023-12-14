@@ -28,7 +28,7 @@ export function Home() {
         // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
         if ('zoom' in document.documentElement.style) {
           document.documentElement.style.zoom = `${newZoomValue}`;
-        }  
+        } 
         dispatch(componentActions.setAdminNavPlace("dashboard"));
         dispatch(statisticActions.getTotalCourse());
         dispatch(statisticActions.getTotalMoney());
@@ -39,7 +39,7 @@ export function Home() {
         dispatch(statisticActions.getRatingPercent());
         dispatch(statisticActions.getMoneyByMonth(currentYear));
         dispatch(statisticActions.getTotalInvoice());
-    }, [dispatch]);
+    }, [currentYear, dispatch]);
 
     const statisticsCardsData = [
         {
