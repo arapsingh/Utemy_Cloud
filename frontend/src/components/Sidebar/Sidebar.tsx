@@ -51,6 +51,7 @@ export function Sidebar() {
                                 } `}
                                 fullWidth
                                 onClick={() => handleClick("dashboard")}
+                                placeholder={undefined}
                             >
                                 <HomeIcon className="w-6 h-6" />
                                 <Typography color="inherit" className="font-medium capitalize" placeholder={undefined}>
