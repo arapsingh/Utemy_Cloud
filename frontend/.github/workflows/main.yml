@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Thay 'main' bằng tên nhánh chính của bạn nếu khác
+      - phuoc_branch5  # Thay 'main' bằng tên nhánh chính của bạn nếu khác
 
 jobs:
   deploy:
