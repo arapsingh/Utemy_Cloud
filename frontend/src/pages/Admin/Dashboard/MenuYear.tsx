@@ -25,7 +25,7 @@ const MenuCustomAnimation = () => {
             }}
         >
             <MenuHandler>
-                <Button className="bg-navy"> {displayYear}</Button>
+                <Button className="bg-navy" placeholder={undefined}> {displayYear}</Button>
             </MenuHandler>
             <MenuList>
                 {yearArray.map((year) => (

@@ -39,6 +39,7 @@ function ProfileMenu() {
                     variant="text"
                     color="blue-gray"
                     className="flex items-center gap-2 px-2 rounded-full py-0.5 lg:ml-auto"
+                    placeholder={undefined}
                 >
                     <Typography color="black" placeholder={undefined}>
                         {user.first_name} {user.last_name}

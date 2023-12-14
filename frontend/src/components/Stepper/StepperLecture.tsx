@@ -44,10 +44,10 @@ const StepperLecture = () => {
                 </Step>
             </Stepper>
             <div className="mt-32 flex justify-between">
-                <Button onClick={handlePrev} disabled={isFirstStep}>
+                <Button onClick={handlePrev} disabled={isFirstStep} placeholder={undefined}>
                     Prev
                 </Button>
-                <Button onClick={handleNext} disabled={isLastStep}>
+                <Button onClick={handleNext} disabled={isLastStep} placeholder={undefined}>
                     Next
                 </Button>
             </div>

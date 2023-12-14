@@ -139,7 +139,7 @@ const UserAdmin = () => {
                         <div className="flex items-center text-start w-full">
                             <Menu>
                                 <MenuHandler>
-                                    <Button className="bg-black w-[90px] text-center">{role}</Button>
+                                    <Button className="bg-black w-[90px] text-center" placeholder={undefined}>{role}</Button>
                                 </MenuHandler>
                                 <MenuList>
                                     <MenuItem
