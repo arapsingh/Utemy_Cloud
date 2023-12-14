@@ -39,7 +39,7 @@ export function Home() {
         dispatch(statisticActions.getRatingPercent());
         dispatch(statisticActions.getMoneyByMonth(currentYear));
         dispatch(statisticActions.getTotalInvoice());
-    }, [currentYear, dispatch]);
+    }, [dispatch]);
 
     const statisticsCardsData = [
         {
