@@ -24,12 +24,12 @@ const MenuCustomAnimation = () => {
                 unmount: { y: 25 },
             }}
         >
-            <MenuHandler>
+            <MenuHandler placeholder={undefined}>
                 <Button className="bg-navy" placeholder={undefined}> {displayYear}</Button>
             </MenuHandler>
-            <MenuList>
+            <MenuList placeholder={undefined}>
                 {yearArray.map((year) => (
-                    <MenuItem className="hover:bg-navy/50" id={year.toString()} onClick={() => handleOnChose(year)}>
+                    <MenuItem className="hover:bg-navy/50" id={year.toString()} onClick={() => handleOnChose(year)} placeholder={undefined}>
                         {year}
                     </MenuItem>
                 ))}
