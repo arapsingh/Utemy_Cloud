@@ -168,6 +168,7 @@ export function Home() {
                                 <Typography
                                     variant="small"
                                     className="flex items-center font-normal text-blue-gray-600"
+                                    placeholder={undefined}
                                 >
                                     <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400" />
                                     &nbsp;{props.footer}
@@ -182,7 +183,7 @@ export function Home() {
                     key={statisticDonutData.title}
                     {...statisticDonutData}
                     footer={
-                        <Typography variant="small" className="flex items-center font-normal text-blue-gray-600">
+                        <Typography variant="small" className="flex items-center font-normal text-blue-gray-600" placeholder={undefined}>
                             <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400" />
                             &nbsp;{statisticDonutData.footer}
                         </Typography>
@@ -193,7 +194,7 @@ export function Home() {
                     {...statisticLineData}
                     footer={
                         <div className="flex justify-between">
-                            <Typography variant="small" className="flex items-center font-normal text-blue-gray-600">
+                            <Typography variant="small" className="flex items-center font-normal text-blue-gray-600" placeholder={undefined}>
                                 <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400" />
                                 &nbsp;{statisticLineData.footer}
                             </Typography>
@@ -201,6 +202,7 @@ export function Home() {
                                 <Typography
                                     variant="small"
                                     className="flex items-center font-normal text-blue-gray-600"
+                                    placeholder={undefined}
                                 >
                                     Năm
                                 </Typography>

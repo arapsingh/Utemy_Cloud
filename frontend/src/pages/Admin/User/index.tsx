@@ -212,6 +212,7 @@ const UserAdmin = () => {
                                                 <Typography
                                                     variant="small"
                                                     className="text-[11px] font-bold uppercase text-blue-gray-400"
+                                                    placeholder={undefined}
                                                 >
                                                     {header}
                                                 </Typography>
@@ -238,6 +239,7 @@ const UserAdmin = () => {
                                                             alt={user.user_id?.toString()}
                                                             size="xs"
                                                             variant="rounded"
+                                                            placeholder={undefined}
                                                         />
                                                         <div>
                                                             <Typography
@@ -246,10 +248,11 @@ const UserAdmin = () => {
                                                                 className={`font-semibold ${
                                                                     user.user_id === currentId ? "text-lightblue" : ""
                                                                 }`}
+                                                                placeholder={undefined}
                                                             >
                                                                 {user.first_name} {user.last_name}
                                                             </Typography>
-                                                            <Typography className="text-xs font-normal text-blue-gray-500">
+                                                            <Typography className="text-xs font-normal text-blue-gray-500" placeholder={undefined}>
                                                                 {user.email}
                                                             </Typography>
                                                         </div>
@@ -273,6 +276,7 @@ const UserAdmin = () => {
                                                     className={`py-0.5 px-2 text-[11px] font-medium w-fit ${
                                                         user.is_delete ? "text-red-700" : "text-green-700"
                                                     }`}
+                                                    placeholder={undefined}
                                                 >
                                                     {user.is_delete ? "Xóa" : "Hoạt động"}
                                                 </Typography>
@@ -281,6 +285,7 @@ const UserAdmin = () => {
                                                 <Typography
                                                     color={"blue-gray"}
                                                     className="py-0.5 px-2 text-[11px] font-medium w-fit"
+                                                    placeholder={undefined}
                                                 >
                                                     {date![1] + " " + date![2] + " " + date![3]}
                                                 </Typography>
@@ -290,6 +295,7 @@ const UserAdmin = () => {
                                                     <Typography
                                                         as="text"
                                                         className="text-xs font-semibold  text-blue-gray-600"
+                                                        placeholder={undefined}
                                                     >
                                                         None
                                                     </Typography>
@@ -300,6 +306,7 @@ const UserAdmin = () => {
                                                         as="text"
                                                         onClick={() => handleOpenEditUserPopup(user)}
                                                         className="text-xs font-semibold hover:underline hover:cursor-pointer text-blue-gray-600"
+                                                        placeholder={undefined}
                                                     >
                                                         Chỉnh sửa
                                                     </Typography>
@@ -308,6 +315,7 @@ const UserAdmin = () => {
                                                             as="text"
                                                             onClick={() => handleOpenActiveModal(id)}
                                                             className="text-xs text-green-700 font-semibold hover:underline hover:cursor-pointer "
+                                                            placeholder={undefined}
                                                         >
                                                             Khôi phục
                                                         </Typography>
@@ -316,6 +324,7 @@ const UserAdmin = () => {
                                                             as="text"
                                                             onClick={() => handleOpenDeleteModal(id)}
                                                             className="text-xs text-red-700 font-semibold hover:underline hover:cursor-pointer "
+                                                            placeholder={undefined}
                                                         >
                                                             Xóa
                                                         </Typography>
