@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, CardFooter, Typography } from "@material-tailwind/react";
+import { Card, CardHeader, CardBody, CardFooter, Typography} from "@material-tailwind/react";
 import { color } from "@material-tailwind/react/types/components/alert";
 import React from "react";
 type StatisticCardProps = {
@@ -10,7 +10,7 @@ type StatisticCardProps = {
 };
 const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, value, footer }) => {
     return (
-        <Card className="border border-blue-gray-100 shadow-sm">
+        <Card className="border border-blue-gray-100 shadow-sm" placeholder="your-placeholder-value">
             <CardHeader
                 variant="gradient"
                 color={color as color}
