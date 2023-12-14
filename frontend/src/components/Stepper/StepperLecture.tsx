@@ -17,8 +17,9 @@ const StepperLecture = () => {
                 activeStep={activeStep}
                 isLastStep={(value) => setIsLastStep(value)}
                 isFirstStep={(value) => setIsFirstStep(value)}
+                placeholder={undefined}
             >
-                <Step>
+                <Step placeholder={undefined}>
                     <QuestionMarkCircleIcon
                         className={`h-5 w-5 ${activeStep === 0 ? "text-black" : "text-gray-400"}`}
                     />
@@ -31,7 +32,7 @@ const StepperLecture = () => {
                         </Typography>
                     </div>
                 </Step>
-                <Step>
+                <Step placeholder={undefined}>
                     <DocumentCheckIcon className={`h-5 w-5 ${activeStep === 1 ? "text-black" : "text-gray-400"}`} />
                     <div className="absolute -bottom-[4.5rem] w-max text-center ">
                         <Typography variant="h6" className={`${activeStep === 1 ? "text-black" : "text-gray-400"}`} placeholder={undefined}>
