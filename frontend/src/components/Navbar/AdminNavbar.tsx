@@ -40,7 +40,7 @@ function ProfileMenu() {
                     color="blue-gray"
                     className="flex items-center gap-2 px-2 rounded-full py-0.5 lg:ml-auto"
                 >
-                    <Typography color="black">
+                    <Typography color="black" placeholder={undefined}>
                         {user.first_name} {user.last_name}
                     </Typography>
                     <Avatar
@@ -80,6 +80,7 @@ function ProfileMenu() {
                                     variant="lead"
                                     className="font-normal"
                                     color={isLastItem ? "inherit" : "inherit"}
+                                    placeholder={undefined}
                                 >
                                     {label}
                                 </Typography>

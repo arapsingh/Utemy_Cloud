@@ -7,7 +7,7 @@ export function FooterAdmin() {
     return (
         <footer className="py-2">
             <div className="flex w-full flex-wrap items-center justify-center gap-6 px-2 md:justify-between">
-                <Typography variant="small" className="font-normal text-inherit">
+                <Typography variant="small" className="font-normal text-inherit" placeholder={undefined}>
                     &copy; {year}, made with <HeartIcon className="-mt-0.5 inline-block h-3.5 w-3.5 text-red-600" /> by{" "}
                     <a href={"/"} target="_blank" className="transition-colors hover:text-blue-500 font-bold">
                         Utemy{" "}
@@ -22,6 +22,7 @@ export function FooterAdmin() {
                             target="_blank"
                             variant="small"
                             className="py-0.5 px-1 font-normal text-inherit transition-colors hover:text-blue-500"
+                            placeholder={undefined}
                         >
                             Về chúng tôi
                         </Typography>

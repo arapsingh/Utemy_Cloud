@@ -23,10 +23,10 @@ const StepperLecture = () => {
                         className={`h-5 w-5 ${activeStep === 0 ? "text-black" : "text-gray-400"}`}
                     />
                     <div className="absolute -bottom-[4.5rem] w-max text-center ">
-                        <Typography variant="h6" className={`${activeStep === 0 ? "text-black" : "text-gray-400"}`}>
+                        <Typography variant="h6" className={`${activeStep === 0 ? "text-black" : "text-gray-400"}`} placeholder={undefined}>
                             Bước 1
                         </Typography>
-                        <Typography className={` font-normal ${activeStep === 0 ? "text-black" : "text-gray-400"}`}>
+                        <Typography className={` font-normal ${activeStep === 0 ? "text-black" : "text-gray-400"}`} placeholder={undefined}>
                             Details about yout account.
                         </Typography>
                     </div>
@@ -34,10 +34,10 @@ const StepperLecture = () => {
                 <Step>
                     <DocumentCheckIcon className={`h-5 w-5 ${activeStep === 1 ? "text-black" : "text-gray-400"}`} />
                     <div className="absolute -bottom-[4.5rem] w-max text-center ">
-                        <Typography variant="h6" className={`${activeStep === 1 ? "text-black" : "text-gray-400"}`}>
+                        <Typography variant="h6" className={`${activeStep === 1 ? "text-black" : "text-gray-400"}`} placeholder={undefined}>
                             Bước 2
                         </Typography>
-                        <Typography className={` font-normal ${activeStep === 1 ? "text-black" : "text-gray-400"}`}>
+                        <Typography className={` font-normal ${activeStep === 1 ? "text-black" : "text-gray-400"}`} placeholder={undefined}>
                             Details about yout account.
                         </Typography>
                     </div>
