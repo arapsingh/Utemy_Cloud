@@ -30,7 +30,7 @@ const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, valu
                     {value}
                 </Typography>
             </CardBody>
-            {footer && <CardFooter className="border-t border-blue-gray-50 p-4">{footer}</CardFooter>}
+            {footer && <CardFooter className="border-t border-blue-gray-50 p-4" placeholder={undefined}>{footer}</CardFooter>}
         </Card>
     );
 };
