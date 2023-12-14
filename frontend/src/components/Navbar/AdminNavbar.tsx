@@ -34,7 +34,7 @@ function ProfileMenu() {
 
     return (
         <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
-            <MenuHandler>
+            <MenuHandler placeholder={undefined}>
                 <Button
                     variant="text"
                     color="blue-gray"
@@ -59,7 +59,7 @@ function ProfileMenu() {
                     />
                 </Button>
             </MenuHandler>
-            <MenuList className="p-2 gap-2">
+            <MenuList className="p-2 gap-2" placeholder={undefined} >
                 {profileMenuItems.map(({ label, icon, link }, key) => {
                     const isLastItem = key === profileMenuItems.length - 1;
                     return (
@@ -72,6 +72,7 @@ function ProfileMenu() {
                                         ? "hover:bg-red-500 hover:text-white text-red"
                                         : "hover:bg-lightblue/80 hover:text-white "
                                 }`}
+                                placeholder={undefined}
                             >
                                 {React.createElement(icon, {
                                     className: `h-4 w-4 `,

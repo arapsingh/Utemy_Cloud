@@ -130,22 +130,24 @@ const UserAdmin = () => {
             )}
             <div className="mt-12 mb-8 flex flex-col gap-12 bg-background_2 min-h-screen">
                 <Toaster />
-                <Card>
+                <Card placeholder={undefined}>
                     <CardHeader
                         variant="gradient"
                         color="gray"
                         className="mb-8 p-6 flex justify-center w-full self-center"
+                        placeholder={undefined}
                     >
                         <div className="flex items-center text-start w-full">
                             <Menu>
-                                <MenuHandler>
+                                <MenuHandler placeholder={undefined}>
                                     <Button className="bg-black w-[90px] text-center" placeholder={undefined}>{role}</Button>
                                 </MenuHandler>
-                                <MenuList>
+                                <MenuList placeholder={undefined}>
                                     <MenuItem
                                         id="All"
                                         className="text-black hover:bg-gray-400"
                                         onClick={() => setRole("All")}
+                                        placeholder={undefined}
                                     >
                                         Tất cả
                                     </MenuItem>
@@ -153,6 +155,7 @@ const UserAdmin = () => {
                                         id="Admin"
                                         className="text-black  hover:bg-gray-400"
                                         onClick={() => setRole("Admin")}
+                                        placeholder={undefined}
                                     >
                                         Admin
                                     </MenuItem>
@@ -160,6 +163,7 @@ const UserAdmin = () => {
                                         id="User"
                                         className="text-black  hover:bg-gray-400"
                                         onClick={() => setRole("User")}
+                                        placeholder={undefined}
                                     >
                                         User
                                     </MenuItem>
@@ -199,7 +203,7 @@ const UserAdmin = () => {
                         </div>
                     </CardHeader>
 
-                    <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+                    <CardBody className="overflow-x-scroll px-0 pt-0 pb-2" placeholder={undefined}>
                         <table className="w-full min-w-[640px] table-auto">
                             <thead>
                                 <tr>
