@@ -10,7 +10,7 @@ type StatisticCardProps = {
 };
 const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, value, footer }) => {
     return (
-        <Card className="border border-blue-gray-100 shadow-sm">
+        <Card className="border border-blue-gray-100 shadow-sm" placeholder={undefined}>
             <CardHeader
                 variant="gradient"
                 color={color as color}
