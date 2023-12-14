@@ -8,12 +8,12 @@ type StatisticCardProps = {
     title: string;
     value: any;
     footer?: any;
-    placeholder?: React.ReactNode; // Adjust the type accordingly
+    placeholder?: string | undefined ; // Adjust the type accordingly
 };
 
 const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, value, footer, placeholder }) => {
     return (
-        <Card className="border border-blue-gray-100 shadow-sm">
+        <Card className="border border-blue-gray-100 shadow-sm" placeholder={placeholder}>
             <CardHeader
                 variant="filled"
                 color={color as color}
@@ -22,7 +22,6 @@ const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, valu
                 className="absolute grid h-12 w-12 place-items-center"
             >
                 {icon && React.createElement(icon, { className: "h-6 w-6 text-black" })}
-                {placeholder}
             </CardHeader>
             <CardBody className="p-4 text-right">
                 <Typography variant="small" className="font-normal text-blue-gray-600">
@@ -36,5 +35,6 @@ const StatisticsCard: React.FC<StatisticCardProps> = ({ color, icon, title, valu
         </Card>
     );
 };
+
 
 export default StatisticsCard;
