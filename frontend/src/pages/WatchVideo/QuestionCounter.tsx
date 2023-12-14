@@ -18,7 +18,7 @@ const QuestionCounter: React.FC<QuestionCounterProps> = (props) => {
     return (
         <>
             <Menu placement="left-start">
-                <MenuHandler>
+                <MenuHandler placeholder={undefined}>
                     <div className="flex gap-2 items-center border-2 border-black rounded-md p-2 hover:cursor-pointer">
                         <QuestionMarkCircleIcon className="w-5 h-5 shrink-0 text-black" />
                         <span className="text-black shrink-0">
@@ -26,7 +26,7 @@ const QuestionCounter: React.FC<QuestionCounterProps> = (props) => {
                         </span>
                     </div>
                 </MenuHandler>
-                <MenuList className="max-h-[200px]">
+                <MenuList className="max-h-[200px]" placeholder={undefined}>
                     {loopArray.map((item, index) => {
                         return (
                             <MenuItem
@@ -34,6 +34,7 @@ const QuestionCounter: React.FC<QuestionCounterProps> = (props) => {
                                 className={`hover:bg-gray-300 my-1 w-full h-full ${
                                     index === props.questionIndex ? "bg-gray-200" : ""
                                 }`}
+                                placeholder={undefined}
                             >
                                 <span className="text-black">Câu {index + 1}</span>
                             </MenuItem>

@@ -17,16 +17,17 @@ const QuizCard: React.FC<QuizCardProps> = (props) => {
     return (
         <div className="flex h-fit ">
             <>
-                <Accordion open={open} className="my-2 w-[90%] h-fit rounded-lg bg-lightblue/20 mx-5 px-4 pb-1">
+                <Accordion open={open} className="my-2 w-[90%] h-fit rounded-lg bg-lightblue/20 mx-5 px-4 pb-1" placeholder={undefined}>
                     <AccordionHeader
                         onClick={() => handleOpen()}
                         className={`  transition-colors ${
                             open ? "text-blue-500 hover:!text-blue-700 border-b border-gray-500" : "text-black"
                         }`}
+                        placeholder={undefined}
                     >
                         <h1 className="">{props.quiz.question}</h1>
                     </AccordionHeader>
-                    <AccordionBody className=" flex justify-between items-center text-base font-normal">
+                    <AccordionBody className=" flex justify-between items-center text-base font-normal" placeholder={undefined}>
                         <h1 className="text-black">Loại câu hỏi: {props.quiz.type === 1 && "Trắc nghiệm"}</h1>
                         <h1 className="text-black">
                             Ngày chỉnh sửa gần đây: {convertStringDate(props.quiz.updated_at as string)}
@@ -34,13 +35,13 @@ const QuizCard: React.FC<QuizCardProps> = (props) => {
                     </AccordionBody>
 
                     <div className="gap-2 items-center ">
-                        <AccordionBody className=" flex justify-between items-center text-base font-normal">
+                        <AccordionBody className=" flex justify-between items-center text-base font-normal" placeholder={undefined}>
                             <h1 className="text-black font-bold ">Câu trả lời</h1>
                         </AccordionBody>
 
                         {props.quiz.quiz_answer.map((answer) => {
                             return (
-                                <AccordionBody className="text-base font-normal flex justify-between text-black bg-white p-3 rounded-md items-center my-1">
+                                <AccordionBody className="text-base font-normal flex justify-between text-black bg-white p-3 rounded-md items-center my-1" placeholder={undefined}>
                                     <div className="w-[90%] ">
                                         <h1 className="text-black">{answer.answer}</h1>
                                     </div>

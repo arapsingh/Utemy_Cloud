@@ -24,16 +24,18 @@ const QuizGroupCard: React.FC<QuizGroupCardProps> = (props) => {
                     open={open}
                     icon={<Icon open={open} />}
                     className="my-2 rounded-lg border border-blue-gray-100 px-4 bg-navy/20"
+                    placeholder={undefined}
                 >
                     <AccordionHeader
                         onClick={() => handleOpen()}
                         className={`border-b-0 transition-colors ${
                             open ? "text-blue-500 hover:!text-blue-700" : "text-black"
                         }`}
+                        placeholder={undefined}
                     >
                         {props.group.title}
                     </AccordionHeader>
-                    <AccordionBody className="p-2 text-base font-normal bg-white rounded-md my-2 text-black">
+                    <AccordionBody className="p-2 text-base font-normal bg-white rounded-md my-2 text-black" placeholder={undefined}>
                         {props.group.description}
                     </AccordionBody>
                 </Accordion>
