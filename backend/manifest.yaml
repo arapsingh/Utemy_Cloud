@@ -8,15 +8,15 @@ applications:
   buildpacks:
   - nodejs_buildpack
   routes:
-  - route: utemy.cfapps.ap21.hana.ondemand.com
+  - route: utemyvietnam.cfapps.us10-001.hana.ondemand.com
   env:
       DATABASE_URL: 'mysql://uk90dqiameg6okoc:ZBbV3wyGXg46SCmhoG6@bp8fbkm2nbjpo9ikw4ir-mysql.services.clever-cloud.com:21721/bp8fbkm2nbjpo9ikw4ir'
       DOMAIN_NAME : "https://utemy.vercel.app"
-      BACKEND_DOMAIN_NAME : "https:\\\\utemy.cfapps.ap21.hana.ondemand.com"
+      BACKEND_DOMAIN_NAME : "https:\\\\utemyvietnam.cfapps.us10-001.hana.ondemand.com"
       TOKEN_ACCESS_EXPIRED_TIME : "15m"
       TOKEN_REFRESH_EXPIRED_TIME : "10d"
-      PUBLIC_URL : "https://utemy.cfapps.ap21.hana.ondemand.com"
-      PUBLIC_API_URL : "https://utemy.cfapps.ap21.hana.ondemand.com/api"
+      PUBLIC_URL : "https://utemyvietnam.cfapps.us10-001.hana.ondemand.com"
+      PUBLIC_API_URL : "https://utemyvietnam.cfapps.us10-001.hana.ondemand.com/api"
       JWT_SECRET_KEY : "Utemy"
       HASH_SALT : "10"
       EMAIL_SERVER : "utemyvietnam@gmail.com"
