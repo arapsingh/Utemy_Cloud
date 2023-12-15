@@ -6,12 +6,12 @@ import { authActions } from "../../redux/slices";
 import toast from "react-hot-toast";
 
 const CheckMail: React.FC = () => {
-    const newZoomValue = 0.6; // Đặt giá trị mong muốn
+    // const newZoomValue = 0.6; // Đặt giá trị mong muốn
 
-    // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
-    if ('zoom' in document.documentElement.style) {
-      document.documentElement.style.zoom = `${newZoomValue}`;
-    }  
+    // // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+    // if ('zoom' in document.documentElement.style) {
+    //   document.documentElement.style.zoom = `${newZoomValue}`;
+    // }  
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const isLogin = useAppSelector((state) => state.authSlice.isLogin);
