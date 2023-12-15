@@ -52,7 +52,7 @@ export function FeedbackAdmin() {
                         <TotalRating ratingId={Number(5)} totalScore={Number(averageRating)} isForCourse={true} />
                         <p className="mt-4 text-2xl text-center font-bold">Utemy đạt được</p>
                         <div className="hidden tablet:flex divider my-1"></div>
-                        <div className="flex justify-between gap-3 ">
+                        <div className="flex justify-between gap-3 w-full">
                             <div className="gap-3">
                                 <h2 className="text-2xl font-bold mb-2">Lọc theo điểm số</h2>
                                 {eveluateList.map((evaluateItem, index) => {
@@ -76,7 +76,7 @@ export function FeedbackAdmin() {
                                                     id={evaluateItem.title}
                                                     checked={evaluate === evaluateItem.value}
                                                 />
-                                                <span className="text-xl">{evaluateItem.title}</span>
+                                                <span className="text-md laptop:text-xl">{evaluateItem.title}</span>
                                             </div>
 
                                             <TotalRating
@@ -88,7 +88,7 @@ export function FeedbackAdmin() {
                                     );
                                 })}
                             </div>
-                            <button className="btn btn-outline text-lg" onClick={handleResetFilter}>
+                            <button className="btn btn-outline text-lg mr-3" onClick={handleResetFilter}>
                                 Làm mới
                             </button>
                         </div>
