@@ -14,12 +14,12 @@ const ChangePassword: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const formikRef = useRef(null);
-    const newZoomValue = 0.6; // Đặt giá trị mong muốn
+    // const newZoomValue = 0.6; // Đặt giá trị mong muốn
 
-    // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
-    if ('zoom' in document.documentElement.style) {
-      document.documentElement.style.zoom = `${newZoomValue}`;
-    }  
+    // // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+    // if ('zoom' in document.documentElement.style) {
+    //   document.documentElement.style.zoom = `${newZoomValue}`;
+    // }  
 
     const initialValue: ChangePasswordType = {
         current_password: "",

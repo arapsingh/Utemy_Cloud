@@ -2,12 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const NotFound: React.FC = () => {
-    const newZoomValue = 0.6; // Đặt giá trị mong muốn
+    // const newZoomValue = 0.6; // Đặt giá trị mong muốn
 
-        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
-        if ('zoom' in document.documentElement.style) {
-          document.documentElement.style.zoom = `${newZoomValue}`;
-        }       
+    //     // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+    //     if ('zoom' in document.documentElement.style) {
+    //       document.documentElement.style.zoom = `${newZoomValue}`;
+    //     }       
     return (
         <>
             <div className="bg-gray-100 h-[calc(80vh-100px)] flex items-center flex-col mt-[100px] space-y-[10px] ">

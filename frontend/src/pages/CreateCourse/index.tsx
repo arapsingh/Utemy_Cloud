@@ -58,12 +58,12 @@ const CreateCourse: FC = () => {
         },
     ];
     useEffect(() => {
-        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+        // const newZoomValue = 0.6; // Đặt giá trị mong muốn
 
-        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
-        if ('zoom' in document.documentElement.style) {
-          document.documentElement.style.zoom = `${newZoomValue}`;
-        }  
+        // // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        // if ('zoom' in document.documentElement.style) {
+        //   document.documentElement.style.zoom = `${newZoomValue}`;
+        // }  
         categories.forEach((category: Category) => {
             const temp: CategoriesOptions = {
                 value: category.category_id,
@@ -73,12 +73,12 @@ const CreateCourse: FC = () => {
         });
     }, [categories, categoriesOptions]);
     useEffect(() => {
-        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+        // const newZoomValue = 0.6; // Đặt giá trị mong muốn
 
-        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
-        if ('zoom' in document.documentElement.style) {
-          document.documentElement.style.zoom = `${newZoomValue}`;
-        }  
+        // // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        // if ('zoom' in document.documentElement.style) {
+        //   document.documentElement.style.zoom = `${newZoomValue}`;
+        // }  
         dispatch(categoryActions.getCategories());
         // dispatch(courseActions.reset());
 

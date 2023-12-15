@@ -117,12 +117,12 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
         dispatch(courseActions.getCourseDetail(slug as string));
     };
     useEffect(() => {
-        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+        // const newZoomValue = 0.6; // Đặt giá trị mong muốn
 
-        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
-        if ('zoom' in document.documentElement.style) {
-          document.documentElement.style.zoom = `${newZoomValue}`;
-        }  
+        // // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        // if ('zoom' in document.documentElement.style) {
+        //   document.documentElement.style.zoom = `${newZoomValue}`;
+        // }  
         dispatch(courseActions.getCourseDetail(slug as string)).then((response) => {
             if (response.payload && response.payload.status_code !== 200) {
                 setIsNotFound(true);
@@ -130,24 +130,24 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
         });
     }, [dispatch, slug, isNotFound]);
     useEffect(() => {
-        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+        // const newZoomValue = 0.6; // Đặt giá trị mong muốn
 
-        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
-        if ('zoom' in document.documentElement.style) {
-          document.documentElement.style.zoom = `${newZoomValue}`;
-        }  
+        // // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        // if ('zoom' in document.documentElement.style) {
+        //   document.documentElement.style.zoom = `${newZoomValue}`;
+        // }  
         if (courseDetail.course_id && isLogin) {
             dispatch(courseActions.getRightOfCourse(courseDetail.course_id));
             dispatch(ratingActions.getUserRating(courseDetail.course_id));
         }
     }, [dispatch, courseDetail.course_id, isLogin]);
     useEffect(() => {
-        const newZoomValue = 0.6; // Đặt giá trị mong muốn
+        // const newZoomValue = 0.6; // Đặt giá trị mong muốn
 
-        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
-        if ('zoom' in document.documentElement.style) {
-          document.documentElement.style.zoom = `${newZoomValue}`;
-        }  
+        // // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+        // if ('zoom' in document.documentElement.style) {
+        //   document.documentElement.style.zoom = `${newZoomValue}`;
+        // }  
         if (courseDetail.number_of_rating > 0) {
             const values: GetRating = {
                 slug: slug as string,
