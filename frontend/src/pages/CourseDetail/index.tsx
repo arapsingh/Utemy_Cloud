@@ -138,6 +138,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
         }  
         if (courseDetail.course_id && isLogin) {
             dispatch(courseActions.getRightOfCourse(courseDetail.course_id));
+            dispatch(ratingActions.getUserRating(courseDetail.course_id));
         }
     }, [dispatch, courseDetail.course_id, isLogin]);
     useEffect(() => {
