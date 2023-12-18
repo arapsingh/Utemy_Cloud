@@ -81,7 +81,7 @@ const MyProfile: React.FC = () => {
                 // ...
 
                 toast.success("Avatar updated successfully!");
-                //window.location.reload();
+                window.location.reload();
             } catch (error) {
                 toast.error("Error updating avatar.");
             }
