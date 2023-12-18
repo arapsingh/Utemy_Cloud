@@ -15,7 +15,7 @@
         "seed": "ts-node src/configs/seed.ts"
     },
     "engines": {
-        "node": "18.18.0",
+        "node": "18.16.0",
         "npm": "10.2.4"
     },
     "keywords": [],
