@@ -3,14 +3,14 @@ applications:
 - name: backend
   random-route: true
   path: C:\TieuLuanChuyenNganh\Utemy_Cloud\backend
-  memory: 2048M
-  disk_quota: 8192M
+  memory: 4096M
+  disk_quota: 10240M
   buildpacks:
   - nodejs_buildpack
   routes:
   - route: utemyvietnam.cfapps.ap21.hana.ondemand.com
   env:
-      DATABASE_URL: 'mysql://uk90dqiameg6okoc:ZBbV3wyGXg46SCmhoG6@bp8fbkm2nbjpo9ikw4ir-mysql.services.clever-cloud.com:21721/bp8fbkm2nbjpo9ikw4ir'
+      DATABASE_URL: 'mysql://uztjmgrs2besbup3:xtv1SbYq8tZyzBUOkebi@bqhtjtavki85viram4w5-mysql.services.clever-cloud.com:21716/bqhtjtavki85viram4w5'
       DOMAIN_NAME : "https://utemyvietnam.vercel.app"
       BACKEND_DOMAIN_NAME : "https:\\\\utemyvietnam.cfapps.ap21.hana.ondemand.com"
       TOKEN_ACCESS_EXPIRED_TIME : "15m"
