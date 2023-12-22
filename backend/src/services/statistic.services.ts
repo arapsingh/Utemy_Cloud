@@ -91,7 +91,7 @@ const invoiceCount = async (req: IRequestWithId): Promise<ResponseBase> => {
             },
         });
         if (!isAdmin) return new ResponseError(400, constants.error.ERROR_UNAUTHORIZED, false);
-        const invoiceCount = await configs.db.user.count();
+        const invoiceCount = await configs.db.transaction.count();
         const data = {
             total_invoice: invoiceCount,
         };
