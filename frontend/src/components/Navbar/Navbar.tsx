@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
                                     <li
                                         key={category.category_id}
                                         className="text-white hover:bg-navyhover text-lg font-Roboto font-semibold text-center cursor-pointer px-6 py-[26px] min-w-fit"
-                                        style={{ fontSize: '0.8rem' }}                                                                            >
+                                    >
                                         {category.title}
                                     </li>
                                 </NavLink>
