@@ -8,12 +8,12 @@ import { Navigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { signupValidationSchema } from "../../validations/auth";
 const Signup: FC = () => {
-    const newZoomValue = 0.6; // Đặt giá trị mong muốn
+    // const newZoomValue = 0.6; // Đặt giá trị mong muốn
 
-        // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
-        if ('zoom' in document.documentElement.style) {
-          document.documentElement.style.zoom = `${newZoomValue}`;
-        }       
+    //     // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
+    //     if ('zoom' in document.documentElement.style) {
+    //       document.documentElement.style.zoom = `${newZoomValue}`;
+    //     }       
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
