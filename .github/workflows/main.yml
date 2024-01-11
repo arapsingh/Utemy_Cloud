@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: jhunt/cf-push@v1
         with:
+          appdir: './backend'
           api: ${{ secrets.CF_API }}
           org: ${{ secrets.CF_ORG }}
           space: ${{ secrets.CF_SPACE }}
