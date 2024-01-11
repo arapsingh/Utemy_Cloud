@@ -6,7 +6,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up CF CLI
+        uses: jvalkeal/setup-cf-cli@v0
+        with:
+          version: 6.51.0
       - uses: actions/checkout@v2
       - run: ls
-      - run: cf login -u ${{ secrets.CF_USERNAME }} -p ${{ secrets.CF_PASSWORD }} -a ${{ secrets.CF_API }}
+      - run: cf login -u ${{ secrets.CF_USERNAME }} -p ${{ secrets.CF_PASSWORD }} -a ${{ secrets.CF_API }} -o ${{ secrets.CF_ORG }} -s ${{ secrets.CF_SPACE }}
       - run: cf push
