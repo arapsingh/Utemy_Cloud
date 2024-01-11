@@ -13,6 +13,7 @@ jobs:
       - run: cat backend/manifest.yml
       - uses: jhunt/cf-push@main
         with:
+          appdir: "./backend"
           api: ${{ secrets.CF_API }}
           org: ${{ secrets.CF_ORG }}
           space: ${{ secrets.CF_SPACE }}
