@@ -3,7 +3,7 @@ import constants from "../constants";
 import apis from "../api";
 import Cookies from "js-cookie";
 const axiosPublic = axios.create({
-    baseURL: process.env.API_APP_BASE_URL || "https://utemy.cfapps.ap21.hana.ondemand.com",
+    baseURL: process.env.API_APP_BASE_URL || "https://utemy.up.railway.app",
 });
 
 const axiosInstance = axios.create();
