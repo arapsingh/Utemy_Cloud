@@ -6,9 +6,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - run: ls "/backend"
+      - run: echo "workflow ${{ github.workflow }}"
+      - run: echo "repo ${{ github.repository }}"
       - run: echo "🎉 action path ${{ github.action_path }}"
-      - run: ls
+      - run: ls ${{ github.workflow }}
+      - run: ls ${{ github.repository }}
+      - run: ls 'workflows'
       - uses: actions/checkout@v2
       - uses: jhunt/cf-push@v1
         with:
@@ -18,5 +21,5 @@ jobs:
           space: ${{ secrets.CF_SPACE }}
           username: ${{ secrets.CF_USERNAME }}
           password: ${{ secrets.CF_PASSWORD }}
-          manifest: ${{ github.workflow }}/manifest.yml
+          manifest: workflows/manifest.yml
           validate: false
