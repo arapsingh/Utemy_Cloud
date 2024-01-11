@@ -10,7 +10,7 @@ applications:
   routes:
   - route: utemyvietnam.cfapps.ap21.hana.ondemand.com
   env:
-      DATABASE_URL: 'mysql://uy6vnkauyfjwfgqn:zfoeb8n7resSW8xDVyT@b7ckvpfdr0qfcauxvizs-mysql.services.clever-cloud.com:20110/b7ckvpfdr0qfcauxvizs'
+      DATABASE_URL: 'mysql://uv5pm0k6jvlwstis:RUcc9ynXZDOJkqliLZZ@bsiot5n5nkgnkl1rzdwh-mysql.services.clever-cloud.com:20667/bsiot5n5nkgnkl1rzdwh'
       DOMAIN_NAME : "https://utemy.vercel.app"
       BACKEND_DOMAIN_NAME : "https:\\\\utemyvietnam.cfapps.ap21.hana.ondemand.com"
       TOKEN_ACCESS_EXPIRED_TIME : "15m"
