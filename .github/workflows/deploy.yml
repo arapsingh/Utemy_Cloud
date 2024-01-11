@@ -1,0 +1,11 @@
+name: Deploy Utemy BE to Cloud Foundry (by Nhan)
+on:
+  push:
+    branches: [deploy]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cf login -u ${{ secrets.CF_USERNAME }} -p ${{ secrets.CF_PASSWORD }} -a ${{ secrets.CF_API }}
+      - run: cf push
