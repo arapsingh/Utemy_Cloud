@@ -6,6 +6,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - run: pwd
       - uses: actions/checkout@v2
       - uses: jhunt/cf-push@v1
         with:
