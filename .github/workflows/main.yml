@@ -6,18 +6,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: pwd
-      - run: ls
-      - run: ls backend
-      - run: cat backend/manifest.yml
+      - uses: actions/checkout@v6
       - uses: jhunt/cf-push@main
         with:
-          appdir: "./backend"
           api: ${{ secrets.CF_API }}
           org: ${{ secrets.CF_ORG }}
           space: ${{ secrets.CF_SPACE }}
           username: ${{ secrets.CF_USERNAME }}
           password: ${{ secrets.CF_PASSWORD }}
-          manifest: ./manifest.yml
+          manifest: manifest.yml
           validate: false
