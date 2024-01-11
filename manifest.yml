@@ -21,7 +21,7 @@ applications:
       HASH_SALT: "10"
       EMAIL_SERVER: "utemyvietnam@gmail.com"
       PASSWORD_SERVER: "xmxfhgajalgcxxtk"
-      PAGE_SIZE: "10"
+      PAGE_SIZE: 10
       TZ: "Asia/Ho_Chi_Minh"
       VNP_TMN_CODE: "R82FFIOK"
       VNP_HASH_SECRET: "XINOGPPZANTAUEQIRJFBYXDKHHXCHQAQ"
