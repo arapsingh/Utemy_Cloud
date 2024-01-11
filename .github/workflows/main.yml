@@ -17,5 +17,5 @@ jobs:
           space: ${{ secrets.CF_SPACE }}
           username: ${{ secrets.CF_USERNAME }}
           password: ${{ secrets.CF_PASSWORD }}
-          manifest: /.github/workflows/manifest.yml
+          manifest: ${{ github.workflow }}/manifest.yml
           validate: false
