@@ -6,13 +6,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "workflow ${{ github.workflow }}"
-      - run: echo "repo ${{ github.repository }}"
-      - run: echo "🎉 action path ${{ github.action_path }}"
       - uses: actions/checkout@v2
       - uses: jhunt/cf-push@v1
         with:
-          appdir: './backend'
           api: ${{ secrets.CF_API }}
           org: ${{ secrets.CF_ORG }}
           space: ${{ secrets.CF_SPACE }}
