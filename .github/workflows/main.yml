@@ -10,7 +10,7 @@ jobs:
       - run: pwd
       - run: ls
       - run: ls backend
-      - uses: jhunt/cf-push@v1
+      - uses: jhunt/cf-push@main
         with:
           api: ${{ secrets.CF_API }}
           org: ${{ secrets.CF_ORG }}
