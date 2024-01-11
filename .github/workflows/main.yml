@@ -6,6 +6,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🎉 Directory ${{ github.workspace }}"
+      - run: ls
       - uses: actions/checkout@v2
       - uses: jhunt/cf-push@v1
         with:
