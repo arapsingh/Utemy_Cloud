@@ -9,8 +9,11 @@ jobs:
       - uses: actions/checkout@v2
       - run: pwd
       - run: ls
-      - uses: jhunt/cf-push@v1
+      - run: ls backend
+      - run: cat backend/manifest.yml
+      - uses: jhunt/cf-push@main
         with:
+          appdir: "./backend"
           api: ${{ secrets.CF_API }}
           org: ${{ secrets.CF_ORG }}
           space: ${{ secrets.CF_SPACE }}
