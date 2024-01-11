@@ -13,4 +13,5 @@ jobs:
       - uses: actions/checkout@v2
       - run: ls
       - run: cf login -u ${{ secrets.CF_USERNAME }} -p ${{ secrets.CF_PASSWORD }} -a ${{ secrets.CF_API }} -o ${{ secrets.CF_ORG }} -s ${{ secrets.CF_SPACE }}
+      - run: cf logs backend --recent
       - run: cf push
