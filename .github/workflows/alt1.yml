@@ -13,4 +13,4 @@ jobs:
           PASSWORD: ${{ secrets.CF_PASSWORD }}
           ORG: ${{ secrets.CF_ORG }}
           SPACE: ${{ secrets.CF_SPACE }}
-          COMMAND: push Utemy
+          COMMAND: push Utemy/backend
