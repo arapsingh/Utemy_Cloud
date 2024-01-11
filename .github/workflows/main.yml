@@ -9,9 +9,6 @@ jobs:
       - run: echo "workflow ${{ github.workflow }}"
       - run: echo "repo ${{ github.repository }}"
       - run: echo "🎉 action path ${{ github.action_path }}"
-      - run: ls ${{ github.workflow }}
-      - run: ls ${{ github.repository }}
-      - run: ls 'workflows'
       - uses: actions/checkout@v2
       - uses: jhunt/cf-push@v1
         with:
@@ -21,5 +18,5 @@ jobs:
           space: ${{ secrets.CF_SPACE }}
           username: ${{ secrets.CF_USERNAME }}
           password: ${{ secrets.CF_PASSWORD }}
-          manifest: workflows/manifest.yml
+          manifest: ${{ github.repository }}/.github/workflows/manifest.yml
           validate: false
