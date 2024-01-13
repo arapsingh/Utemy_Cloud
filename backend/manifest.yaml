@@ -2,7 +2,7 @@
 applications:
   - name: backend
     random-route: true
-    path: ./backend
+    path: .
     memory: 2048M
     disk_quota: 10240M
     buildpacks:
