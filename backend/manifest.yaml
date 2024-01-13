@@ -3,7 +3,7 @@ applications:
   - name: backend
     random-route: true
     # path: ./backend
-    memory: 4096M
+    memory: 2048M
     disk_quota: 10240M
     buildpacks:
       - nodejs_buildpack

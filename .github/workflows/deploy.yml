@@ -16,7 +16,7 @@ jobs:
       - name: Cd to Backend
         run: cd backend
       - name: Push to Cloud Foundry
-        run: cf push -f backend/manifest.yaml
+        run: cf push 
       - name: View logs
         run: cf logs backend --recent
 
