@@ -16,7 +16,7 @@ jobs:
       - name: Cd to Backend and push
         run: |
           cd backend
-          cf push -f manifest.yaml
+          cf push -f backend/manifest.yaml
       - name: View logs
         run: cf logs backend --recent
 
