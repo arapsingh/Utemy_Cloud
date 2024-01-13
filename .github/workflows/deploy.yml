@@ -13,10 +13,8 @@ jobs:
       - uses: actions/checkout@v2
       - run: ls
       - run: cf login -u ${{ secrets.CF_USERNAME }} -p ${{ secrets.CF_PASSWORD }} -a ${{ secrets.CF_API }} -o ${{ secrets.CF_ORG }} -s ${{ secrets.CF_SPACE }}
-      - name: Cd to Backend and push
-        run: |
-          cd backend
-          cf push -f manifest.yaml
+      - name: Push to Cloud Foundry
+        run: cf push -f /home/runner/work/Utemy_Cloud/Utemy_Cloud/backend/manifest.yaml
       - name: View logs
         run: cf logs backend --recent
 
