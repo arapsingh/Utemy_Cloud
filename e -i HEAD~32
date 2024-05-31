@@ -1,0 +1,357 @@
+[33m0901c93[m[33m ([m[1;36mHEAD -> [m[1;32mphuoc_branch7[m[33m)[m ...
+[33m724ac1a[m merrge bên DA chính
+[33m5c3334a[m merrge bên DA chính
+[33m5f84a73[m[33m ([m[1;31morigin/comment_reaction[m[33m)[m lọc cmt
+[33mbfd7215[m no change
+[33m6adf273[m lọc cmt
+[33m457ba9a[m Merge pull request #67 from NhanNguyen11002/blog-admin
+[33m73bef6c[m change size icon float button
+[33m6b1a0d2[m change float button, scroll to top button position
+[33m5fe8d4a[m Merge pull request #66 from NhanNguyen11002/blog-admin
+[33m174adcf[m Merge remote-tracking branch 'origin/dev' into blog-admin
+[33m72dc39b[m Merge pull request #65 from NhanNguyen11002/comment_reaction
+[33m9447676[m fix get category route, add id for form field, add key to child in list, fix certifier error
+[33m00300a8[m Thống kê cho giảng viên
+[33m869c346[m Thống kê cho giảng viên
+[33m6bdd28e[m Thống kê cho giảng viên
+[33mbad0045[m add search course in author profile, responsive watch video, cart, all course, course detail
+[33mee3d259[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into comment_reaction
+[33m2e7ed85[m Merge pull request #64 from NhanNguyen11002/blog-admin
+[33m187b7ba[m full blog, remove material tailwind lib, fix pagination logic
+[33m30d14c0[m[33m ([m[1;31mnew-origin/phuoc_branch7[m[33m, [m[1;32mdeploy[m[33m)[m add urlblog azure1
+[33m033dcc4[m add urlblog azure
+[33m6690580[m videocard2
+[33m9db5536[m videocard
+[33m88d1ad6[m path helper
+[33me2fe851[m videoazure2
+[33m950d92f[m videoazure1
+[33mf124cb1[m videoazure
+[33m76a0c17[m videofolder
+[33m42205ee[m fixxxx
+[33m56ca765[m fixxxx
+[33mff19260[m fixxx
+[33m3c67e6f[m fixx
+[33m44fb664[m fixx
+[33mb4749e9[m fixx
+[33m0465ba0[m fix
+[33mfba66c5[m no fixas
+[33m594c529[m no fixa
+[33medf4317[m no fix
+[33m60e57e3[m no
+[33mf5c35d0[m no
+[33m3e46db6[m no
+[33m700a9d3[m Merge branch 'phuoc_branch7' of https://github.com/arapsingh/Utemy_Cloud into phuoc_branch7
+[33m6c9e756[m[33m ([m[1;31mnew-origin/phuoc_branch8[m[33m, [m[1;32mphuoc_branch8[m[33m)[m no
+[33m13a31ef[m deploy
+[33m20ed37b[m deploy
+[33m789054c[m deploy
+[33m0d5f131[m deploy
+[33mb8541bb[m nd deploy khoa luan
+[33m1cf42d2[m nd deploy khoa luan
+[33m765b530[m nd deploy khoa luan
+[33m410f28f[m Merge pull request #2 from arapsingh/phuoc_branch8
+[33m3d9cdce[m nd deploy khoa luan
+[33m9b25754[m nd deploy khoa luan
+[33mcef3fb7[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into comment_reaction
+[33m0fa8f91[m comment by courseId
+[33m085907e[m Merge remote-tracking branch 'origin/dev' into blog-admin
+[33ma910f14[m blog admin, blog header user
+[33m1a10163[m Merge pull request #63 from NhanNguyen11002/comment_reaction
+[33mb4eac30[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into comment_reaction
+[33m6aeb044[m fix history transaction, eventUI
+[33m2542882[m Merge pull request #62 from NhanNguyen11002/refactor-quiz
+[33m6ef4c17[m fix review 24/5
+[33m13f8782[m Merge pull request #61 from NhanNguyen11002/refactor-quiz
+[33m620dda8[m change gitnore to normal
+[33m123fea6[m add blog folder, fix small bug in many page
+[33m8a7330c[m Merge pull request #60 from NhanNguyen11002/comment_reaction
+[33m5c4e685[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into comment_reaction
+[33m49a6925[m api blog,reactionblog, commentblog
+[33m8782b6c[m Merge pull request #59 from NhanNguyen11002/refactor-quiz
+[33m85e2c0c[m fix isDone null in watch video page
+[33m074812e[m add final course test
+[33m2ab9cb6[m Merge remote-tracking branch 'origin/dev' into refactor-quiz
+[33m528446b[m Merge pull request #58 from NhanNguyen11002/comment_reaction
+[33mb8207d2[m fix is_done null subscriber button
+[33m61d11cb[m update deletecoupon
+[33m9531e69[m ratioInWheel, reactionCard, trialLearn
+[33ma0d576a[m ratioInWheel, reactionCard, trialLearn
+[33m5391a2b[m Merge pull request #57 from NhanNguyen11002/refactor-quiz
+[33mdb5ceba[m delete openapi not used
+[33me20821e[m nhu tren
+[33mbfe8a0f[m Merge pull request #56 from NhanNguyen11002/refactor-quiz
+[33m829465d[m fix fill in quiz, fix popup stop test
+[33mf1b0a58[m comment,creatableSelect
+[33m0946377[m fix immer error
+[33m1724cf4[m add formula to editor
+[33meecfa11[m Merge pull request #55 from NhanNguyen11002/comment_reaction
+[33mb7b33ba[m comment reaction for watch video fix bug
+[33m986424f[m Merge pull request #54 from NhanNguyen11002/comment_reaction
+[33m77edd99[m comment reaction for watch video
+[33md088e80[m comment reaction
+[33m3b18f63[m Merge pull request #53 from NhanNguyen11002/test-refactor
+[33medeb1cb[m add tf, đk type quiz, sort random answer for each test
+[33m2a8a44c[m fix skip video, fix cardvideo of homepage, prepare db for test refactor
+[33m772bd8f[m public gitkeep
+[33mae54833[m public gitkeep
+[33m62e5bc2[m public gitkeep
+[33m34f0d56[m public gitkeep
+[33m3e94988[m Merge pull request #52 from NhanNguyen11002/trailer_trial2
+[33mc3837fa[m trailer, trial learning
+[33m2e120fc[m trailer, trial learning
+[33mc830a2c[m trailer, trial learning
+[33m5bbff06[m trailer, trial learning
+[33mdb36bcb[m Merge pull request #51 from NhanNguyen11002/track-progress
+[33m381f232[m fix list view user, report, decision
+[33mc179500[m full track learning progress
+[33m3792c3d[m Merge remote-tracking branch 'origin/dev' into track-progress
+[33m7bedcf2[m Merge pull request #50 from NhanNguyen11002/coupon-spin-event3
+[33m20d873c[m rangbuoc,validate
+[33m6e82239[m Merge remote-tracking branch 'origin/dev' into track-progress
+[33mc6ac71f[m set event to handle tracking progress at watch video page
+[33ma573c27[m Merge pull request #49 from NhanNguyen11002/coupon-spin-event2
+[33mcdeb370[m captcha,maxdiscount,spin,event,...
+[33m75bb22d[m captcha,maxdiscount,spin,event
+[33mb9958e5[m Merge pull request #48 from NhanNguyen11002/course-status-related
+[33m2369954[m refactor admin navbar(header)
+[33m7602a5f[m report, decision, approval manangement
+[33meb46e33[m Merge pull request #47 from NhanNguyen11002/improve-UI
+[33mb073cea[m fix toaster admin
+[33m0b3c0a0[m edit coupon, category card, fix UI homepage, layout
+[33m7c17cb1[m Merge remote-tracking branch 'origin/dev' into improve-UI
+[33mf662ab5[m course, course detail admin, ask approval, approve course
+[33m7c6b988[m Merge pull request #46 from NhanNguyen11002/coupon
+[33m45d9b05[m public-coupon, wheel
+[33md1f3cb9[m add new evidence folder
+[33m2bcb4ac[m Merge pull request #45 from NhanNguyen11002/improve-UI
+[33m42c9aa3[m Merge remote-tracking branch 'origin/dev' into improve-UI
+[33m9c59d53[m Merge pull request #44 from NhanNguyen11002/salelist-outstandingteacher
+[33m815e0ca[m divide edit course into many tab, done target tab, detail tab
+[33m449e167[m sale course list, outstanding teacher
+[33m45d2a32[m fix service for change logic course, lecture creation
+[33me5d2d03[m Modify UI with shadcnUI, change status option of course, change kecture creation logic
+[33mc37df31[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into solve-conflict-27/28
+[33maad9807[m all text black fix
+[33m888422e[m clear status select box, auto get time of uploaded video
+[33m945c82d[m fix_deploy
+[33md9a8c66[m fix_deploy
+[33m2299182[m fix_deploy
+[33m7a061ab[m fix_deploy
+[33m4128c8e[m fix_deploy
+[33m1adee5f[m fix_deploy
+[33m643e57b[m fix_deploy
+[33m2f23385[m fix_deploy
+[33m475056d[m fix_deploy
+[33m28a7557[m fix_deploy
+[33m57a6152[m fix_deploy
+[33m309f482[m fix_deploy
+[33m7416dcb[m fix_deploy
+[33maf155db[m fix_deploy
+[33mec85d19[m fix_deploy
+[33mf545f0d[m fix_deploy
+[33md541273[m fix_deploy
+[33m40b175b[m fix_deploy
+[33m0509f79[m fix_deploy
+[33m4d201e7[m fix_deploy
+[33m6737030[m fix_deploy
+[33m1a9895c[m fix_deploy
+[33m206395a[m fix_deploy1
+[33m448f8ab[m fix_deploy
+[33mde448e8[m fix_deploy1
+[33m4dd1740[m fix_deploy
+[33m6d711da[m fix_deploy1
+[33mc04aa99[m fix_deploy
+[33mccdb3a1[m deploy_tocf
+[33m5a2f018[m deploy_to_cf
+[33m9d727c0[m deploy_to_cf
+[33m4a27bb3[m deploytocf
+[33m45e1d51[m Merge branch 'deploy' of https://github.com/NhanNguyen11002/Utemy into phuoc_branch8
+[33m130532b[m lastupdate
+[33m3d78e97[m[33m ([m[1;31morigin/deploy[m[33m)[m update deploy
+[33mb29c697[m update manifest change routes to test cicd
+[33m29eb3a2[m update deploy
+[33m779e8eb[m update deploy
+[33m26fe60d[m Merge branch 'deploy' of https://github.com/NhanNguyen11002/Utemy into deploy
+[33m063b2a8[m add deploy.yml
+[33mc1ddd75[m Update main.yml
+[33m1c163ec[m Update main.yml
+[33md10f4ca[m Update main.yml
+[33m3de8e8c[m Update manifest.yml
+[33m8e8374f[m Update alt1.yml
+[33mf56c8e9[m Merge branch 'deploy' of https://github.com/NhanNguyen11002/Utemy into deploy
+[33m541720d[m change path manifest
+[33m3c19f97[m Update alt1.yml
+[33m7a5ed50[m Update manifest.yml
+[33m67e01cb[m Update alt1.yml
+[33m91b0998[m change manifest path
+[33m2ab9465[m change manifest path
+[33m1c532da[m Update alt1.yml
+[33m73d48b3[m alt 1 1
+[33m5f0e5f7[m Merge branch 'deploy' of https://github.com/NhanNguyen11002/Utemy into deploy
+[33m2c1f5a5[m alt 1
+[33m672d57b[m Update main.yml
+[33m28aa730[m Update main.yml
+[33mfc19d1e[m Update main.yml
+[33mfc5f033[m Update main.yml
+[33me7ba705[m Update main.yml
+[33mc977599[m Update main.yml
+[33mf07462e[m Update main.yml
+[33m815313f[m Update main.yml
+[33m2086e16[m move manifest to backend
+[33m061dec9[m Update main.yml
+[33m1476103[m Update main.yml
+[33mac1605f[m Update main.yml
+[33m16cd67e[m Update main.yml
+[33m056bbaa[m Update main.yml
+[33m0fd189f[m Update main.yml
+[33m0901280[m Update main.yml
+[33m439c744[m Update main.yml
+[33mec3c875[m Update main.yml
+[33mc8b155e[m Update main.yml
+[33mecfeba3[m Update main.yml
+[33mb8e0898[m Update main.yml
+[33m0adb687[m Update main.yml
+[33mec5960e[m fix path in main.yml again 1
+[33mdb3f1de[m fix path in main.yml again
+[33mb608595[m fix path in main.yml
+[33mea289c7[m edit main.yml, add manifest.yml
+[33mc821d19[m Merge pull request #43 from NhanNguyen11002/dev
+[33ma16573e[m[33m ([m[1;31morigin/dev[m[33m)[m Merge pull request #42 from NhanNguyen11002/deploy
+[33m700a612[m add github action
+[33mafe11db[m last update
+[33m48e3bf0[m last update
+[33mcbbe08f[m Merge pull request #41 from NhanNguyen11002/implement-quiz
+[33m4b1ef15[m clear toaster
+[33mdb993f1[m last update
+[33ma778e84[m last update
+[33md265821[m last update
+[33m42bb9a8[m ...
+[33m4fe7a5a[m Merge pull request #40 from NhanNguyen11002/implement-quiz
+[33m76c18a6[m modify change password, fix verify email page auto go to home
+[33ma7bb755[m Merge pull request #39 from NhanNguyen11002/implement-quiz
+[33m7733213[m fix not load popup rating
+[33m64e3631[m Merge pull request #38 from NhanNguyen11002/implement-quiz
+[33mb5b74e9[m fix validate change password FE, invoice count BE statistic
+[33m0a1f683[m Merge pull request #37 from NhanNguyen11002/implement-quiz
+[33m0fa2ebb[m validate is deleted course
+[33m09aa5aa[m Merge pull request #36 from NhanNguyen11002/implement-quiz
+[33me486277[m validate negative
+[33m13a2bd2[m last update3
+[33mcbbb31b[m last update2
+[33m4df6793[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into phuoc_branch7
+[33md813e8e[m last update
+[33m02b7d91[m Merge pull request #35 from NhanNguyen11002/implement-quiz
+[33mada5f61[m add negativate price validation
+[33mac7fb3f[m add negative number validation
+[33mf2b95d7[m[33m ([m[1;31mnew-origin/phuoc_branch6[m[33m, [m[1;32mphuoc_branch6[m[33m)[m last update1
+[33m20185ab[m last update
+[33mbcb61a3[m last update
+[33md3fe92e[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into phuoc_branch5
+[33m90d1e01[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into solve-conflict-27/28
+[33ma5f7060[m Merge pull request #34 from NhanNguyen11002/implement-quiz
+[33m17387de[m fix conflict data after delete quiz, pass percent wrong
+[33m299f64d[m fix public git keep add1
+[33m17406b8[m fix public git keep add
+[33med6b7b4[m fix public git keep
+[33m4e328c8[m fix21
+[33m0128b4b[m fix20
+[33mbab188a[m fix19
+[33m2b276b2[m fix18
+[33m06da2c8[m fix17
+[33m5c19fdb[m fix16
+[33mb8e538b[m fix15
+[33mee6ac2d[m fix14
+[33m5fe7c3d[m fix13
+[33m5442123[m fix12
+[33mcc63c54[m fix11
+[33m81257b4[m fix10
+[33mcf0ba5f[m fix9
+[33m1d07782[m fix8
+[33mc2dbef4[m fix7
+[33mcfa4c12[m fix6
+[33mac30727[m fix5
+[33m12e55f7[m fix4
+[33m5a522e9[m fix3
+[33md32e907[m fix2
+[33m6ed55ea[m fix1
+[33m53ed08f[m fix
+[33mf0e1c85[m folder1
+[33m2994c05[m folder
+[33m33263f8[m[33m ([m[1;31mnew-origin/frontend_branch[m[33m)[m Add GitHub Actions for deployment
+[33mca4a291[m Add GitHub Actions for deployment
+[33m86bdf3d[m fix3
+[33m4431349[m fix2
+[33m791a54a[m fix1
+[33mff135c2[m fix
+[33mb35c491[m fix5
+[33m674c5d5[m fix4
+[33m7fc51e6[m fix3
+[33m81d028c[m fix2
+[33mce50778[m Merge pull request #33 from NhanNguyen11002/implement-quiz
+[33m4811501[m fix1
+[33me8871c7[m refactor 150% admin
+[33md0e299f[m[33m ([m[1;31mnew-origin/phuoc_branch4[m[33m, [m[1;32mphuoc_branch4[m[33m)[m fix
+[33mcec435e[m fix
+[33me2d1679[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into phuoc_branch4
+[33mdb9095a[m fix
+[33mac06339[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into history-transaction
+[33m7de73b9[m fix backend
+[33mfb82252[m Merge pull request #32 from NhanNguyen11002/implement-quiz
+[33m8008abc[m fix sort object module
+[33m6ccb022[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into solve-conflict-27/28
+[33m6b50525[m Merge pull request #31 from NhanNguyen11002/implement-quiz
+[33me1c601c[m add validate quiz add, edit
+[33mb57635b[m Merge pull request #30 from NhanNguyen11002/implement-quiz
+[33m245e7da[m Merge remote-tracking branch 'origin/dev' into implement-quiz
+[33m3fe5ceb[m done quiz, test, fix review 10/12/2023, fix admin ui
+[33m071571c[m last fix3
+[33m02b47f7[m last fix2
+[33m1f49901[m clear lesson route
+[33m5dfd046[m add, edit, delete lecture
+[33m05b0ae2[m last fix1
+[33m2298d92[m quiz home
+[33m6e8829f[m Quiz UI
+[33m349440a[m last fix
+[33m3ca7a63[m fix3
+[33m5b60f52[m fix2
+[33m7af9f1e[m fix1
+[33m2da745b[m fix
+[33mc75c135[m fix7
+[33ma7b3fd4[m fix6
+[33m5c88964[m fix5
+[33m906fe7b[m fix4
+[33m855f3b3[m fix3
+[33md554548[m fix2
+[33me0b4a9b[m fix1
+[33ma71e580[m fix
+[33m8bc6c56[m[33m ([m[1;31mnew-origin/phuoc_branch3[m[33m, [m[1;32mphuoc_branch3[m[33m)[m ....
+[33ma2c4be0[m ...
+[33m786ce16[m ...
+[33md671872[m[33m ([m[1;31mnew-origin/phuoc_branch2[m[33m, [m[1;32mphuoc_branch2[m[33m)[m url dự phòng cho fe
+[33m44c7587[m url dự phòng
+[33m489e772[m url dự phòng
+[33mf629314[m url dự phòng
+[33mdf93f06[m url fe
+[33mb86a6a7[m cors origin
+[33m5c32542[m url dự phòng
+[33m77bb5d3[m url websites
+[33m56c0887[m url website
+[33m9d48d54[m ...
+[33m2754afe[m ...
+[33m1f3f4c8[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into solve-conflict-27/28
+[33m02865da[m create file
+[33m1672424[m Merge branch 'improve-UI' into implement-quiz
+[33mc2f03c6[m add evaluate admin, course detail feedback href
+[33mcb51d61[m Merge pull request #28 from NhanNguyen11002/improve-UI
+[33mcf4571a[m[33m ([m[1;31morigin/improve-UI[m[33m)[m improve UI again
+[33mca85de5[m Merge branch 'dev' of https://github.com/NhanNguyen11002/Utemy into solve-conflict-27/28
+[33m06303fb[m ...
+[33m5f9f95d[m[33m ([m[1;31morigin/implement-quiz[m[33m)[m Merge pull request #27 from NhanNguyen11002/improve-UI
+[33m3702394[m vietsub 100%, improve UI 100%
+[33m41ced2d[m Merge pull request #26 from NhanNguyen11002/improve-UI
+[33m77877fc[m improve UI, add some function, change language to vietnamese 60%
+[33md67660c[m Merge pull request #25 from NhanNguyen11002/cart-checkout-history
+[33m96d7078[m[33m ([m[1;31morigin/cart-checkout-history[m[33m)[m Fix show total course in cart
+[33m1bf82e4[m Merge pull request #24 from NhanNguyen11002/cart-checkout-history
+[33m4d34f32[m Fix UI
+[33m13fdb90[m fix duplicate enrolled, not increase number of enrolled

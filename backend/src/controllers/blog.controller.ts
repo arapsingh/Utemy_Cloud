@@ -88,3 +88,4 @@ export default class BlogController {
         return res.status(response.getStatusCode()).json(response);
     }
 }
+
