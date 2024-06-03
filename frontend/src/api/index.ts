@@ -12,6 +12,17 @@ import statisticApis from "./statistic";
 import quizApis from "./quiz";
 import lectureApis from "./lecture";
 import testApis from "./test";
+import approvalApis from "./approval";
+import decisionApis from "./decision";
+import reportApis from "./report";
+import couponApis from "./coupon";
+import eventApis from "./event";
+import progressApis from "./progress";
+import reactionApis from "./reaction";
+import commentApis from "./comment";
+import replyCommentApis from "./replycomment";
+import certifierApis from "./certifier";
+import blogApis from "./blog";
 
 const apis = {
     authApis,
@@ -28,5 +39,16 @@ const apis = {
     quizApis,
     lectureApis,
     testApis,
+    approvalApis,
+    decisionApis,
+    reportApis,
+    couponApis,
+    eventApis,
+    progressApis,
+    reactionApis,
+    commentApis,
+    replyCommentApis,
+    certifierApis,
+    blogApis,
 };
 export default apis;

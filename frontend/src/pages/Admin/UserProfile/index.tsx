@@ -3,12 +3,12 @@ import { DefaultAvatar } from "../../../assets/images";
 import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
 import { userActions } from "../../../redux/slices";
 import { User } from "../../../types/user";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Course } from "../../../types/course";
 import NotFound from "../../NotFound";
 import { CardVideo } from "../../../components";
-import { useNavigate } from "react-router-dom";
 import { StarIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import "react-quill/dist/quill.snow.css";
 
 const UserProfile = () => {
     const [isNotFound, setIsNotFound] = useState<boolean>(false);
@@ -70,10 +70,10 @@ const UserProfile = () => {
                                 <p className="text-2xl text-black font-bold">{totalRating}</p>
                             </div>
                         </div>
-                        <div className="gap-5">
+                        <div className="gap-5 ql-snow">
                             <span className=" text-2xl text-black mb-5">Giới thiệu về tôi: </span>
                             <div
-                                className="description-course"
+                                className="description-course ql-editor"
                                 dangerouslySetInnerHTML={{ __html: user.description }}
                             ></div>
                         </div>

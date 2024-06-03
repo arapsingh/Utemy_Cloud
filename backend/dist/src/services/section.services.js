@@ -9,6 +9,7 @@ const response_1 = require("../common/response");
 const constants_1 = __importDefault(require("../constants"));
 const jsonwebtoken_1 = require("jsonwebtoken");
 const lesson_services_1 = __importDefault(require("./lesson.services"));
+const test_services_1 = __importDefault(require("./test.services"));
 const addSection = async (req) => {
     try {
         const { course_id, title } = req.body;
@@ -128,12 +129,18 @@ const deleteSection = async (req) => {
                     },
                 });
                 deletedLecture.forEach(async (lecture) => {
+                    const deleteProgress = await configs_1.default.db.progress.updateMany({
+                        where: {
+                            lecture_id: Number(lecture.id),
+                        },
+                        data: {
+                            is_delete: true,
+                        },
+                    });
                     if (lecture.type === "Lesson")
                         lesson_services_1.default.deleteLesson(lecture.id);
                     else
-                        console.log("delete test");
-                    // const fullPathDeConverted = await helper.ConvertHelper.deConvertFilePath(lesson.url_video);
-                    // await helper.FileHelper.destroyedVideoIfFailed(fullPathDeConverted);
+                        test_services_1.default.deleteTest(lecture.id);
                 });
                 return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_REQUEST, true);
             }

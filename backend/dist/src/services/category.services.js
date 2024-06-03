@@ -90,6 +90,7 @@ const createCategory = async (req) => {
     try {
         const file = req.file;
         const { title, description } = req.body;
+        console.log("Request Cat: ", req.body);
         if (file) {
             const isAdmin = await configs_1.default.db.user.findFirst({
                 where: {

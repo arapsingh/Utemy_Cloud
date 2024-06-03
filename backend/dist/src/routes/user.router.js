@@ -8,6 +8,10 @@ const index_1 = __importDefault(require("../controllers/index"));
 const isLogin_1 = require("../middlewares/isLogin");
 const multer_1 = require("../middlewares/multer");
 const userRouter = (0, express_1.Router)();
+// get top 10 author by avg of avg rating of all course
+userRouter.get("/top10-author", index_1.default.userController.getTop10AuthorByAvgRating);
+// get top 10 author by sum of attendees
+userRouter.get("/top10-author-by-enrolled", index_1.default.userController.getTop10AuthorBySumEnrolled);
 // 8. Get me
 userRouter.get("/profile", isLogin_1.isLogin, index_1.default.userController.getProfile);
 userRouter.get("/all", isLogin_1.isLogin, index_1.default.userController.getAllUsers);

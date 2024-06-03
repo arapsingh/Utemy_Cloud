@@ -21,6 +21,7 @@ class CourseController {
                 success: false,
             });
         }
+        // const trailerFile: Express.Multer.File | undefined = req.file;
         const response = await services_1.default.CourseService.createCourse(req);
         return res.status(response.getStatusCode()).json(response);
     }
@@ -35,6 +36,10 @@ class CourseController {
             });
         }
         const response = await services_1.default.CourseService.editCourse(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async updateTargetCourse(req, res) {
+        const response = await services_1.default.CourseService.updateTargetCourse(req);
         return res.status(response.getStatusCode()).json(response);
     }
     async deleteCourse(req, res) {
@@ -77,6 +82,14 @@ class CourseController {
         const response = await services_1.default.CourseService.getCourseDetail(req);
         return res.status(response.getStatusCode()).json(response);
     }
+    async getProgressByCourseSlug(req, res) {
+        const response = await services_1.default.CourseService.getProgressByCourseSlug(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async getCourseDetailForTrialLesson(req, res) {
+        const response = await services_1.default.CourseService.getCourseDetailForTrialLesson(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
     async getCourseDetailById(req, res) {
         const response = await services_1.default.CourseService.getCourseDetailById(req);
         return res.status(response.getStatusCode()).json(response);
@@ -96,6 +109,50 @@ class CourseController {
     }
     async stopPromotion(req, res) {
         const response = await services_1.default.CourseService.stopPromotion(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async getAllSalesCourses(req, res) {
+        const response = await services_1.default.CourseService.getAllSalesCourses(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async getTop10SalesCourses(req, res) {
+        const response = await services_1.default.CourseService.getTop10SalesCourses(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async approveCourse(req, res) {
+        const response = await services_1.default.CourseService.approveCourse(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async restrictCourse(req, res) {
+        const response = await services_1.default.CourseService.restrictCourse(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async getAllEnrolled(req, res) {
+        const response = await services_1.default.CourseService.getAllEnrolled(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async getCertificate(req, res) {
+        const response = await services_1.default.CourseService.getCertificate(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async createFinalTest(req, res) {
+        const response = await services_1.default.CourseService.createFinalTest(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async updateFinalTest(req, res) {
+        const response = await services_1.default.CourseService.updateFinalTest(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async deleteFinalTest(req, res) {
+        const response = await services_1.default.CourseService.deleteFinalTest(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async setDoneCourse(req, res) {
+        const response = await services_1.default.CourseService.setDoneCourse(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async getFinalTestByCourseId(req, res) {
+        const response = await services_1.default.CourseService.getFinalTestByCourseId(req);
         return res.status(response.getStatusCode()).json(response);
     }
 }

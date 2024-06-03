@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navbar, CardVideo } from "../../components";
+import { CardVideo } from "../../components";
 import { DefaultAvatar } from "../../assets";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { userActions } from "../../redux/slices";
@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { Course } from "../../types/course";
 import NotFound from "../NotFound";
 import { useNavigate } from "react-router-dom";
+import "react-quill/dist/quill.snow.css";
 
 const AuthorProfile: React.FC = () => {
     const [isNotFound, setIsNotFound] = useState<boolean>(false);
@@ -45,7 +46,6 @@ const AuthorProfile: React.FC = () => {
 
     return (
         <>
-            <Navbar />
             <div className="container h-full mx-auto px-4 mt-[150px] laptop:mt-0 flex w-1/2">
                 <div className="w-2/3 h-full flex flex-col items-starts justify-center gap-2 mt-[50px] p-4">
                     <div className="w-full">
@@ -62,16 +62,16 @@ const AuthorProfile: React.FC = () => {
                                 <p className="text-2xl text-black font-bold">{totalRating}</p>
                             </div>
                         </div>
-                        <div className="gap-5">
+                        <div className="gap-5 ql-snow">
                             <span className=" text-2xl text-black mb-5">Giới thiệu về tôi: </span>
                             <div
-                                className="description-course"
+                                className="description-courseql-editor"
                                 dangerouslySetInnerHTML={{ __html: user.description }}
                             ></div>
                         </div>
                     </div>
                     <h1 className="text-2xl text-black self-start">Các khóa học của tôi ({courseList.length})</h1>
-                    <div className="grid grid-cols-2 gap-7  place-self-start my-3 w-2/3">
+                    <div className="grid grid-cols-2 gap-5  place-self-start my-3 ">
                         {courseList.length > 0 &&
                             courseList.map((course: Course, index) => {
                                 return (
@@ -99,7 +99,7 @@ const AuthorProfile: React.FC = () => {
                     </div>
                 </div>
                 <div className="px-4 tablet:px-[60px] flex flex-col items-center gap-4  p-4 rounded-lg w-1/3 mt-[50px]">
-                    <div className="w-50 h-50 rounded-full border">
+                    <div className=" w-64 h-64 rounded-full border">
                         <img
                             src={user.url_avatar || DefaultAvatar}
                             alt="Avatar"

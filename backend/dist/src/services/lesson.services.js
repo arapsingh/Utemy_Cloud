@@ -11,23 +11,23 @@ const helper_1 = __importDefault(require("../helper"));
 const createLesson = async (content, lectureId) => {
     try {
         const videoFile = content.videoFile;
+        console.log(videoFile);
         const title = content.title;
-        const duration = content.duration;
         const description = content.description;
         const uuid = (0, uuid_1.v4)();
         const createFile = await helper_1.default.FileHelper.createFileM3U8AndTS(videoFile, common_1.resolutions, configs_1.default.general.PATH_TO_PUBLIC_FOLDER_VIDEOS, `${lectureId}_${uuid}`);
-        const fullpathConverted = helper_1.default.ConvertHelper.convertFilePath(createFile);
+        const fullpathConverted = helper_1.default.ConvertHelper.convertFilePath(createFile.urlVideo);
         const createLesson = await configs_1.default.db.lesson.create({
             data: {
                 title,
                 lecture_id: lectureId,
                 url_video: fullpathConverted,
-                duration,
+                duration: Math.ceil(createFile.duration).toString(),
                 description,
             },
         });
         if (!createLesson) {
-            await helper_1.default.FileHelper.destroyedVideoIfFailed(createFile); //không tới đc đây
+            await helper_1.default.FileHelper.destroyedVideoIfFailed(createFile.urlVideo);
             return new common_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
         }
         else {
@@ -42,7 +42,6 @@ const updateLesson = async (content, lectureId) => {
     try {
         const title = content.title;
         const videoFile = content.videoFile;
-        const duration = content.duration;
         const description = content.description;
         const isFoundLesson = await configs_1.default.db.lesson.findFirst({
             where: {
@@ -54,7 +53,7 @@ const updateLesson = async (content, lectureId) => {
         if (videoFile) {
             const uuid = (0, uuid_1.v4)();
             const createFile = await helper_1.default.FileHelper.createFileM3U8AndTS(videoFile, common_1.resolutions, configs_1.default.general.PATH_TO_PUBLIC_FOLDER_VIDEOS, `${lectureId}_${uuid}`);
-            const fullPathConverted = helper_1.default.ConvertHelper.convertFilePath(createFile);
+            const fullPathConverted = helper_1.default.ConvertHelper.convertFilePath(createFile.urlVideo);
             const oldFullPathConverted = helper_1.default.ConvertHelper.deConvertFilePath(isFoundLesson.url_video);
             const updateLesson = await configs_1.default.db.lesson.update({
                 where: {
@@ -63,7 +62,7 @@ const updateLesson = async (content, lectureId) => {
                 data: {
                     title,
                     url_video: fullPathConverted,
-                    duration,
+                    duration: Math.ceil(createFile.duration).toString(),
                     description,
                 },
             });
@@ -72,7 +71,7 @@ const updateLesson = async (content, lectureId) => {
                 return new common_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_UPDATE_LESSON, true);
             }
             else {
-                await helper_1.default.FileHelper.destroyedVideoIfFailed(createFile);
+                await helper_1.default.FileHelper.destroyedVideoIfFailed(createFile.urlVideo);
                 return new common_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
             }
         }
@@ -83,7 +82,6 @@ const updateLesson = async (content, lectureId) => {
                 },
                 data: {
                     title,
-                    duration,
                     description,
                 },
             });

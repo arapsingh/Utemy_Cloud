@@ -5,12 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_config_1 = require("../configs/db.config");
 const configs_1 = __importDefault(require("../configs"));
-const runtime_1 = require("@prisma/client/runtime");
 const response_1 = require("../common/response");
 const helper_1 = require("../utils/helper");
 const client_1 = require("@prisma/client");
 const constants_1 = __importDefault(require("../constants"));
 const helper_2 = __importDefault(require("../helper"));
+const uuid_1 = require("uuid");
+const library_1 = require("@prisma/client/runtime/library");
+const common_1 = require("../common");
 const getRightOfCourse = async (req) => {
     try {
         const user_id = req.user_id;
@@ -36,7 +38,7 @@ const getRightOfCourse = async (req) => {
         return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, { role: "Unenrolled" });
     }
     catch (error) {
-        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
@@ -58,7 +60,7 @@ const addPromotion = async (req) => {
             const isAddPromotion = await configs_1.default.db.course.update({
                 data: {
                     sale_price: Number(sale_price),
-                    sale_until,
+                    sale_until: new Date(sale_until),
                 },
                 where: {
                     id: isFoundCourse.id,
@@ -74,7 +76,7 @@ const addPromotion = async (req) => {
     }
     catch (error) {
         console.log(error);
-        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
@@ -110,24 +112,68 @@ const stopPromotion = async (req) => {
     }
     catch (error) {
         console.log(error);
-        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const createCourse = async (req) => {
-    const file = req.file;
-    const { title, slug, description, summary, categories, status, price, requirement, study } = req.body;
+    let fullPathConvertedThumbnail = "";
+    let fullpathConvertedTrailer = "";
+    const { title, slug, description, summary, categories, price, requirement, study } = req.body;
     const user_id = req.user_id;
+    // Check if req.files exists and is an object
+    if (req.files && typeof req.files === "object") {
+        const files = req.files;
+        // Check if 'thumbnail' exists in files
+        if ("thumbnail" in files) {
+            const thumbnailFiles = files["thumbnail"];
+            // Check if thumbnailFiles is an array and not empty
+            if (Array.isArray(thumbnailFiles) && thumbnailFiles.length > 0) {
+                const thumbnailFile = thumbnailFiles[0];
+                console.log("Thumbnail file:", thumbnailFiles);
+                console.log(thumbnailFile.path);
+                fullPathConvertedThumbnail = helper_2.default.ConvertHelper.convertFilePath(thumbnailFile.path);
+            }
+            else {
+                console.log("No thumbnail file uploaded.");
+            }
+        }
+        else {
+            console.log("No thumbnail file uploaded.");
+        }
+        // Check if 'trailer' exists in files
+        if ("trailer" in files) {
+            const trailerFiles = files["trailer"];
+            // Check if trailerFiles is an array and not empty
+            if (Array.isArray(trailerFiles) && trailerFiles.length > 0) {
+                const trailerFile = trailerFiles[0];
+                console.log("Trailer file:", trailerFile);
+                const uuid = (0, uuid_1.v4)();
+                const createFile = await helper_2.default.FileHelper.createFileM3U8AndTS(trailerFile, common_1.resolutions, configs_1.default.general.PATH_TO_PUBLIC_FOLDER_VIDEOS, `${slug}_${uuid}`);
+                if (!createFile) {
+                    await helper_2.default.FileHelper.destroyedVideoIfFailed(createFile.urlVideo);
+                }
+                else {
+                    fullpathConvertedTrailer = helper_2.default.ConvertHelper.convertFilePath(createFile.urlVideo);
+                }
+            }
+            else {
+                console.log("No trailer file uploaded.");
+            }
+        }
+        else {
+            console.log("No trailer file uploaded.");
+        }
+    }
+    else {
+        console.log("No files uploaded.");
+    }
     try {
-        let fullPathConverted = "";
-        if (file)
-            fullPathConverted = helper_2.default.ConvertHelper.convertFilePath(file.path);
         const listCategoryId = categories.split(",").map((item) => ({
             category_id: Number(item),
         }));
-        const convertedStatus = status === "true" ? true : false;
         const uniqueSlug = (0, helper_1.generateUniqueSlug)(slug);
         if (user_id) {
             const isCreateCourse = await db_config_1.db.course.create({
@@ -136,9 +182,9 @@ const createCourse = async (req) => {
                     slug: uniqueSlug,
                     description: description,
                     summary: summary,
-                    thumbnail: fullPathConverted,
+                    thumbnail: fullPathConvertedThumbnail,
                     author_id: user_id,
-                    status: convertedStatus,
+                    status: false,
                     price: Number(price),
                     sale_price: Number(price),
                     course_categories: {
@@ -146,14 +192,15 @@ const createCourse = async (req) => {
                     },
                     study,
                     requirement,
+                    url_trailer: fullpathConvertedTrailer,
                 },
                 include: {
-                    user: true, // Liên kết tới bảng User
-                    enrolleds: true, // Liên kết tới bảng Enrolled
-                    ratings: true, // Liên kết tới bảng Rating
+                    user: true,
+                    enrolleds: true,
+                    ratings: true,
                     sections: {
                         include: {
-                            Lecture: true, // Liên kết tới bảng Lesson bên trong bảng Section
+                            Lecture: true,
                         },
                     },
                 },
@@ -165,16 +212,15 @@ const createCourse = async (req) => {
         return new response_1.ResponseError(400, constants_1.default.error.ERROR_CREATE_COURSE_FAILED, false);
     }
     catch (error) {
-        console.log("Lỗi create", error);
-        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+        console.log("Error creating course:", error);
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
     }
 };
 const editCourse = async (req) => {
-    const file = req.file;
-    const { course_id, title, slug, summary, description, categories, status, price, requirement, study } = req.body;
+    const { course_id, title, slug, summary, description, categories, price } = req.body;
     try {
         const isFoundCourseById = await configs_1.default.db.course.findFirst({
             where: {
@@ -182,57 +228,77 @@ const editCourse = async (req) => {
                 is_delete: false,
             },
         });
-        const convertedStatus = status === "true" ? true : false;
         if (!isFoundCourseById) {
             return new response_1.ResponseError(404, constants_1.default.error.ERROR_COURSE_NOT_FOUND, false);
         }
-        if (file) {
-            const oldThumbnailPath = helper_2.default.ConvertHelper.deConvertFilePath(isFoundCourseById.thumbnail);
-            const fullPathConverted = helper_2.default.ConvertHelper.convertFilePath(file.path);
-            const updatedCourse = await configs_1.default.db.course.update({
-                where: {
-                    id: Number(course_id),
-                },
-                data: {
-                    title: title,
-                    slug: slug,
-                    summary: summary,
-                    description: description,
-                    status: convertedStatus,
-                    thumbnail: fullPathConverted,
-                    price: Number(price),
-                    requirement,
-                    study,
-                },
-            });
-            if (!updatedCourse) {
-                helper_2.default.FileHelper.destroyedFileIfFailed(file.path);
-                return new response_1.ResponseError(400, constants_1.default.error.ERROR_MISSING_REQUEST_BODY, false);
-            }
-            else {
+        if (req.files && typeof req.files === "object") {
+            const files = req.files;
+            const thumbnailFile = files["thumbnail"] ? files["thumbnail"][0] : undefined;
+            const trailerFile = files["trailer"] ? files["trailer"][0] : undefined;
+            // Update thumbnail if available
+            if (thumbnailFile) {
+                console.log("Thumbnail file:", thumbnailFile);
+                const oldThumbnailPath = helper_2.default.ConvertHelper.deConvertFilePath(isFoundCourseById.thumbnail);
+                const fullPathConvertedThumbnail = helper_2.default.ConvertHelper.convertFilePath(thumbnailFile.path);
+                await configs_1.default.db.course.update({
+                    where: { id: Number(course_id) },
+                    data: {
+                        title: title,
+                        slug: slug,
+                        summary: summary,
+                        description: description,
+                        thumbnail: fullPathConvertedThumbnail,
+                        price: Number(price),
+                    },
+                });
                 helper_2.default.FileHelper.destroyedFileIfFailed(oldThumbnailPath);
+            }
+            // Update trailer if available
+            if (trailerFile) {
+                console.log("Trailer file:", trailerFile);
+                const uuid = (0, uuid_1.v4)();
+                const createFile = await helper_2.default.FileHelper.createFileM3U8AndTS(trailerFile, common_1.resolutions, configs_1.default.general.PATH_TO_PUBLIC_FOLDER_VIDEOS, `${slug}_${uuid}`);
+                if (!createFile) {
+                    await helper_2.default.FileHelper.destroyedVideoIfFailed(createFile.urlVideo);
+                }
+                else {
+                    const oldTrailerPath = helper_2.default.ConvertHelper.deConvertFilePath(isFoundCourseById.thumbnail);
+                    const fullpathConvertedTrailer = helper_2.default.ConvertHelper.convertFilePath(createFile.urlVideo);
+                    await configs_1.default.db.course.update({
+                        where: { id: Number(course_id) },
+                        data: {
+                            title: title,
+                            slug: slug,
+                            summary: summary,
+                            description: description,
+                            url_trailer: fullpathConvertedTrailer,
+                            price: Number(price),
+                        },
+                    });
+                    helper_2.default.FileHelper.destroyedFileIfFailed(oldTrailerPath);
+                }
             }
         }
         else {
-            const updatedCourse = await configs_1.default.db.course.update({
-                where: {
-                    id: Number(course_id),
-                },
-                data: {
-                    title: title,
-                    slug: slug,
-                    summary: summary,
-                    description: description,
-                    status: convertedStatus,
-                    price: Number(price),
-                    requirement,
-                    study,
-                },
-            });
-            if (!updatedCourse) {
-                return new response_1.ResponseError(400, constants_1.default.error.ERROR_MISSING_REQUEST_BODY, false);
-            }
+            console.log("No files uploaded.");
         }
+        // Update other course details
+        const updatedCourse = await configs_1.default.db.course.update({
+            where: {
+                id: Number(course_id),
+            },
+            data: {
+                title: title,
+                slug: slug,
+                summary: summary,
+                description: description,
+                price: Number(price),
+            },
+        });
+        if (!updatedCourse) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_MISSING_REQUEST_BODY, false);
+        }
+        // Update course categories
         await db_config_1.db.courseCategory.deleteMany({
             where: { course_id: Number(course_id) },
         });
@@ -242,13 +308,46 @@ const editCourse = async (req) => {
                 category_id: Number(category),
             })),
         });
-        if (!isUpdateCategory)
+        if (!isUpdateCategory) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_MISSING_REQUEST_BODY, false);
+        }
         return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_UPDATE_DATA, true);
     }
     catch (error) {
         console.log(error);
-        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const updateTargetCourse = async (req) => {
+    try {
+        const { course_id, requirement, study } = req.body;
+        // Check if the course existsc
+        const existingCourse = await db_config_1.db.course.findUnique({
+            where: {
+                id: Number(course_id),
+            },
+        });
+        if (!existingCourse) {
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_COURSE_NOT_FOUND, false);
+        }
+        // Set is_delete field to true to mark the course as deleted
+        await db_config_1.db.course.update({
+            where: {
+                id: Number(course_id),
+            },
+            data: {
+                requirement: JSON.stringify(requirement),
+                study: JSON.stringify(study),
+            },
+        });
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_UPDATE_DATA, true);
+    }
+    catch (error) {
+        console.log(error);
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
@@ -278,7 +377,7 @@ const deleteCourse = async (req) => {
         return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_UPDATE_DATA, true);
     }
     catch (error) {
-        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
@@ -289,7 +388,7 @@ const buyCourse = async (req) => {
         return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_UPDATE_DATA, true);
     }
     catch (error) {
-        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
@@ -350,6 +449,8 @@ const getTop10RateCourse = async (req) => {
                     first_name: course.user.first_name,
                     last_name: course.user.last_name,
                 },
+                study: JSON.parse(course.study),
+                updated_at: course.updated_at,
                 slug: course.slug,
                 categories: tempCate,
                 price: course.price,
@@ -426,6 +527,8 @@ const getTop10EnrolledCourse = async (req) => {
                     first_name: course.user.first_name,
                     last_name: course.user.last_name,
                 },
+                updated_at: course.updated_at,
+                study: JSON.parse(course.study),
                 slug: course.slug,
                 categories: tempCate,
                 price: course.price,
@@ -472,11 +575,6 @@ const searchMyCourse = async (req) => {
             },
             include: {
                 user: true,
-                course_categories: {
-                    include: {
-                        Category: true,
-                    },
-                },
                 ratings: {
                     include: {
                         User: true,
@@ -485,6 +583,16 @@ const searchMyCourse = async (req) => {
                 sections: {
                     where: {
                         is_delete: false,
+                    },
+                    include: {
+                        Lecture: {
+                            select: {
+                                id: true,
+                                type: true,
+                                lesson: true,
+                                test: true,
+                            },
+                        },
                     },
                 },
                 enrolleds: {
@@ -505,6 +613,28 @@ const searchMyCourse = async (req) => {
         });
         const totalPage = Math.ceil(totalRecord / take);
         const courseCard = courses.map((data) => {
+            const sections = data.sections.map((section) => {
+                const lecture = section.Lecture.map((lecture) => {
+                    let content;
+                    if (lecture.type === "Lesson")
+                        content = lecture.lesson;
+                    else
+                        content = lecture.test;
+                    const tempLecture = {
+                        lecture_id: lecture.id,
+                        type: lecture.type,
+                        content,
+                    };
+                    return tempLecture;
+                });
+                const temp = {
+                    title: section.title,
+                    updated_at: section.updated_at,
+                    id: section.id,
+                    lecture,
+                };
+                return temp;
+            });
             return {
                 course_id: data.id,
                 title: data.title,
@@ -519,16 +649,13 @@ const searchMyCourse = async (req) => {
                     first_name: data.user.first_name,
                     last_name: data.user.last_name,
                 },
-                price: data.price,
                 created_at: data.created_at,
                 slug: data.slug,
-                category: data.course_categories.map((cc) => {
-                    return {
-                        id: cc.Category?.id,
-                        title: cc.Category?.title,
-                        url_image: cc.Category?.url_image,
-                    };
-                }),
+                study: JSON.stringify(data.study),
+                requirement: JSON.stringify(data.requirement),
+                final_test_id: data.final_test_id,
+                sections,
+                description: data.description,
             };
         });
         const responseData = {
@@ -539,7 +666,7 @@ const searchMyCourse = async (req) => {
         return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, responseData);
     }
     catch (error) {
-        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
@@ -582,8 +709,14 @@ const searchMyEnrolledCourse = async (req) => {
                             where: {
                                 is_delete: false,
                             },
+                            include: {
+                                Lecture: {
+                                    where: {
+                                        is_delete: false,
+                                    },
+                                },
+                            },
                         },
-                        enrolleds: true,
                     },
                 },
             },
@@ -604,7 +737,24 @@ const searchMyEnrolledCourse = async (req) => {
             },
         });
         const totalPage = Math.ceil(totalRecord / take);
-        const courseCard = enrolledCourses.map((enroll) => {
+        const courseCard = enrolledCourses.map(async (enroll) => {
+            let number_of_lecture = 0;
+            enroll.course.sections.forEach((section) => {
+                number_of_lecture += section.Lecture.length;
+            });
+            let getOverall = 0;
+            await configs_1.default.db.progress
+                .count({
+                where: {
+                    user_id: userId,
+                    course_id: enroll.course.id,
+                    pass: true,
+                    is_delete: false,
+                },
+            })
+                .then((result) => {
+                getOverall = result;
+            });
             return {
                 course_id: enroll.course?.id,
                 title: enroll.course?.title,
@@ -613,8 +763,10 @@ const searchMyEnrolledCourse = async (req) => {
                 number_of_rating: enroll.course?.number_of_rating,
                 number_of_enrolled: enroll.course?.number_of_enrolled,
                 average_rating: enroll.course?.average_rating,
-                created_at: enroll.course.created_at,
+                updated_at: enroll.course.updated_at,
                 number_of_section: enroll.course.sections.length,
+                number_of_lecture,
+                overall_progress: getOverall,
                 author: {
                     user_id: enroll.course?.user.id,
                     first_name: enroll.course?.user.first_name,
@@ -630,15 +782,16 @@ const searchMyEnrolledCourse = async (req) => {
                 }),
             };
         });
+        const data = await Promise.all(courseCard);
         const responseData = {
             total_page: totalPage,
             total_record: totalRecord,
-            data: courseCard,
+            data,
         };
         return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, responseData);
     }
     catch (error) {
-        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
@@ -657,7 +810,7 @@ const getAllCourse = async (req) => {
             : undefined;
         const sortBy = req.query.sort_by ? req.query.sort_by : undefined;
         const evaluate = req.query.evaluate ? parseFloat(req.query.evaluate) : undefined;
-        const take = configs_1.default.general.PAGE_SIZE;
+        const take = 5; // custom page size là 5
         const skip = ((Number(pageIndex) ?? 1) - 1) * take;
         const categoriesConvert = category?.map((item) => Number(item));
         const orderBy = {};
@@ -764,7 +917,7 @@ const getAllCourse = async (req) => {
     }
     catch (error) {
         console.log(error);
-        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
@@ -819,6 +972,7 @@ const getCourseDetail = async (req) => {
                         id: true,
                     },
                 },
+                test: true,
             },
         });
         if (course) {
@@ -853,21 +1007,39 @@ const getCourseDetail = async (req) => {
                     };
                     return temp;
                 });
+                let number_of_lecture = 0;
                 let number_of_section = 0;
                 sections.forEach((section, index) => {
                     number_of_section += 1;
+                    number_of_lecture += section.lecture.length;
                 });
+                let test;
+                if (course.test)
+                    test = {
+                        test_id: course.test.id,
+                        title: course.test.title,
+                        description: course.test.description,
+                        is_time_limit: course.test.is_time_limit,
+                        duration: course.test.duration,
+                        pass_percent: course.test.pass_percent,
+                        quiz_group_id: course.test.quiz_group_id,
+                        number_of_question: course.test.number_of_question,
+                    };
+                else
+                    test = null;
                 const courseData = {
                     course_id: course.id,
                     title: course.title,
                     summary: course.summary,
                     description: course.description,
                     thumbnail: course.thumbnail,
+                    url_trailer: course.url_trailer,
                     average_rating: course.average_rating,
                     number_of_rating: course.number_of_rating,
                     number_of_enrolled: course.number_of_enrolled,
                     author: author,
                     number_of_section,
+                    number_of_lecture,
                     categories: categories,
                     sections: sections,
                     status: course.status,
@@ -875,6 +1047,8 @@ const getCourseDetail = async (req) => {
                     sale_price: course.sale_price,
                     sale_until: course.sale_until,
                     slug: course.slug,
+                    final_test_id: course.final_test_id,
+                    test,
                     updated_at: course.updated_at.toString(),
                     requirement: JSON.parse(course.requirement),
                     study: JSON.parse(course.study),
@@ -939,6 +1113,12 @@ const getCourseDetailById = async (req) => {
                         id: true,
                     },
                 },
+                approval: {
+                    where: {
+                        is_handle: false,
+                    },
+                },
+                test: true,
             },
         });
         if (course) {
@@ -954,6 +1134,10 @@ const getCourseDetailById = async (req) => {
                         url_image: category.Category.url_image,
                     };
                     categories.push(temp);
+                });
+                const approval = course.approval.map((approval) => {
+                    const temp = { ...approval, approval_id: approval.id };
+                    return temp;
                 });
                 const author = { ...course.user, user_id: course.user.id };
                 const sections = course.sections.map((section) => {
@@ -978,16 +1162,31 @@ const getCourseDetailById = async (req) => {
                     };
                     return temp;
                 });
+                let test;
+                if (course.test)
+                    test = {
+                        test_id: course.test.id,
+                        title: course.test.title,
+                        description: course.test.description,
+                        is_time_limit: course.test.is_time_limit,
+                        duration: course.test.duration,
+                        pass_percent: course.test.pass_percent,
+                        quiz_group_id: course.test.quiz_group_id,
+                    };
+                else
+                    test = null;
                 const courseData = {
                     course_id: course.id,
                     title: course.title,
                     summary: course.summary,
                     description: course.description,
                     thumbnail: course.thumbnail,
+                    url_trailer: course.url_trailer,
                     average_rating: course.average_rating,
                     number_of_rating: course.number_of_rating,
                     number_of_enrolled: course.number_of_enrolled,
                     author: author,
+                    approval,
                     categories: categories,
                     sections: sections,
                     status: course.status,
@@ -995,6 +1194,8 @@ const getCourseDetailById = async (req) => {
                     sale_price: course.sale_price,
                     sale_until: course.sale_until,
                     slug: course.slug,
+                    final_test_id: course.final_test_id,
+                    test,
                     requirement: JSON.parse(course.requirement),
                     study: JSON.parse(course.study),
                 };
@@ -1125,7 +1326,7 @@ const getListRatingOfCourse = async (req) => {
         }
     }
     catch (error) {
-        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
@@ -1166,10 +1367,739 @@ const getRatingPercentOfCourse = async (req) => {
     }
     catch (error) {
         console.log(error);
-        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getAllSalesCourses = async (req) => {
+    try {
+        const pageIndex = req.query.page_index
+            ? parseInt(req.query.page_index, 10)
+            : undefined;
+        const take = configs_1.default.general.PAGE_SIZE;
+        const skip = ((Number(pageIndex) ?? 1) - 1) * take;
+        const courseCardData = await configs_1.default.db.$queryRaw `
+            SELECT 
+                Course.id AS course_id,
+                Course.title,
+                Course.summary,
+                Course.thumbnail,
+                Course.number_of_rating,
+                Course.average_rating,
+                Course.number_of_enrolled,
+                Course.created_at,
+                Course.price,
+                Course.sale_price,
+                Course.sale_until,
+                Course.status,
+                JSON_OBJECT(
+                    'user_id', User.id,
+                    'first_name', User.first_name,
+                    'last_name', User.last_name
+                ) AS author,
+                Course.slug,
+                JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'id', Category.id,
+                        'title', Category.title,
+                        'url_image', Category.url_image
+                    )
+                ) AS category
+            FROM 
+                Course
+            JOIN 
+                User ON Course.author_id = User.id
+            LEFT JOIN 
+                courses_categories ON courses_categories.course_id = Course.id
+            LEFT JOIN 
+                Category ON Category.id = courses_categories.category_id
+            WHERE 
+                Course.is_delete = false
+                AND Course.status = true
+                AND Course.sale_price IS NOT NULL
+                AND Course.sale_price < Course.price
+            GROUP BY 
+                Course.id
+            LIMIT ${skip}, ${take};
+        `;
+        // const totalRecordBigInt = totalRecord[0].total_record;
+        // const totalRecordNumber = parseInt(totalRecordBigInt.toString());
+        if (!courseCardData) {
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_COURSE_NOT_FOUND, false);
+        }
+        else
+            console.log("This is:", courseCardData.length);
+        const totalPage = Math.ceil(courseCardData.length / take);
+        const responseData = {
+            total_page: totalPage,
+            total_record: courseCardData.length,
+            data: courseCardData,
+        };
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, responseData);
+    }
+    catch (error) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getTop10SalesCourses = async (req) => {
+    try {
+        const top10SalesCourses = await configs_1.default.db.$queryRaw `
+        SELECT 
+                Course.id AS course_id,
+                Course.title,
+                Course.summary,
+                Course.thumbnail,
+                Course.number_of_rating,
+                Course.average_rating,
+                Course.number_of_enrolled,
+                User.id AS user_id,
+                User.first_name,
+                User.last_name,
+                Course.slug,
+                Course.study,
+                Course.updated_at,
+                Course.price,
+                Course.sale_price,
+                Course.sale_until,
+                JSON_OBJECT(
+                    'user_id', User.id,
+                    'first_name', User.first_name,
+                    'last_name', User.last_name
+                ) AS author,
+                JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'category_id', Category.id,
+                        'title', Category.title,
+                        'url_image', Category.url_image
+                    )
+                ) AS categories
+            FROM 
+                Course
+            JOIN 
+                User ON Course.author_id = User.id
+            LEFT JOIN 
+                courses_categories ON courses_categories.course_id = Course.id
+            LEFT JOIN 
+                Category ON Category.id = courses_categories.category_id
+            WHERE 
+                Course.is_delete = false
+                AND Course.status = true
+                AND Course.price - Course.sale_price > 0
+            GROUP BY 
+                Course.id
+            ORDER BY 
+                Course.price - Course.sale_price  DESC
+            LIMIT 10;
+        `;
+        if (top10SalesCourses.length === 0) {
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_COURSE_NOT_FOUND, false);
+        }
+        else
+            console.log("Here:", top10SalesCourses.length);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, top10SalesCourses);
+    }
+    catch (error) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const approveCourse = async (req) => {
+    try {
+        const { course_id } = req.params;
+        const user_id = Number(req.user_id);
+        const isAdmin = await configs_1.default.db.user.findFirst({
+            where: {
+                is_admin: true,
+                id: user_id,
+            },
+        });
+        if (!isAdmin)
+            return new response_1.ResponseError(401, constants_1.default.error.ERROR_UNAUTHORIZED, false);
+        const isFoundCourse = await configs_1.default.db.course.findFirst({
+            where: {
+                id: Number(course_id),
+                is_delete: false,
+                status: false,
+            },
+        });
+        if (!isFoundCourse)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_COURSE_NOT_FOUND, false);
+        const approveCourse = await configs_1.default.db.course.update({
+            where: {
+                id: isFoundCourse.id,
+            },
+            data: {
+                status: true,
+            },
+        });
+        if (!approveCourse)
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+        const clearApproval = await configs_1.default.db.approval.updateMany({
+            where: {
+                course_id: isFoundCourse.id,
+                is_handle: false,
+            },
+            data: {
+                is_handle: true,
+            },
+        });
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_APPROVE_COURSE, true);
+    }
+    catch (error) {
+        console.log(error);
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const restrictCourse = async (req) => {
+    try {
+        const { course_id } = req.params;
+        const user_id = Number(req.user_id);
+        const isAdmin = await configs_1.default.db.user.findFirst({
+            where: {
+                is_admin: true,
+                id: user_id,
+            },
+        });
+        if (!isAdmin)
+            return new response_1.ResponseError(401, constants_1.default.error.ERROR_UNAUTHORIZED, false);
+        const isFoundCourse = await configs_1.default.db.course.findFirst({
+            where: {
+                id: Number(course_id),
+                is_delete: false,
+                status: true,
+            },
+        });
+        if (!isFoundCourse)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_COURSE_NOT_FOUND, false);
+        const restrictCourse = await configs_1.default.db.course.update({
+            where: {
+                id: isFoundCourse.id,
+            },
+            data: {
+                status: false,
+            },
+        });
+        if (!restrictCourse)
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_RESTRICT_COURSE, true);
+    }
+    catch (error) {
+        console.log(error);
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getProgressByCourseSlug = async (req) => {
+    try {
+        const { slug } = req.params;
+        const userId = Number(req.user_id);
+        const isFoundCourse = await configs_1.default.db.course.findFirst({
+            where: {
+                slug,
+            },
+        });
+        if (!isFoundCourse)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        const getProgress = await configs_1.default.db.progress.findMany({
+            where: {
+                course_id: Number(isFoundCourse.id),
+                user_id: userId,
+                is_delete: false,
+            },
+            orderBy: {
+                lecture_id: "asc",
+            },
+            include: {
+                lecture: {
+                    select: {
+                        section_id: true,
+                        lesson: true,
+                        test: true,
+                        type: true,
+                    },
+                },
+            },
+        });
+        const getOverall = await configs_1.default.db.progress.count({
+            where: {
+                course_id: Number(isFoundCourse.id),
+                user_id: userId,
+                pass: true,
+                is_delete: false,
+            },
+        });
+        if (!getProgress)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        const progressData = getProgress.map((progress) => {
+            const duration = progress.lecture.type === "Lesson"
+                ? progress.lecture.lesson?.duration
+                : progress.lecture.test?.duration;
+            const temp = {
+                progress_id: progress.id,
+                lecture_id: progress.lecture_id,
+                section_id: progress.lecture.section_id,
+                is_pass: progress.pass,
+                duration,
+                progress_value: progress.progress_value,
+                progress_percent: progress.progress_percent,
+            };
+            return temp;
+        });
+        const data = {
+            overall_progress: getOverall,
+            progress: progressData,
+        };
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, data);
+    }
+    catch (error) {
+        console.log(error);
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getCourseDetailForTrialLesson = async (req) => {
+    try {
+        const { slug } = req.params;
+        const course = await db_config_1.db.course.findFirst({
+            where: {
+                slug: slug,
+            },
+            include: {
+                course_categories: {
+                    include: {
+                        Category: {
+                            select: {
+                                id: true,
+                                title: true,
+                            },
+                        },
+                    },
+                },
+                sections: {
+                    select: {
+                        title: true,
+                        updated_at: true,
+                        id: true,
+                        Lecture: {
+                            where: {
+                                is_delete: false,
+                                type: "lesson",
+                            },
+                            select: {
+                                id: true,
+                                type: true,
+                                lesson: true,
+                                // test: true,
+                            },
+                            orderBy: {
+                                created_at: "asc",
+                            },
+                            take: 1,
+                        },
+                    },
+                    where: {
+                        is_delete: false,
+                    },
+                    take: 2,
+                },
+                user: {
+                    select: {
+                        first_name: true,
+                        last_name: true,
+                        id: true,
+                    },
+                },
+            },
+        });
+        if (course) {
+            if (course.is_delete) {
+                return new response_1.ResponseError(404, constants_1.default.error.ERROR_COURSE_NOT_FOUND, false);
+            }
+            else {
+                const categories = [];
+                course.course_categories.forEach((category) => {
+                    categories.push(category.Category);
+                });
+                const author = { ...course.user, user_id: course.user.id };
+                const sections = course.sections.map((section) => {
+                    const lecture = section.Lecture.map((lecture) => {
+                        let content;
+                        if (lecture.type === "Lesson")
+                            content = lecture.lesson;
+                        // else content = lecture.test;
+                        const tempLecture = {
+                            lecture_id: lecture.id,
+                            type: lecture.type,
+                            content,
+                        };
+                        return tempLecture;
+                    });
+                    const temp = {
+                        title: section.title,
+                        updated_at: section.updated_at,
+                        id: section.id,
+                        lecture,
+                    };
+                    return temp;
+                });
+                let number_of_section = 0;
+                sections.forEach((section, index) => {
+                    number_of_section += 1;
+                });
+                const courseData = {
+                    course_id: course.id,
+                    title: course.title,
+                    summary: course.summary,
+                    description: course.description,
+                    thumbnail: course.thumbnail,
+                    url_trailer: course.url_trailer,
+                    average_rating: course.average_rating,
+                    number_of_rating: course.number_of_rating,
+                    number_of_enrolled: course.number_of_enrolled,
+                    author: author,
+                    number_of_section,
+                    categories: categories,
+                    sections: sections,
+                    status: course.status,
+                    price: course.price,
+                    sale_price: course.sale_price,
+                    sale_until: course.sale_until,
+                    slug: course.slug,
+                    final_test_id: course.final_test_id,
+                    updated_at: course.updated_at.toString(),
+                    requirement: JSON.parse(course.requirement),
+                    study: JSON.parse(course.study),
+                };
+                return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, courseData);
+            }
+        }
+        return new response_1.ResponseError(404, constants_1.default.error.ERROR_GET_COURSE_FAILED, false);
+    }
+    catch (error) {
+        console.log(error);
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getAllEnrolled = async (req) => {
+    try {
+        const user_id = Number(req.user_id);
+        const getAllEnrolled = await configs_1.default.db.enrolled.findMany({
+            where: {
+                user_id,
+            },
+        });
+        if (!getAllEnrolled)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, getAllEnrolled);
+    }
+    catch (error) {
+        console.log(error);
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getCertificate = async (req) => {
+    try {
+        const userId = Number(req.user_id);
+        const courseId = Number(req.params.course_id);
+        const isEnrolleDone = await configs_1.default.db.enrolled.findFirst({
+            where: {
+                user_id: userId,
+                course_id: courseId,
+                is_done: true,
+            },
+        });
+        if (!isEnrolleDone)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        const getCertificate = await configs_1.default.db.certificate.findFirst({
+            where: {
+                recipient_id: userId,
+                course_id: courseId,
+            },
+        });
+        if (!getCertificate)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, {
+            public_id: getCertificate.public_id,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const createFinalTest = async (req) => {
+    try {
+        const content = req.body;
+        const courseId = Number(content.course_id);
+        const title = content.title;
+        const duration = Number(content.duration) * 60;
+        const description = content.description;
+        const pass_percent = Number((Number(content.pass_percent) / 100).toFixed(2));
+        const quiz_group_id = Number(content.quiz_group_id);
+        const is_time_limit = content.is_time_limit === "true" ? true : false;
+        const quizList = await configs_1.default.db.quiz.findMany({
+            where: {
+                quiz_group_id,
+                is_delete: false,
+            },
+        });
+        const isCourseExist = await configs_1.default.db.course.findFirst({
+            where: {
+                id: courseId,
+            },
+        });
+        if (!isCourseExist)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        const createTest = await configs_1.default.db.test.create({
+            data: {
+                title,
+                duration: duration.toString(),
+                description,
+                pass_percent,
+                quiz_group_id,
+                number_of_question: quizList.length,
+                is_time_limit,
+            },
+        });
+        const updateCourse = await configs_1.default.db.course.update({
+            where: {
+                id: courseId,
+            },
+            data: {
+                final_test_id: createTest.id,
+            },
+        });
+        const createTestDetailData = quizList.map((quiz) => {
+            const temp = {
+                test_id: createTest.id,
+                quiz_id: quiz.id,
+            };
+            return temp;
+        });
+        const createTestDetail = await configs_1.default.db.testDetail.createMany({
+            data: createTestDetailData,
+        });
+        if (!createTestDetail) {
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+        }
+        else {
+            return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_CREATE_DATA, true);
+        }
+    }
+    catch (error) {
+        return new response_1.ResponseError(500, JSON.stringify(error), false);
+    }
+};
+const updateFinalTest = async (req) => {
+    try {
+        const content = req.body;
+        const courseId = Number(req.params.course_id);
+        const title = content.title;
+        const duration = Number(content.duration) * 60;
+        const description = content.description;
+        const pass_percent = Number((Number(content.pass_percent) / 100).toFixed(2));
+        const quiz_group_id = Number(content.quiz_group_id);
+        const is_time_limit = content.is_time_limit === "true" ? true : false;
+        const quizList = await configs_1.default.db.quiz.findMany({
+            where: {
+                quiz_group_id,
+                is_delete: false,
+            },
+        });
+        const isExistCourse = await configs_1.default.db.course.findUnique({
+            where: {
+                id: courseId,
+            },
+        });
+        if (!isExistCourse || !isExistCourse.final_test_id)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        const isExistTest = await configs_1.default.db.test.findFirst({
+            where: {
+                id: isExistCourse.final_test_id,
+                is_delete: false,
+            },
+        });
+        if (!isExistTest)
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        const updateTest = await configs_1.default.db.test.update({
+            data: {
+                title,
+                duration: duration.toString(),
+                description,
+                pass_percent,
+                quiz_group_id,
+                number_of_question: quizList.length,
+                is_time_limit,
+            },
+            where: {
+                id: isExistTest.id,
+            },
+        });
+        if (!updateTest)
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+        if (quiz_group_id !== isExistTest?.quiz_group_id) {
+            const createTestDetailData = quizList.map((quiz) => {
+                const temp = {
+                    test_id: updateTest.id,
+                    quiz_id: quiz.id,
+                };
+                return temp;
+            });
+            const clearOldTestDetail = await configs_1.default.db.testDetail.deleteMany({
+                where: {
+                    test_id: isExistTest.id,
+                },
+            });
+            const createTestDetail = await configs_1.default.db.testDetail.createMany({
+                data: createTestDetailData,
+            });
+            if (!createTestDetail) {
+                return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+            }
+            else {
+                return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_UPDATE_DATA, true);
+            }
+        }
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_UPDATE_DATA, true);
+    }
+    catch (error) {
+        return new response_1.ResponseError(500, JSON.stringify(error), false);
+    }
+};
+const deleteFinalTest = async (req) => {
+    try {
+        const courseId = Number(req.params.course_id);
+        const isExistCourse = await configs_1.default.db.course.findFirst({
+            where: {
+                id: courseId,
+                is_delete: false,
+            },
+        });
+        if (!isExistCourse)
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        if (!isExistCourse.final_test_id)
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        const isExistTest = await configs_1.default.db.test.findFirst({
+            where: {
+                id: isExistCourse.final_test_id,
+            },
+        });
+        if (!isExistTest)
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        const deleteTest = await configs_1.default.db.test.update({
+            where: {
+                id: isExistTest.id,
+            },
+            data: {
+                is_delete: true,
+            },
+        });
+        if (deleteTest) {
+            const updateCourse = await configs_1.default.db.course.update({
+                where: {
+                    id: isExistCourse.id,
+                },
+                data: {
+                    final_test_id: null,
+                },
+            });
+            const deleteTestDetail = await configs_1.default.db.testDetail.deleteMany({
+                where: {
+                    test_id: deleteTest.id,
+                },
+            });
+            return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_DELETE_DATA, true);
+        }
+        else {
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+        }
+    }
+    catch (error) {
+        return new response_1.ResponseError(500, JSON.stringify(error), false);
+    }
+};
+const getFinalTestByCourseId = async (req) => {
+    try {
+        const courseId = Number(req.params.course_id);
+        const isExistCourse = await configs_1.default.db.course.findFirst({
+            where: {
+                id: courseId,
+                is_delete: false,
+            },
+        });
+        if (!isExistCourse)
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        if (!isExistCourse.final_test_id)
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        const isExistTest = await configs_1.default.db.test.findFirst({
+            where: {
+                id: isExistCourse.final_test_id,
+            },
+        });
+        if (!isExistTest)
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        const data = {
+            test_id: isExistTest.id,
+            title: isExistTest.title,
+            description: isExistTest.description,
+            is_time_limit: isExistTest.is_time_limit,
+            duration: isExistTest.duration,
+            pass_percent: isExistTest.pass_percent,
+            quiz_group_id: isExistTest.quiz_group_id,
+        };
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, data);
+    }
+    catch (error) {
+        return new response_1.ResponseError(500, JSON.stringify(error), false);
+    }
+};
+const setDoneCourse = async (req) => {
+    try {
+        const courseId = Number(req.params.course_id);
+        const userId = Number(req.user_id);
+        const isExistEnrolled = await configs_1.default.db.enrolled.findFirst({
+            where: {
+                course_id: courseId,
+                user_id: userId,
+                is_done: false,
+            },
+        });
+        if (!isExistEnrolled)
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        const setDoneCourse = await configs_1.default.db.enrolled.update({
+            where: {
+                id: isExistEnrolled.id,
+            },
+            data: {
+                is_done: true,
+            },
+        });
+        if (setDoneCourse) {
+            return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_UPDATE_DATA, true);
+        }
+        else {
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+        }
+    }
+    catch (error) {
+        return new response_1.ResponseError(500, JSON.stringify(error), false);
     }
 };
 const CourseServices = {
@@ -1190,5 +2120,19 @@ const CourseServices = {
     addPromotion,
     stopPromotion,
     getRatingPercentOfCourse,
+    getAllSalesCourses,
+    getTop10SalesCourses,
+    updateTargetCourse,
+    approveCourse,
+    restrictCourse,
+    getProgressByCourseSlug,
+    getCourseDetailForTrialLesson,
+    getAllEnrolled,
+    getCertificate,
+    createFinalTest,
+    updateFinalTest,
+    deleteFinalTest,
+    setDoneCourse,
+    getFinalTestByCourseId,
 };
 exports.default = CourseServices;

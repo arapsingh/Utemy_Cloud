@@ -435,6 +435,96 @@ const activeUser = async (req) => {
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
     }
 };
+const getTop10AuthorByAvgRating = async (req) => {
+    try {
+        const top10Author = await configs_1.default.db.user.findMany({
+            take: 10,
+            where: {
+                is_deleted: false,
+                courses: {
+                    some: {
+                        is_delete: false,
+                    },
+                },
+            },
+            select: {
+                id: true,
+                first_name: true,
+                last_name: true,
+                description: true,
+                url_avatar: true,
+                courses: {
+                    select: {
+                        average_rating: true,
+                        number_of_enrolled: true,
+                    },
+                },
+            },
+        });
+        const responseData = top10Author.map((user) => ({
+            user_id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            description: user.description,
+            url_avatar: user.url_avatar,
+            average_rating_all_course: user.courses.reduce((acc, course) => acc + course.average_rating, 0) / user.courses.length,
+            number_of_enrolled_all_course: user.courses.reduce((acc, course) => acc + course.number_of_enrolled, 0),
+        }));
+        responseData.sort((a, b) => b.average_rating_all_course - a.average_rating_all_course);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, responseData);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getTop10AuthorBySumEnrolled = async (req) => {
+    try {
+        const top10Author = await configs_1.default.db.user.findMany({
+            take: 10,
+            where: {
+                is_deleted: false,
+                courses: {
+                    some: {
+                        is_delete: false,
+                    },
+                },
+            },
+            select: {
+                id: true,
+                first_name: true,
+                last_name: true,
+                description: true,
+                url_avatar: true,
+                courses: {
+                    select: {
+                        average_rating: true,
+                        number_of_enrolled: true,
+                    },
+                },
+            },
+        });
+        const responseData = top10Author.map((user) => ({
+            user_id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            description: user.description,
+            url_avatar: user.url_avatar,
+            average_rating_all_course: user.courses.reduce((acc, course) => acc + course.average_rating, 0) / user.courses.length,
+            number_of_enrolled_all_course: user.courses.reduce((acc, course) => acc + course.number_of_enrolled, 0),
+        }));
+        responseData.sort((a, b) => b.number_of_enrolled_all_course - a.number_of_enrolled_all_course);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, responseData);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
 const UserServices = {
     changeAvatar,
     getProfile,
@@ -445,5 +535,7 @@ const UserServices = {
     deleteUser,
     editUser,
     activeUser,
+    getTop10AuthorByAvgRating,
+    getTop10AuthorBySumEnrolled,
 };
 exports.default = UserServices;

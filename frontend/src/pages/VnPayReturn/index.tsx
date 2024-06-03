@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import useQueryParams from "../../hooks/useQueryParams";
 import { useAppDispatch } from "../../hooks/hooks";
-import { vnpayActions, cartActions } from "../../redux/slices";
+import { vnpayActions, cartActions, courseActions } from "../../redux/slices";
 import { FaceSmileIcon, FaceFrownIcon } from "@heroicons/react/24/outline";
 
 const VnPayReturn = () => {
@@ -19,6 +19,7 @@ const VnPayReturn = () => {
         vnp_TransactionNo,
         vnp_TransactionStatus,
         vnp_TxnRef,
+        vnp_SecureHash,
     } = useQueryParams();
     const data = {
         vnp_Amount,
@@ -32,7 +33,9 @@ const VnPayReturn = () => {
         vnp_TransactionNo,
         vnp_TransactionStatus,
         vnp_TxnRef,
+        vnp_SecureHash,
     };
+    console.log(data);
     useEffect(() => {
         // const newZoomValue = 0.6; // Đặt giá trị mong muốn
 
@@ -41,9 +44,13 @@ const VnPayReturn = () => {
         //   document.documentElement.style.zoom = `${newZoomValue}`;
         // }       
         dispatch(vnpayActions.vnpayIpn(data)).then((response) => {
-            if (response.payload?.status_code === 200) dispatch(cartActions.getAllCart());
+            if (response.payload?.status_code === 200) {
+                dispatch(cartActions.getAllCart());
+                dispatch(courseActions.getAllEnrolled());
+            }
         });
-    }, [dispatch]);
+    }, [dispatch, JSON.stringify(data)]);
+    //có gì bỏ cái stringify ra nếu lỗi
     const success = vnp_ResponseCode === "00" && vnp_TransactionStatus === "00";
     const invoiceId = vnp_OrderInfo.split(":")[1];
     return (

@@ -9,7 +9,7 @@ const constants_1 = __importDefault(require("../constants"));
 const createTest = async (content, lectureId) => {
     try {
         const title = content.title;
-        const duration = content.duration;
+        const duration = Number(content.duration) * 60;
         const description = content.description;
         const pass_percent = Number((Number(content.pass_percent) / 100).toFixed(2));
         const quiz_group_id = Number(content.quiz_group_id);
@@ -24,7 +24,7 @@ const createTest = async (content, lectureId) => {
             data: {
                 title,
                 lecture_id: lectureId,
-                duration,
+                duration: duration.toString(),
                 description,
                 pass_percent,
                 quiz_group_id,
@@ -56,7 +56,7 @@ const createTest = async (content, lectureId) => {
 const updateTest = async (content, lectureId) => {
     try {
         const title = content.title;
-        const duration = content.duration;
+        const duration = Number(content.duration) * 60;
         const description = content.description;
         const pass_percent = Number((Number(content.pass_percent) / 100).toFixed(2));
         const quiz_group_id = Number(content.quiz_group_id);
@@ -78,7 +78,7 @@ const updateTest = async (content, lectureId) => {
         const updateTest = await configs_1.default.db.test.update({
             data: {
                 title,
-                duration,
+                duration: duration.toString(),
                 description,
                 pass_percent,
                 quiz_group_id,
@@ -156,6 +156,12 @@ const getTestByTestId = async (req) => {
     try {
         const { test_id } = req.params;
         const user_id = Number(req.user_id);
+        const isAdmin = await configs_1.default.db.user.findFirst({
+            where: {
+                id: user_id,
+                is_admin: true,
+            },
+        });
         const isCourseExist = await configs_1.default.db.test.findFirst({
             where: {
                 id: Number(test_id),
@@ -178,14 +184,33 @@ const getTestByTestId = async (req) => {
                 },
             },
         });
-        const isEnrolled = await configs_1.default.db.enrolled.findFirst({
-            where: {
-                user_id,
-                course_id: isCourseExist?.lecture?.section.course_id,
-            },
-        });
-        if (user_id !== isCourseExist?.lecture?.section.Course?.author_id && !isEnrolled)
-            return new common_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        if (!isCourseExist || isCourseExist.lecture_id === null) {
+            const isCourseExistFinalTest = await configs_1.default.db.course.findUnique({
+                where: {
+                    final_test_id: Number(test_id),
+                },
+            });
+            if (!isCourseExistFinalTest)
+                return new common_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+            const isEnrolled = await configs_1.default.db.enrolled.findFirst({
+                where: {
+                    user_id,
+                    course_id: isCourseExistFinalTest.id,
+                },
+            });
+            if (user_id !== isCourseExistFinalTest.author_id && !isEnrolled && !isAdmin)
+                return new common_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        }
+        else {
+            const isEnrolled = await configs_1.default.db.enrolled.findFirst({
+                where: {
+                    user_id,
+                    course_id: isCourseExist?.lecture?.section.course_id,
+                },
+            });
+            if (user_id !== isCourseExist?.lecture?.section.Course?.author_id && !isEnrolled && !isAdmin)
+                return new common_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        }
         const isExistTest = await configs_1.default.db.test.findFirst({
             where: {
                 id: Number(test_id),
@@ -245,35 +270,127 @@ const getTestByTestId = async (req) => {
         return new common_1.ResponseError(500, JSON.stringify(error), false);
     }
 };
+const processType3Data = (data) => {
+    if (data.length === 0)
+        return [];
+    const type3Data = data.filter((item) => item.type === 3);
+    if (type3Data.length === 0)
+        return [];
+    const id = type3Data[0].quiz_answer_id;
+    const groupedData = type3Data.reduce((acc, cur) => {
+        //@ts-expect-error đéo lỗi đc mà cứ báo lỗi
+        const newValue = acc.get(cur.quiz_id) !== undefined
+            ? acc.get(cur.quiz_id)?.concat(cur)
+            : new Array().concat(cur);
+        acc.set(cur.quiz_id, newValue);
+        return acc;
+    }, new Map());
+    const processedData = Array.from(groupedData).map(async ([quizId, group]) => {
+        const numAns = await configs_1.default.db.quizAnswer.count({
+            where: {
+                quiz_id: quizId,
+            },
+        });
+        const totalCorrect = group.reduce((acc, cur) => acc + (cur.is_correct ? 1 : 0), 0);
+        const averageCorrect = totalCorrect / numAns;
+        const isCorrect = averageCorrect >= 0.5 ? true : false;
+        const quizAnswerString = group
+            .map((item) => `${item.quiz_answer_string}:${item.is_correct ? "t" : "f"}`)
+            .join(",");
+        return {
+            quiz_id: quizId,
+            quiz_answer_string: quizAnswerString,
+            quiz_answer_id: id,
+            is_correct: isCorrect,
+            type: 3,
+        };
+    });
+    return processedData;
+};
 const createTestHistory = async (req) => {
     try {
         const test_id = Number(req.body.test_id);
         const test_progress = req.body.test_progress;
+        const type3Data = await Promise.all(processType3Data(test_progress));
+        const format_test_progress = test_progress
+            .filter((e) => e.type !== 3)
+            .concat(type3Data.length > 0 ? type3Data : []);
         const user_id = Number(req.user_id);
         const isExistTest = await configs_1.default.db.test.findFirst({
             where: {
                 id: test_id,
             },
-            select: {
-                number_of_question: true,
-                pass_percent: true,
+            include: {
+                lecture: {
+                    include: {
+                        section: true,
+                    },
+                },
             },
         });
         if (!isExistTest)
             return new common_1.ResponseError(500, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
-        const total_percent = Number(Number(countRightAnswer(test_progress) / Number(isExistTest.number_of_question)).toFixed(2));
+        const total_percent = Number(Number(countRightAnswer(format_test_progress) / Number(isExistTest.number_of_question)).toFixed(2));
+        const isEnrolled = await configs_1.default.db.enrolled.findFirst({
+            where: {
+                user_id,
+                course_id: isExistTest.lecture?.section.course_id,
+            },
+        });
+        const is_pass = total_percent >= isExistTest.pass_percent;
+        const isFinal = await configs_1.default.db.course.findUnique({
+            where: {
+                final_test_id: isExistTest.id,
+            },
+        });
+        if (is_pass && isEnrolled) {
+            if (isFinal) {
+                const setPassCourse = await configs_1.default.db.enrolled.update({
+                    where: {
+                        id: isEnrolled.id,
+                    },
+                    data: {
+                        is_pass: true,
+                    },
+                });
+            }
+            else {
+                const isExistProgress = await configs_1.default.db.progress.findFirst({
+                    where: {
+                        user_id,
+                        lecture_id: Number(isExistTest.lecture_id),
+                        course_id: Number(isExistTest.lecture?.section.course_id),
+                    },
+                });
+                if (!isExistProgress) {
+                    const createProgress = await configs_1.default.db.progress.create({
+                        data: {
+                            user_id,
+                            lecture_id: Number(isExistTest.lecture_id),
+                            course_id: Number(isExistTest.lecture?.section.course_id),
+                            progress_value: countRightAnswer(format_test_progress),
+                            progress_percent: total_percent,
+                            pass: is_pass,
+                        },
+                    });
+                }
+            }
+        }
         const createTestHistory = await configs_1.default.db.testHistory.create({
             data: {
                 test_id,
                 user_id,
-                total_score: countRightAnswer(test_progress),
+                total_score: countRightAnswer(format_test_progress),
                 total_percent: total_percent * 100,
-                is_pass: total_percent >= isExistTest.pass_percent,
+                is_pass,
             },
         });
-        const createTestHistoryDetailData = test_progress.map((progress) => {
+        const createTestHistoryDetailData = format_test_progress.map((progress) => {
             const temp = {
-                ...progress,
+                quiz_id: progress.quiz_id,
+                quiz_answer_string: progress.quiz_answer_string,
+                is_correct: progress.is_correct,
+                quiz_answer_id: progress.quiz_answer_id,
                 test_history_id: createTestHistory.id,
             };
             return temp;

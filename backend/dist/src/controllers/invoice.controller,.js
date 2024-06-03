@@ -14,8 +14,17 @@ class InvoiceController {
         return res.status(response.getStatusCode()).json(response);
     }
     async createInvoice(req, res) {
-        const response = await services_1.default.InvoiceServices.createInvoice(req);
-        return res.status(response.getStatusCode()).json(response);
+        try {
+            const total = req.body.totalwithcoupon;
+            const discount = req.body.discount;
+            const coupon_id = req.body.id;
+            const max_discount_money = req.body.maxdiscountamount;
+            const response = await services_1.default.InvoiceServices.createInvoice(req, total, discount, coupon_id, max_discount_money);
+            return res.status(response.getStatusCode()).json(response);
+        }
+        catch (error) {
+            return res.status(500).json({ error: "Internal server error" });
+        }
     }
     async getInvoiceById(req, res) {
         const response = await services_1.default.InvoiceServices.getInvoiceById(req);

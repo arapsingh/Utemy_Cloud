@@ -52,5 +52,13 @@ class UserController {
         const response = await services_1.default.UserService.getAllUsers(req);
         return res.status(response.getStatusCode()).json(response);
     }
+    async getTop10AuthorByAvgRating(req, res) {
+        const response = await services_1.default.UserService.getTop10AuthorByAvgRating(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
+    async getTop10AuthorBySumEnrolled(req, res) {
+        const response = await services_1.default.UserService.getTop10AuthorBySumEnrolled(req);
+        return res.status(response.getStatusCode()).json(response);
+    }
 }
 exports.default = UserController;

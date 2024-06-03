@@ -18,6 +18,18 @@ const quiz_controller_1 = __importDefault(require("./quiz.controller"));
 const lecture_controller_1 = __importDefault(require("./lecture.controller"));
 const test_controller_1 = __importDefault(require("./test.controller"));
 const coupon_controller_1 = __importDefault(require("./coupon.controller"));
+const approval_controller_1 = __importDefault(require("./approval.controller"));
+const decision_controller_1 = __importDefault(require("./decision.controller"));
+const report_controller_1 = __importDefault(require("./report.controller"));
+const event_controller_1 = __importDefault(require("./event.controller"));
+const progress_controller_1 = __importDefault(require("./progress.controller"));
+const comment_controller_1 = __importDefault(require("./comment.controller"));
+const replycomment_controller_1 = __importDefault(require("./replycomment.controller"));
+const reaction_controller_1 = __importDefault(require("./reaction.controller"));
+const certifier_controller_1 = __importDefault(require("./certifier.controller"));
+const blog_controller_1 = __importDefault(require("./blog.controller"));
+const commentblog_controller_1 = __importDefault(require("./commentblog.controller"));
+const reactioncommentblog_controller_1 = __importDefault(require("./reactioncommentblog.controller"));
 exports.default = {
     authController: new auth_controller_1.default(),
     sectionController: new section_controller_1.default(),
@@ -34,4 +46,16 @@ exports.default = {
     lectureController: new lecture_controller_1.default(),
     testController: new test_controller_1.default(),
     couponController: new coupon_controller_1.default(),
+    approvalController: new approval_controller_1.default(),
+    decisionController: new decision_controller_1.default(),
+    reportController: new report_controller_1.default(),
+    eventController: new event_controller_1.default(),
+    progressController: new progress_controller_1.default(),
+    commentController: new comment_controller_1.default(),
+    replyCommentController: new replycomment_controller_1.default(),
+    reactionController: new reaction_controller_1.default(),
+    certifierController: new certifier_controller_1.default(),
+    blogController: new blog_controller_1.default(),
+    commentBlogController: new commentblog_controller_1.default(),
+    reactionCommentBlogController: new reactioncommentblog_controller_1.default(),
 };

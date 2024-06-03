@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateLeectureSchema = exports.AddLectureSchema = void 0;
+exports.UpdateLectureSchema = exports.AddLectureSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
 const constants_1 = __importDefault(require("../constants"));
 exports.AddLectureSchema = joi_1.default.object({
@@ -44,7 +44,7 @@ exports.AddLectureSchema = joi_1.default.object({
     }),
     video: joi_1.default.any(),
 });
-exports.UpdateLeectureSchema = joi_1.default.object({
+exports.UpdateLectureSchema = joi_1.default.object({
     type: joi_1.default.string().trim().required().max(20).messages({
         "any.required": constants_1.default.error.ERROR_LECTURE_TYPE_REQUIRED,
         "string.base": constants_1.default.error.ERROR_LECTURE_TYPE_STRING,

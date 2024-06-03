@@ -25,6 +25,8 @@ const isAuthor = async (req, res, next) => {
             groupId = req.params;
         else if (isObjectEmpty(req.params))
             groupId = req.body;
+        else
+            groupId = { ...req.params, ...req.body };
         if (groupId.course_id) {
             const isCourseExist = await configs_1.default.db.course.findUnique({
                 where: {

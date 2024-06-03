@@ -14,6 +14,17 @@ import statisticSlice from "./slices/statistic.slice";
 import quizSlice from "./slices/quiz.slice";
 import lectureSlice from "./slices/lecture.slice";
 import testSlice from "./slices/test.slice";
+import approvalSlice from "./slices/approval.slice";
+import decisionSlice from "./slices/decision.slice";
+import reportSlice from "./slices/report.slice";
+import couponSlice from "./slices/coupon.slice";
+import eventSlice from "./slices/event.slice";
+import progressSlice from "./slices/progress.slice";
+import reactionSlice from "./slices/reaction.slice";
+import commentSlice from "./slices/comment.slice";
+import replyCommentSlice from "./slices/replycomment.slice";
+import certifierSlice from "./slices/certifier.slice";
+import blogSlice from "./slices/blog.slice";
 
 // import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
 // import { composeWithDevTools } from "redux-devtools-extension";
@@ -35,6 +46,17 @@ const store = configureStore({
         quizSlice,
         lectureSlice,
         testSlice,
+        approvalSlice,
+        decisionSlice,
+        reportSlice,
+        couponSlice,
+        eventSlice,
+        progressSlice,
+        reactionSlice,
+        commentSlice,
+        replyCommentSlice,
+        certifierSlice,
+        blogSlice,
         // fileStorageSlice: fileStorageSlice,
     },
     middleware: (getDefaultMiddleware) =>

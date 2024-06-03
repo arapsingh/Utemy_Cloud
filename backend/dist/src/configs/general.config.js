@@ -28,4 +28,5 @@ exports.general = {
     vnp_Url: process.env.VNP_URL,
     vnp_Api: process.env.VNP_API,
     vnp_ReturnUrl: process.env.VNP_RETURN_URL,
+    CERTIFIER_ID: process.env.CERTIFIER_ID,
 };

@@ -129,12 +129,24 @@ const deleteLecture = async (req) => {
                 is_delete: true,
             },
         });
-        if (isLectureExist.type === "Lesson") {
-            return lesson_services_1.default.deleteLesson(isLectureExist.id);
+        if (deleteLecture) {
+            const deleteProgress = await configs_1.default.db.progress.updateMany({
+                where: {
+                    lecture_id: Number(lecture_id),
+                },
+                data: {
+                    is_delete: true,
+                },
+            });
+            if (isLectureExist.type === "Lesson") {
+                return lesson_services_1.default.deleteLesson(isLectureExist.id);
+            }
+            else {
+                return test_services_1.default.deleteTest(isLectureExist.id);
+            }
         }
-        else {
-            return test_services_1.default.deleteTest(isLectureExist.id);
-        }
+        else
+            return new common_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
     }
     catch (error) {
         console.log(error);

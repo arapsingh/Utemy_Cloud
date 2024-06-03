@@ -27,10 +27,6 @@ exports.createCourseSchema = joi_1.default.object({
         "string.base": constants_1.default.error.ERROR_COURSE_SLUG_STRING,
         "string.regex": constants_1.default.error.ERROR_COURSE_SLUG_MALFORMED,
     }),
-    status: joi_1.default.required().messages({
-        "any.required": constants_1.default.error.ERROR_COURSE_STATUS_REQUIRED,
-        "bool.base": constants_1.default.error.ERROR_COURSE_STATUS_BOOLEAN,
-    }),
     description: joi_1.default.string().trim().required().messages({
         "any.required": constants_1.default.error.ERROR_COURSE_DESCRIPTION_REQUIRED,
         "string.base": constants_1.default.error.ERROR_COURSE_DESCRIPTION_STRING,
@@ -64,9 +60,6 @@ const updateCourseSchema = joi_1.default.object({
         "string.base": constants_1.default.error.ERROR_COURSE_SLUG_STRING,
         "string.regex": constants_1.default.error.ERROR_COURSE_SLUG_MALFORMED,
     }),
-    status: joi_1.default.required().messages({
-        "any.required": constants_1.default.error.ERROR_COURSE_STATUS_REQUIRED,
-    }),
     description: joi_1.default.string().trim().required().messages({
         "any.required": constants_1.default.error.ERROR_COURSE_DESCRIPTION_REQUIRED,
         "string.base": constants_1.default.error.ERROR_COURSE_DESCRIPTION_STRING,
@@ -81,6 +74,7 @@ const updateCourseSchema = joi_1.default.object({
     requirement: joi_1.default.string(),
     study: joi_1.default.string(),
     thumbnail: joi_1.default.string(),
+    url_trailer: joi_1.default.string(),
     price: joi_1.default.number().required().positive().messages({
         "any.required": constants_1.default.error.ERROR_COURSE_PRICE_REQUIRED,
         "number.base": constants_1.default.error.ERROR_COURSE_PRICE_NUMBER,

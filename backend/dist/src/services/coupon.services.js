@@ -7,9 +7,18 @@ const configs_1 = __importDefault(require("../configs"));
 const runtime_1 = require("@prisma/client/runtime");
 const response_1 = require("../common/response");
 const constants_1 = __importDefault(require("../constants"));
-const createCoupon = async (req) => {
+const luxon_1 = require("luxon");
+const createCoupon = async (req, formData) => {
     try {
-        const { code, discount, valid_start, valid_until } = req.body;
+        // const { code, discount, valid_start, valid_until, remain_quantity, is_event } = req.body;
+        const code = req.body.code;
+        const discount = Number(req.body.discount);
+        const validStart = req.body.valid_start;
+        const validUntil = req.body.valid_until;
+        const remainQuantity = Number(req.body.remain_quantity);
+        const eventId = Number(req.body.event_id) || null;
+        const isEvent = req.body.is_event === "true";
+        const maxDiscountMoney = Number(req.body.max_discount_money);
         const user_id = Number(req.user_id);
         const isAdmin = await configs_1.default.db.user.findFirst({
             where: {
@@ -21,27 +30,43 @@ const createCoupon = async (req) => {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_UNAUTHORIZED, false);
         const createCoupon = await configs_1.default.db.coupon.create({
             data: {
-                code,
-                discount: Number(discount),
-                valid_until,
+                code: code,
+                discount: discount / 100,
+                valid_start: validStart,
+                valid_until: validUntil,
+                remain_quantity: remainQuantity,
+                is_event: isEvent,
+                max_discount_money: maxDiscountMoney,
+                event_id: eventId,
             },
         });
         if (createCoupon)
             return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_CREATE_DATA, true);
-        else
+        else {
+            // console.error("Error occurred while creating coupon:", createCoupon); // Log lỗi cụ thể
             return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+        }
     }
     catch (error) {
+        console.error("An error occurred while creating coupon:", error); // Log lỗi cụ thể
         if (error instanceof runtime_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
     }
 };
-const updateCoupon = async (req) => {
+const updateCoupon = async (req, formData) => {
     try {
         const { coupon_id } = req.params;
-        const { code, discount, valid_start, valid_until } = req.body;
+        // const { code, discount, valid_start, valid_until, is_event, remain_quantity } = req.body;
+        const code = req.body.code;
+        const discount = Number(req.body.discount);
+        const validStart = req.body.valid_start;
+        const validUntil = req.body.valid_until;
+        const eventId = Number(req.body.event_id) || null;
+        const remainQuantity = Number(req.body.remain_quantity);
+        const isEvent = req.body.is_event === "true";
+        const maxDiscountMoney = Number(req.body.max_discount_money);
         const user_id = Number(req.user_id);
         const isAdmin = await configs_1.default.db.user.findFirst({
             where: {
@@ -60,9 +85,14 @@ const updateCoupon = async (req) => {
             return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
         const updateCoupon = await configs_1.default.db.coupon.update({
             data: {
-                code,
-                discount: Number(discount),
-                valid_until,
+                code: code,
+                discount: discount / 100,
+                valid_start: validStart,
+                valid_until: validUntil,
+                remain_quantity: remainQuantity,
+                is_event: isEvent,
+                max_discount_money: maxDiscountMoney,
+                event_id: eventId,
             },
             where: {
                 id: isCouponExsist.id,
@@ -70,7 +100,10 @@ const updateCoupon = async (req) => {
         });
         if (updateCoupon)
             return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_UPDATE_DATA, true);
-        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+        {
+            console.error("error upat:", updateCoupon);
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+        }
     }
     catch (error) {
         if (error instanceof runtime_1.PrismaClientKnownRequestError) {
@@ -117,45 +150,158 @@ const deleteCoupon = async (req) => {
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
     }
 };
+// const getCouponByCode = async (req: IRequestWithId): Promise<ResponseBase> => {
+//     try {
+//         const { code } = req.params;
+//         const user_id = Number(req.user_id);
+//         const isCouponExsist = await configs.db.coupon.findFirst({
+//             where: {
+//                 code,
+//                 is_delete: false,
+//                 is_event: false,
+//                 valid_until: {
+//                     gt: new Date(),
+//                 },
+//                 remain_quantity: {
+//                     gt: 0,
+//                 },
+//             },
+//             select: {
+//                 id: true,
+//                 code: true,
+//                 discount: true,
+//                 valid_until: true,
+//             },
+//         });
+//         if (isCouponExsist) {
+//             const isCouponUsed = await configs.db.couponHistory.findFirst({
+//                 where: {
+//                     coupon_id: isCouponExsist.id,
+//                     user_id,
+//                 },
+//                 include: {
+//                     coupon: true,
+//                 },
+//             });
+//             if (isCouponUsed && !isCouponUsed.coupon.is_event) {
+//                 // Đã sử dụng coupon và coupon không phải là event
+//                 return new ResponseError(400, constants.error.ERROR_COUPON_USED, false);
+//             }
+//         } else {
+//             // Xử lý trường hợp coupon không tồn tại
+//             return new ResponseError(404, constants.error.ERROR_DATA_NOT_FOUND, false);
+//         }
+//         return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, isCouponExsist);
+//     } catch (error) {
+//         if (error instanceof PrismaClientKnownRequestError) {
+//             return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+//         }
+//         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+//     }
+// };
 const getCouponByCode = async (req) => {
     try {
         const { code } = req.params;
         const user_id = Number(req.user_id);
-        const isCouponExsist = await configs_1.default.db.coupon.findFirst({
-            where: {
-                code,
-                is_delete: false,
-                valid_until: {
-                    gt: new Date(),
-                },
-            },
-            select: {
-                id: true,
-                code: true,
-                discount: true,
-                valid_until: true,
-            },
-        });
-        if (!isCouponExsist)
+        // Tìm kiếm trong bảng coupon_owner
+        const couponOwnersWithCouponInfo = await configs_1.default.db.$queryRaw `
+            SELECT
+                CO.coupon_id as id,
+                CO.user_id,
+                COALESCE(SUM(CO.quantity), 0) AS total_quantity,
+                C.code,
+                ROUND(C.discount, 2) AS discount,
+                C.is_delete,
+                C.valid_start,
+                C.valid_until,
+                C.remain_quantity,
+                C.is_event,
+                C.max_discount_money,
+                C.event_id
+            FROM
+                coupon_owner CO
+            JOIN
+                coupon C ON CO.coupon_id = C.id
+            WHERE
+                C.valid_start < UTC_TIMESTAMP()  -- Lọc ra các bản ghi có valid_start nhỏ hơn ngày hiện tại
+				AND C.valid_until > UTC_TIMESTAMP()
+            GROUP BY
+                CO.coupon_id, CO.user_id;
+        `;
+        if (couponOwnersWithCouponInfo.length > 0) {
+            const findCouponEventByCode = couponOwnersWithCouponInfo.find((coupon) => coupon.code === code && coupon.user_id === user_id);
+            if (findCouponEventByCode) {
+                console.log(findCouponEventByCode);
+                return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, findCouponEventByCode);
+            }
+            else {
+                const isUsedCoupon = await configs_1.default.db.couponHistory.findFirst({
+                    where: {
+                        user_id: user_id,
+                        coupon: {
+                            code: code,
+                        },
+                        is_from_event: false,
+                    },
+                    select: {
+                        user_id: true,
+                        coupon: {
+                            select: {
+                                code: true,
+                            },
+                        },
+                    },
+                });
+                if (!isUsedCoupon) {
+                    // Nếu không có dữ liệu trong bảng coupon_owner và chưa có lịch sử sd cp đó, tiếp tục kiểm tra trong bảng coupon
+                    const isCouponExist = await configs_1.default.db.coupon.findFirst({
+                        where: {
+                            code: code,
+                            is_delete: false,
+                            is_event: false,
+                            valid_until: {
+                                gt: new Date(),
+                            },
+                            valid_start: {
+                                lt: new Date(),
+                            },
+                            remain_quantity: {
+                                gt: 0,
+                            },
+                        },
+                        select: {
+                            id: true,
+                            code: true,
+                            discount: true,
+                            valid_until: true,
+                            max_discount_money: true,
+                            remain_quantity: true,
+                        },
+                    });
+                    if (isCouponExist) {
+                        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, isCouponExist);
+                    }
+                    else
+                        return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+                }
+                else
+                    return new response_1.ResponseError(404, constants_1.default.error.ERROR_COUPON_USED, false);
+            }
+        }
+        else
             return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
-        const isCouponUsed = await configs_1.default.db.couponHistory.findFirst({
-            where: {
-                coupon_id: isCouponExsist.id,
-                user_id,
-            },
-        });
-        if (isCouponUsed)
-            return new response_1.ResponseError(400, constants_1.default.error.ERROR_COUPON_USED, false);
-        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, isCouponExsist);
     }
     catch (error) {
+        // Xử lý trường hợp coupon không tồn tại
         if (error instanceof runtime_1.PrismaClientKnownRequestError) {
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
         }
+        console.log(error);
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
     }
+    // return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
 };
-const getAllCoupon = async (req) => {
+const GetCouponsWithPagination = async (req) => {
     try {
         const user_id = Number(req.user_id);
         const isAdmin = await configs_1.default.db.user.findFirst({
@@ -166,20 +312,57 @@ const getAllCoupon = async (req) => {
         });
         if (!isAdmin)
             return new response_1.ResponseError(400, constants_1.default.error.ERROR_UNAUTHORIZED, false);
+        const { search_item: searchItem, page_index: pageIndex } = req.query;
+        const parsedSearchItem = searchItem;
+        const pageSize = configs_1.default.general.PAGE_SIZE;
+        const skip = ((Number(pageIndex) ?? 1) - 1) * pageSize;
         const getAllCoupon = await configs_1.default.db.coupon.findMany({
+            skip,
+            take: pageSize,
             where: {
+                code: {
+                    contains: parsedSearchItem,
+                },
                 is_delete: false,
             },
-            select: {
-                id: true,
-                code: true,
-                discount: true,
-                valid_until: true,
+            orderBy: {
+                valid_start: "desc",
+            },
+            include: {
+                event: true,
             },
         });
         if (!getAllCoupon)
             return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
-        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, getAllCoupon);
+        const totalRecord = await configs_1.default.db.coupon.count({
+            where: {
+                is_delete: false,
+            },
+        });
+        const totalPage = Math.ceil(totalRecord / pageSize);
+        const coupons = [];
+        getAllCoupon.map((item) => {
+            const coupon = {
+                coupon_id: item.id,
+                code: item.code,
+                discount: item.discount,
+                is_delete: item.is_delete,
+                remain_quantity: item.remain_quantity,
+                valid_start: luxon_1.DateTime.fromISO(item.valid_start.toISOString()),
+                valid_until: luxon_1.DateTime.fromISO(item.valid_until.toISOString()),
+                is_event: item.is_event,
+                max_discount_money: item.max_discount_money,
+                event_id: item.event_id,
+                event_name: item.event ? item.event.name : null, // Lấy tên của sự kiện
+            };
+            return coupons.push(coupon);
+        });
+        const categoriesResponseData = {
+            total_record: totalRecord,
+            total_page: totalPage,
+            data: coupons,
+        };
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, categoriesResponseData);
     }
     catch (error) {
         if (error instanceof runtime_1.PrismaClientKnownRequestError) {
@@ -188,5 +371,574 @@ const getAllCoupon = async (req) => {
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
     }
 };
-const couponService = { createCoupon, updateCoupon, deleteCoupon, getCouponByCode, getAllCoupon };
+// const createCouponHistory = async (req: IRequestWithId): Promise<ResponseBase> => {
+//     try {
+//         const { coupon_id } = req.params;
+//         const user_id = Number(req.user_id);
+//         // Kiểm tra xem mã coupon có tồn tại và có thể sử dụng không
+//         const coupon = await configs.db.coupon.findUnique({
+//             where: {
+//                 id: Number(coupon_id),
+//                 is_delete: false,
+//                 valid_until: {
+//                     gt: new Date(),
+//                 },
+//             },
+//         });
+//         if (!coupon) return new ResponseError(404, constants.error.ERROR_DATA_NOT_FOUND, false);
+//         // Ghi lại việc sử dụng mã coupon vào bảng coupon_history
+//         const record = await configs.db.couponHistory.create({
+//             data: {
+//                 coupon_id: coupon.id,
+//                 user_id: user_id,
+//                 invoice_id: invoice_id,
+//             },
+//         });
+//         if (!record) return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+//         return new ResponseSuccess(200, constants.success.SUCCESS_CREATE_DATA, true);
+//     } catch (error) {
+//         if (error instanceof PrismaClientKnownRequestError) {
+//             return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+//         }
+//         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+//     }
+// };
+const getCouponHistoryByUserId = async (req) => {
+    try {
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getAllCouponHistory = async (req) => {
+    try {
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const createCouponOwner = async (req, coupon_id, event_id) => {
+    try {
+        const user_id = Number(req.user_id);
+        // Lấy ra một coupon có trường is_event được đánh dấu là true
+        const coupon = await configs_1.default.db.coupon.findFirst({
+            where: {
+                is_event: true,
+                remain_quantity: {
+                    gt: 0, // Đảm bảo còn voucher để săn
+                },
+            },
+        });
+        if (!coupon) {
+            return new response_1.ResponseError(404, "No available coupons", false);
+        }
+        // Kiểm tra xem người dùng đã có dữ liệu trong bảng coupon_owner chưa
+        const existingCouponOwner = await configs_1.default.db.couponOwner.findFirst({
+            where: {
+                coupon_id: coupon_id,
+                user_id,
+                event_id: event_id,
+            },
+        });
+        if (!existingCouponOwner) {
+            // Tạo mới dữ liệu cho coupon_owner nếu chưa tồn tại
+            const createNewOwner = await configs_1.default.db.couponOwner.create({
+                data: {
+                    coupon_id: coupon_id,
+                    event_id: event_id,
+                    user_id,
+                    quantity: 1, // Mỗi lần săn được coupon sẽ có số lượng là 1
+                },
+            });
+            // Giảm số lượng voucher trong bảng coupon sau mỗi lần săn
+            const updateCoupon = await configs_1.default.db.coupon.update({
+                where: {
+                    id: coupon_id,
+                },
+                data: {
+                    remain_quantity: {
+                        decrement: 1, // Giảm số lượng voucher đi 1
+                    },
+                },
+            });
+            const historySpin = await configs_1.default.db.userEvent.create({
+                data: {
+                    user_id,
+                    event_id: event_id,
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                },
+            });
+            if (createNewOwner && updateCoupon && historySpin)
+                console.log(createNewOwner);
+            return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_CREATE_DATA, true, createNewOwner);
+        }
+        else {
+            // Cập nhật số lượng voucher trong bảng coupon_owner
+            const updateOwner = await configs_1.default.db.couponOwner.update({
+                where: {
+                    id: existingCouponOwner.id,
+                },
+                data: {
+                    quantity: {
+                        increment: 1, // Tăng số lượng voucher lên 1
+                    },
+                },
+            });
+            // Giảm số lượng voucher trong bảng coupon sau mỗi lần săn
+            const updateCoupon = await configs_1.default.db.coupon.update({
+                where: {
+                    id: coupon_id,
+                },
+                data: {
+                    remain_quantity: {
+                        decrement: 1, // Giảm số lượng voucher đi 1
+                    },
+                },
+            });
+            const historySpin = await configs_1.default.db.userEvent.create({
+                data: {
+                    user_id,
+                    event_id: event_id,
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                },
+            });
+            if (updateOwner && updateCoupon && historySpin)
+                return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_UPDATE_DATA, true, updateOwner);
+            return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+        }
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        console.log(error);
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const createHistoryForGoodLuckNextTime = async (req, event_id) => {
+    try {
+        const user_id = Number(req.user_id);
+        const historySpin = await configs_1.default.db.userEvent.create({
+            data: {
+                user_id,
+                event_id: event_id,
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+        });
+        if (!historySpin)
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_CREATE_DATA, true);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getAllEventCoupon = async (req) => {
+    try {
+        const user_id = Number(req.user_id);
+        // const isAdmin = await configs.db.user.findFirst({
+        //     where: {
+        //         id: user_id,
+        //         is_admin: true,
+        //     },
+        // });
+        // if (!isAdmin) return new ResponseError(400, constants.error.ERROR_UNAUTHORIZED, false);
+        const getAllEventCoupon = await configs_1.default.db.coupon.findMany({
+            where: {
+                is_delete: false,
+                is_event: true,
+                remain_quantity: {
+                    gt: 0,
+                },
+            },
+            select: {
+                id: true,
+                code: true,
+                discount: true,
+                valid_until: true,
+            },
+        });
+        if (!getAllEventCoupon)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, getAllEventCoupon);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getAllEventCouponByEventId = async (req) => {
+    try {
+        const user_id = Number(req.user_id);
+        const { event_id } = req.params;
+        // const isAdmin = await configs.db.user.findFirst({
+        //     where: {
+        //         id: user_id,
+        //         is_admin: true,
+        //     },
+        // });
+        // if (!isAdmin) return new ResponseError(400, constants.error.ERROR_UNAUTHORIZED, false);
+        const isActiveEvent = await configs_1.default.db.event.findFirst({
+            where: {
+                id: Number(event_id),
+                is_active: true,
+                is_delete: false,
+            },
+        });
+        if (!isActiveEvent)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_EVENT_NOT_FOUND, false);
+        const getAllEventCouponByEventId = await configs_1.default.db.coupon.findMany({
+            where: {
+                is_delete: false,
+                is_event: true,
+                event_id: Number(event_id),
+                remain_quantity: {
+                    gt: 0,
+                },
+                valid_until: {
+                    gt: new Date(),
+                },
+            },
+            select: {
+                id: true,
+                // code: true,
+                discount: true,
+                valid_until: true,
+                event_id: true,
+                ratio: true,
+            },
+        });
+        if (!getAllEventCouponByEventId)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, getAllEventCouponByEventId);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        console.log(error);
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getCouponByIdOnDate = async (req) => {
+    try {
+        const { coupon_id } = req.params;
+        const user_id = Number(req.user_id);
+        const isCouponExist = await configs_1.default.db.coupon.findFirst({
+            where: {
+                id: Number(coupon_id),
+                is_delete: false,
+                valid_until: {
+                    gt: new Date(),
+                },
+                remain_quantity: {
+                    gt: -1,
+                },
+            },
+            include: {
+                ratio: true,
+            }
+        });
+        if (isCouponExist) {
+            const isCouponUse = await configs_1.default.db.couponHistory.findFirst({
+                where: {
+                    coupon_id: isCouponExist.id,
+                    user_id,
+                    is_from_event: false,
+                },
+                include: {
+                    coupon: true,
+                },
+            });
+            if (isCouponUse && !isCouponUse.coupon.is_event) {
+                // Đã sử dụng coupon và coupon không phải là event
+                return new response_1.ResponseError(400, constants_1.default.error.ERROR_COUPON_USED, false);
+            }
+        }
+        else {
+            console.log("is cp exist: ", isCouponExist);
+            // Xử lý trường hợp coupon không tồn tại
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        }
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, isCouponExist);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getCouponById = async (req) => {
+    try {
+        const { coupon_id } = req.params;
+        const user_id = Number(req.user_id);
+        const isCouponExist = await configs_1.default.db.coupon.findFirst({
+            where: {
+                id: Number(coupon_id),
+                is_delete: false,
+                remain_quantity: {
+                    gt: -1,
+                },
+            },
+            include: {
+                ratio: true,
+            }
+        });
+        if (isCouponExist) {
+            const isCouponUse = await configs_1.default.db.couponHistory.findFirst({
+                where: {
+                    coupon_id: isCouponExist.id,
+                    user_id,
+                    is_from_event: false,
+                },
+                include: {
+                    coupon: true,
+                },
+            });
+            if (isCouponUse && !isCouponUse.coupon.is_event) {
+                // Đã sử dụng coupon và coupon không phải là event
+                return new response_1.ResponseError(400, constants_1.default.error.ERROR_COUPON_USED, false);
+            }
+        }
+        else {
+            console.log("is cp exist: ", isCouponExist);
+            // Xử lý trường hợp coupon không tồn tại
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        }
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, isCouponExist);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getHistorySpinOfUserForAEvent = async (req) => {
+    try {
+        const user_id = Number(req.user_id);
+        const { event_id } = req.params;
+        const findHistorySpin = await configs_1.default.db.userEvent.findFirst({
+            where: {
+                user_id: user_id,
+                event_id: Number(event_id),
+            },
+        });
+        if (!findHistorySpin)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_HISTORY_SPIN_NOT_FOUND, false);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, findHistorySpin);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const getVoucherBySpin = async (req) => {
+    try {
+        const user_id = Number(req.user_id);
+        const allVoucherSpin = await configs_1.default.db.couponOwner.findMany({
+            where: {
+                user_id: user_id, // Giá trị user_id mà người dùng nhập vào
+            },
+            select: {
+                quantity: true,
+                coupon: {
+                    select: {
+                        code: true,
+                        valid_start: true,
+                        valid_until: true,
+                        discount: true,
+                    },
+                },
+            },
+        });
+        const validVouchers = allVoucherSpin.filter((voucher) => {
+            const validUntilDate = new Date(voucher.coupon.valid_until);
+            const currentDate = new Date();
+            console.log(`Voucher valid until: ${validUntilDate}, Current date: ${currentDate}`);
+            return validUntilDate >= currentDate;
+        });
+        const validVoucherData = validVouchers.map((voucherSpin) => ({
+            code: voucherSpin.coupon.code,
+            valid_start: voucherSpin.coupon.valid_start,
+            valid_until: voucherSpin.coupon.valid_until,
+            discount: voucherSpin.coupon.discount,
+            quantity: voucherSpin.quantity,
+        }));
+        if (!allVoucherSpin)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, validVoucherData);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        console.log(error);
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const createRatio = async (req) => {
+    try {
+        const user_id = Number(req.user_id);
+        const isAdmin = await configs_1.default.db.user.findFirst({
+            where: {
+                id: user_id,
+                is_admin: true,
+            },
+        });
+        if (!isAdmin)
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_UNAUTHORIZED, false);
+        const { coupon_id, ratio } = req.body;
+        const isExistCoupon = await configs_1.default.db.coupon.findFirst({
+            where: {
+                id: coupon_id,
+                event_id: {
+                    not: null,
+                },
+            },
+        });
+        if (!isExistCoupon)
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_COUPON_NOT_FOUND, false);
+        const createRatio = await configs_1.default.db.ratio.create({
+            data: {
+                coupon_id: Number(coupon_id),
+                ratio: ratio,
+            },
+        });
+        if (!createRatio)
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_CREATE_DATA, true, createRatio);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        console.log(error);
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const updateRatio = async (req) => {
+    try {
+        const user_id = Number(req.user_id);
+        const { ratio, coupon_id } = req.body;
+        const isAdmin = await configs_1.default.db.user.findFirst({
+            where: {
+                id: user_id,
+                is_admin: true,
+            },
+        });
+        if (!isAdmin)
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_UNAUTHORIZED, false);
+        const isExistCoupon = await configs_1.default.db.coupon.findFirst({
+            where: {
+                id: coupon_id,
+                event_id: {
+                    not: null,
+                },
+            },
+        });
+        if (!isExistCoupon) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_COUPON_NOT_FOUND, false);
+        }
+        // const isRatioExist = await configs.db.ratio.findUnique({
+        //     where: {
+        //         id: Number(ratio_id),
+        //     },
+        // });
+        // if (!isRatioExist) return new ResponseError(404, constants.error.ERROR_DATA_NOT_FOUND, false);
+        const updateRatio = await configs_1.default.db.ratio.update({
+            data: {
+                ratio: ratio,
+            },
+            where: {
+                coupon_id: Number(coupon_id),
+            },
+        });
+        if (!updateRatio)
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_UPDATE_DATA, true, updateRatio);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        console.log(error);
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const deleteRatio = async (req) => {
+    try {
+        const user_id = Number(req.user_id);
+        const { coupon_id } = req.body;
+        const isAdmin = await configs_1.default.db.user.findFirst({
+            where: {
+                id: user_id,
+                is_admin: true,
+            },
+        });
+        if (!isAdmin)
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_UNAUTHORIZED, false);
+        const isCouponRatioExist = await configs_1.default.db.ratio.findUnique({
+            where: {
+                coupon_id: Number(coupon_id),
+            },
+        });
+        if (!isCouponRatioExist)
+            return new response_1.ResponseError(404, constants_1.default.error.ERROR_DATA_NOT_FOUND, false);
+        const deleteRatio = await configs_1.default.db.ratio.delete({
+            where: {
+                coupon_id: Number(coupon_id),
+            },
+        });
+        if (!deleteRatio)
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_DELETE_DATA, true, deleteRatio);
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError) {
+            return new response_1.ResponseError(400, constants_1.default.error.ERROR_BAD_REQUEST, false);
+        }
+        console.log(error);
+        return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
+const couponService = {
+    createCoupon,
+    updateCoupon,
+    deleteCoupon,
+    getCouponByCode,
+    GetCouponsWithPagination,
+    getAllEventCoupon,
+    getAllEventCouponByEventId,
+    getCouponHistoryByUserId,
+    getAllCouponHistory,
+    createCouponOwner,
+    getCouponByIdOnDate,
+    getCouponById,
+    getHistorySpinOfUserForAEvent,
+    getVoucherBySpin,
+    createHistoryForGoodLuckNextTime,
+    createRatio,
+    updateRatio,
+    deleteRatio,
+};
 exports.default = couponService;

@@ -13,10 +13,23 @@ const qs_1 = __importDefault(require("qs"));
 const sort_object_1 = __importDefault(require("sort-object"));
 const vnpayIpn = async (req) => {
     try {
-        const { vnp_Amount, vnp_BankCode, vnp_CardType, vnp_BankTranNo, vnp_OrderInfo, vnp_PayDate, vnp_ResponseCode, vnp_TmnCode, vnp_TransactionNo, vnp_TransactionStatus, vnp_TxnRef, } = req.body;
+        const { vnp_Amount, vnp_BankCode, vnp_CardType, vnp_BankTranNo, vnp_OrderInfo, vnp_PayDate, vnp_ResponseCode, vnp_TmnCode, vnp_TransactionNo, vnp_TransactionStatus, vnp_TxnRef, vnp_SecureHash, } = req.body;
+        const secureHash = vnp_SecureHash;
+        let vnp_Params = req.query;
+        vnp_Params["vnp_OrderInfo"] = encodeURIComponent(vnp_OrderInfo);
+        delete vnp_Params["vnp_SecureHash"];
+        delete vnp_Params["vnp_SecureHashType"];
+        const secretKey = configs_1.default.general.vnp_HashSecret;
+        vnp_Params = (0, sort_object_1.default)(vnp_Params);
+        const signData = qs_1.default.stringify(vnp_Params, { encode: false });
+        const hmac = crypto_1.default.createHmac("sha512", secretKey);
+        const signed = hmac.update(Buffer.from(signData, "utf-8")).digest("hex");
+        if (signed !== secureHash) {
+            return new response_1.ResponseError(400, "False checksum", false);
+        }
+        const userId = Number(req.user_id);
         const orderInfo = vnp_OrderInfo?.toString();
         const invoiceId = Number(orderInfo.split(":")[1]);
-        console.log(invoiceId);
         const isTransactionSuccess = vnp_ResponseCode === "00" && vnp_TransactionStatus === "00";
         if (isTransactionSuccess) {
             const isInvoiceExist = await configs_1.default.db.invoice.findFirst({
@@ -63,15 +76,12 @@ const vnpayIpn = async (req) => {
                 };
                 return temp;
             });
-            // console.log("create enrolled data", createEnrolledData);
             const updateCourseEnrolledData = boughtCourses.map((course) => {
                 return course.course_id;
             });
-            // console.log("update data", updateCourseEnrolledData);
             const createEnrolled = await configs_1.default.db.enrolled.createMany({
                 data: createEnrolledData,
             });
-            // console.log("createEnrolled", createEnrolled);
             const updateCourseEnrolled = await configs_1.default.db.course.updateMany({
                 where: {
                     id: {
@@ -84,7 +94,6 @@ const vnpayIpn = async (req) => {
                     },
                 },
             });
-            // console.log("update enrolled", updateCourseEnrolled);
             const clearCart = await configs_1.default.db.cartDetail.deleteMany({
                 where: {
                     cart_id: cartDetail.id,
@@ -106,16 +115,81 @@ const vnpayIpn = async (req) => {
                     vnp_txn_ref: vnp_TxnRef,
                 },
             });
-            if (createEnrolled && clearCart && createTransactionData) {
-                const data = { RspCode: "00", Message: "success" };
-                return new response_1.ResponseSuccess(200, "Transaction success", true, data);
+            if (invoiceDetail.coupon_id !== null) {
+                const findCouponById = await configs_1.default.db.couponOwner.findFirst({
+                    where: {
+                        coupon_id: invoiceDetail.coupon_id,
+                        user_id: invoiceDetail.user_id,
+                    },
+                });
+                const isForEvent = !!findCouponById;
+                // Tạo dữ liệu cho bảng coupon_history
+                const createCouponHistory = await configs_1.default.db.couponHistory.create({
+                    data: {
+                        invoice_id: invoiceId,
+                        coupon_id: invoiceDetail.coupon_id,
+                        user_id: invoiceDetail.user_id,
+                        is_from_event: isForEvent,
+                    },
+                });
+                // Kiểm tra mã coupon_id có tồn tại trong bảng coupon_owner không
+                const couponOwner = await configs_1.default.db.couponOwner.findFirst({
+                    where: {
+                        coupon_id: invoiceDetail.coupon_id,
+                        user_id: invoiceDetail.user_id,
+                        quantity: {
+                            gt: 0,
+                        },
+                    },
+                });
+                // Nếu mã coupon_id tồn tại trong bảng coupon_owner
+                if (couponOwner) {
+                    // Cập nhật số lượng còn lại trong bảng coupon_owner và xóa dòng nếu quantity = 0
+                    const updatedCouponOwner = await configs_1.default.db.couponOwner.update({
+                        where: {
+                            id: couponOwner.id,
+                        },
+                        data: {
+                            quantity: {
+                                decrement: 1,
+                            },
+                        },
+                    });
+                    // Xóa dòng trong bảng coupon_owner nếu quantity = 0
+                    if (updatedCouponOwner.quantity === 0) {
+                        await configs_1.default.db.couponOwner.delete({
+                            where: {
+                                id: couponOwner.id,
+                            },
+                        });
+                    }
+                }
+                else {
+                    // Nếu mã coupon_id không tồn tại trong bảng coupon_owner, cập nhật lại remain_quantity trong bảng Coupon
+                    const updateCoupon = await configs_1.default.db.coupon.update({
+                        data: {
+                            remain_quantity: {
+                                decrement: 1,
+                            },
+                        },
+                        where: {
+                            id: invoiceDetail.coupon_id,
+                        },
+                    });
+                }
+                // Kiểm tra kết quả các thao tác và trả về kết quả tương ứng
+                if (createCouponHistory) {
+                    const data = { RspCode: "00", Message: "success" };
+                    return new response_1.ResponseSuccess(200, "Transaction success", true, data);
+                }
+                else {
+                    return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
+                }
             }
-            else
-                return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
-        }
-        else {
-            const data = { RspCode: "99", Message: "fail" };
-            return new response_1.ResponseSuccess(200, "Transaction failed", false, data);
+            else {
+                const data = { RspCode: "99", Message: "fail" };
+                return new response_1.ResponseSuccess(200, "Transaction failed", false, data);
+            }
         }
     }
     catch (error) {
@@ -125,6 +199,7 @@ const vnpayIpn = async (req) => {
         }
         return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
     }
+    return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
 };
 const createPaymentUrl = async (req) => {
     try {
@@ -133,11 +208,6 @@ const createPaymentUrl = async (req) => {
         const createDate = (0, moment_1.default)(date).format("YYYYMMDDHHmmss");
         const expiredDate = (0, moment_1.default)(new Date(date.getTime() + 20 * 60 * 1000)).format("YYYYMMDDHHmmss");
         const ipAddr = "127.0.0.1";
-        //     req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.socket.remoteAddress || req.ip;
-        // // req.connection.socket.remoteAddress;
-        // console.log("req ip", req.ip);
-        // console.log("ipaddr", ipAddr);
-        // ::1
         const tmnCode = encodeURIComponent(configs_1.default.general.vnp_TmnCode);
         const secretKey = configs_1.default.general.vnp_HashSecret;
         // console.log("secret", secretKey);

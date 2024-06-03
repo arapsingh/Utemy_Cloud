@@ -7,8 +7,9 @@ const configs_1 = __importDefault(require("../configs"));
 const runtime_1 = require("@prisma/client/runtime");
 const response_1 = require("../common/response");
 const constants_1 = __importDefault(require("../constants"));
-const createInvoice = async (req) => {
+const createInvoice = async (req, totalwithcoupon, discount, coupon_id, max_discount_money) => {
     try {
+        console.log("Total with coupon is: ", max_discount_money);
         const userId = Number(req.user_id);
         const isInvoiceNotSucess = await configs_1.default.db.invoice.findFirst({
             where: {
@@ -25,6 +26,8 @@ const createInvoice = async (req) => {
         const createInvoice = await configs_1.default.db.invoice.create({
             data: {
                 user_id: userId,
+                total_money: totalwithcoupon,
+                coupon_id: coupon_id,
             },
         });
         let cartId = 0;
@@ -57,14 +60,40 @@ const createInvoice = async (req) => {
             return new response_1.ResponseError(404, "You don't have any courses in cart", false);
         }
         let total_money = 0;
+        let totalorigin = 0;
+        const now = new Date();
+        boughtCourses.forEach((cartDetail) => {
+            if (cartDetail.course.sale_until && cartDetail.course.sale_until > now && cartDetail.course.sale_price) {
+                totalorigin += cartDetail.course.sale_price;
+            }
+            else {
+                totalorigin += cartDetail.course.price;
+            }
+        });
+        const ratio = max_discount_money / totalorigin;
+        console.log("totalorigin: ", totalorigin);
+        console.log("max discount money: ", max_discount_money);
         const createInvoiceDetailData = boughtCourses.map((cartDetail) => {
             const now = new Date();
             let paidPrice;
-            if (cartDetail.course.sale_until && cartDetail.course.sale_until > now) {
-                paidPrice = cartDetail.course.sale_price;
+            if (cartDetail.course.sale_until && cartDetail.course.sale_until > now && cartDetail.course.sale_price) {
+                if (Number(totalorigin) - totalwithcoupon < max_discount_money)
+                    paidPrice = cartDetail.course.sale_price - cartDetail.course.sale_price * discount;
+                else
+                    paidPrice = cartDetail.course.sale_price - cartDetail.course.sale_price * ratio;
             }
-            else
-                paidPrice = cartDetail.course.price;
+            else {
+                if (Number(totalorigin) - totalwithcoupon < max_discount_money) {
+                    paidPrice = cartDetail.course.price - cartDetail.course.price * discount;
+                }
+                else
+                    paidPrice = cartDetail.course.price - cartDetail.course.price * ratio;
+            }
+            // if (cartDetail.course.sale_until && cartDetail.course.sale_until > now && cartDetail.course.sale_price) {
+            //     paidPrice = cartDetail.course.sale_price - cartDetail.course.sale_price * discount;
+            // } else {
+            //     paidPrice = cartDetail.course.price - cartDetail.course.price * discount;
+            // }
             total_money += Number(paidPrice);
             const data = {
                 invoice_id: createInvoice.id,
@@ -80,13 +109,16 @@ const createInvoice = async (req) => {
             },
             data: {
                 total_money,
+                coupon_id: coupon_id,
             },
         });
         const createInvoiceDetail = await configs_1.default.db.invoiceDetail.createMany({
             data: createInvoiceDetailData,
         });
-        if (createInvoiceDetail && updateInvoice)
+        if (createInvoiceDetail && updateInvoice) {
+            console.log("couponid:", coupon_id);
             return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_CREATE_DATA, true);
+        }
         else
             return new response_1.ResponseError(500, constants_1.default.error.ERROR_INTERNAL_SERVER, false);
     }
@@ -100,18 +132,36 @@ const createInvoice = async (req) => {
 const getAllInvoices = async (req) => {
     try {
         const userId = Number(req.user_id);
-        const { page_index: pageIndex, page_size: pageSize } = req.query;
+        const { page_index: pageIndex, page_size: pageSize, from: fromQueryParam, to: toQueryParam } = req.query;
+        // Chuyển đổi giá trị 'from' và 'to' sang kiểu 'Date' nếu chúng tồn tại
+        let fromDate;
+        let toDate;
+        if (typeof fromQueryParam === "string") {
+            fromDate = new Date(fromQueryParam);
+        }
+        if (typeof toQueryParam === "string") {
+            toDate = new Date(toQueryParam);
+        }
         // Parse pageIndex and pageSize to numbers, set default values if not provided
         const parsePageIndex = Number(pageIndex) || 1;
         const parsePageSize = Number(pageSize) || 10;
         // Calculate skip based on pageIndex and pageSize
         const skip = (parsePageIndex - 1) * parsePageSize;
+        // Create a where object to hold the conditions
+        const where = {
+            user_id: userId,
+            is_success: true,
+        };
+        // Add conditions for from and to if they exist
+        if (fromDate && toDate) {
+            where.created_at = {
+                gte: fromDate,
+                lte: toDate,
+            };
+        }
         // Retrieve paginated invoices with details and courses
         const getInvoices = await configs_1.default.db.invoice.findMany({
-            where: {
-                user_id: userId,
-                is_success: true,
-            },
+            where,
             include: {
                 invoice_detail: {
                     include: {
@@ -124,10 +174,7 @@ const getAllInvoices = async (req) => {
         });
         // Calculate total records for pagination info
         const totalRecord = await configs_1.default.db.invoice.count({
-            where: {
-                user_id: userId,
-                is_success: true,
-            },
+            where,
         });
         // Calculate total pages
         const totalPage = Math.ceil(totalRecord / parsePageSize);
@@ -170,6 +217,7 @@ const getAllInvoices = async (req) => {
                 })),
             })),
         };
+        console.log("kq: ", getInvoices);
         return new response_1.ResponseSuccess(200, constants_1.default.success.SUCCESS_GET_DATA, true, paginatedResponse);
     }
     catch (error) {
