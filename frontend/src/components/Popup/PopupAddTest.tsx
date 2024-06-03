@@ -68,7 +68,6 @@ const PopupAddTest: React.FC<AddTestPopupProps> = (props) => {
     };
     const dispatch = useAppDispatch();
     const handleOnSubmit = (values: any) => {
-        console.log("submit", values);
         let formData = new FormData();
         formData.append("title", values.title);
         formData.append(props.changeType ? "lecture_id" : "section_id", props.sectionId.toString());
@@ -148,7 +147,7 @@ const PopupAddTest: React.FC<AddTestPopupProps> = (props) => {
                                 <div className="flex gap-2 w-full">
                                     <div className="px-5 py-3 w-1/2">
                                         <label htmlFor="duration" className="text-sm mb-1 tablet:text-xl font-medium">
-                                            Thời lượng (giây)
+                                            Thời lượng (phút)
                                         </label>{" "}
                                         <br />
                                         <Field

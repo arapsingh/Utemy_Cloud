@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar/Navbar";
+// import Navbar from "../../components/Navbar/Navbar";
 import { CourseCard, Pagination, TotalRating } from "../../components";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { Course, SearchAllCourses } from "../../types/course";
@@ -116,17 +116,22 @@ const AllCourses: React.FC = () => {
 
     return (
         <>
-            <Navbar />
             <div className="container mx-auto p-4 mt-[100px] laptop:mt-0">
                 <div className="">
                     <div className="flex flex-col gap-4 laptop:flex-row">
-                        <div className="w-[30%] laptop:w-[250px]">
+                        <div className="w-[30%] laptop:w-[250px] ml-16">
                             <div className="">
-                                <button className="btn btn-info btn-outline text-lg mr-1" onClick={handleFilterCourse}>
-                                    Lọc
+                                <button
+                                    className="btn btn-info btn-outline text-lg mr-1 hover:text-white"
+                                    onClick={handleFilterCourse}
+                                >
+                                    Áp dụng
                                 </button>
                                 <div className="dropdown dropdown-bottom mr-1">
-                                    <label tabIndex={0} className="btn btn-warning btn-outline text-lg m-1">
+                                    <label
+                                        tabIndex={0}
+                                        className="btn btn-warning btn-outline text-lg m-1 hover:text-white"
+                                    >
                                         Sắp xếp
                                     </label>
                                     <ul
@@ -146,9 +151,6 @@ const AllCourses: React.FC = () => {
                                         })}
                                     </ul>
                                 </div>
-                                <button className="btn btn-outline text-lg" onClick={handleResetFilter}>
-                                    Làm mới
-                                </button>
                             </div>
                             <div className="mt-3 w-[70%] ">
                                 <h2 className="text-2xl font-bold mb-2 ">Đánh giá</h2>
@@ -212,10 +214,15 @@ const AllCourses: React.FC = () => {
                                         })}
                                 </div>
                             </div>
+                            <button className="btn btn-outline text-lg w-3/4" onClick={handleResetFilter}>
+                                Đặt lại
+                            </button>
                         </div>
                         <div className="border-t-[1px] w-[70%] laptop:border-l-[1px] laptop:border-t-0">
                             <div className="w-full flex">
-                                {totalRecord === 0 && <p className="text-error  text-2xl ml-3">Không có nội dung gì</p>}
+                                {totalRecord === 0 && (
+                                    <p className="text-error  text-2xl ml-3">Không có khoá học thoả mãn tiêu chí</p>
+                                )}
                                 {totalRecord >= 1 && (
                                     <p className="text-2xl ml-3 items-center font-medium">
                                         Tìm thấy {totalRecord} khóa học

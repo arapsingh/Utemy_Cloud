@@ -37,5 +37,57 @@ const success = {
     SUCCESS_REMOVE_CART: "Remove from cart successfully",
     SUCCESS_SAVE_FOR_LATER: "Change saved successfully",
     SUCCESS_GET_CART: "Get cart successfully ",
+
+    //approval
+    SUCCESS_CREATE_APPROVAL: "Create approval successfully",
+    SUCCESS_GET_APPROVAL: "Get approval successfully",
+    SUCCESS_APPROVE_COURSE: "Approve course successfully",
+    SUCCESS_RESTRICT_COURSE: "Restrict course successfully",
+
+    //decision
+    SUCCESS_CREATE_DECISION: "Create decision successfully",
+    SUCCESS_GET_DECISION: "Get decision successfully",
+    SUCCES_HANDLE_DECISION: "Handle decision successfully",
+
+    //report
+    SUCCESS_CREATE_REPORT: "Create report successfully",
+    SUCCESS_HANDLE_REPORT: "Handle report successfully",
+
+    //comment lecture
+    SUCCESS_CREATE_COMMENT_LECTURE: "Create comment lecture successfully",
+    SUCCESS_UPDATE_COMMENT_LECTURE: "Update comment lecture successfully",
+    SUCCESS_DELETE_COMMENT_LECTURE: "Delete comment lecture successfully",
+    SUCCESS_GET_COMMENT_LECTURE: "Get comment lecture successfully",
+    SUCCESS_GET_ALL_COMMENT_LECTURE: "Get all comment lecture successfully",
+
+    //reply comment lecture
+    SUCCESS_CREATE_REPLY_COMMENT_LECTURE: "Create reply comment lecture successfully",
+    SUCCESS_UPDATE_REPLY_COMMENT_LECTURE: "Update reply comment lecture successfully",
+    SUCCESS_DELETE_REPLY_COMMENT_LECTURE: "Delete reply comment lecture successfully",
+    SUCCESS_GET_REPLY_COMMENT_LECTURE: "Get reply comment lecture successfully",
+    SUCCESS_GET_ALL_REPLY_COMMENT_LECTURE: "Get all reply comment lecture successfully",
+
+    //reaction like for comment/ reply
+    SUCCESS_CREATE_LIKE: "Create reaction like successfully",
+    SUCCESS_DELETE_LIKE: "Unlike successfully",
+    SUCCESS_GET_LIKE: "Get like successfully",
+    SUCCESS_GET_ALL_LIKE: "Get all like successfully",
+
+    //reaction dislike for comment/ reply
+    SUCCESS_CREATE_DISLIKE: "Create reaction dislike successfully",
+    SUCCESS_DELETE_DISLIKE: "Undislike successfully",
+    SUCCESS_GET_DISLIKE: "Get dislike successfully",
+    SUCCESS_GET_ALL_DISLIKE: "Get all dislike successfully",
+
+    SUCCESS_BUT_NO_UPDATE_PROGRESS: "No update progresss",
+
+    //comment blog
+    SUCCESS_CREATE_COMMENT_BLOG: "Create comment for blog successfully",
+    SUCCESS_UPDATE_COMMENT_BLOG: "Update comment for blog successfully",
+    SUCCESS_DELETE_COMMENT_BLOG: "Delete comment for blog successfully",
+
+    //reaction comment blog
+    SUCCESS_CREATE_REACTION: "Create reaction successfully",
+    
 };
 export default success;

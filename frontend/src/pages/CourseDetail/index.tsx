@@ -1,28 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { Navbar, Accordion, DeleteModal, Spin, TotalRating, Pagination } from "../../components";
+import {
+    DeleteModal,
+    Spin,
+    TotalRating,
+    Pagination,
+    UserToolDropdown,
+    VideoPlayerForTrailerTrial,
+} from "../../components";
+import AccordionSection from "../../components/Accordion/AccordionSection";
+// import AccordionSectionForTrial from "../../components/Accordion/AccordionSectionForTrial";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { useNavigate, useParams } from "react-router-dom";
 import { Section } from "../../types/section";
 import { Course as CourseDetailType } from "../../types/course";
 import { GetRating, Rating as RatingType } from "../../types/rating";
-// import { Section as SectionType } from "../../types/section";
 import { Link } from "react-router-dom";
 import NotFound from "../NotFound";
-import { courseActions, ratingActions } from "../../redux/slices";
+import { courseActions, ratingActions, progressActions } from "../../redux/slices";
 import PopupRating from "./PopupRating";
-
 import toast from "react-hot-toast";
 import AuthorButton from "./AuthorButton";
 import GuestButton from "./GuestButton";
 import SubscribeUserButton from "./SubscribeUserButton";
-import UnsubscribeModal from "./UnsubcribeModal";
-import PopupPromotion from "./PopupPromotion";
 import CommentSection from "./CommentSection";
 import constants from "../../constants";
-import { calDayRemains, getCourseIncludes } from "../../utils/helper";
+import { calDayRemains, getCourseIncludes, convertStringDate } from "../../utils/helper";
 // import { orderLesson } from "../../types/lesson";
-import { convertStringDate } from "../../utils/helper";
-import AuthorDropdown from "./AuthorDropdown";
+import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
+import "react-quill/dist/quill.snow.css";
 
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
 import {
@@ -33,6 +38,14 @@ import {
     GlobeAsiaAustraliaIcon,
     TicketIcon,
 } from "@heroicons/react/24/outline";
+import {
+    Dialog,
+    DialogContent,
+    // DialogDescription,
+    // DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "../../components/ui/dialog";
 
 type CourseDetailProps = {
     isLogin: boolean;
@@ -43,19 +56,19 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
     const dispatch = useAppDispatch();
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState<boolean>(false);
     const [isOpenPopupRating, setIsOpenPopupRating] = useState<boolean>(false);
-    const [isOpenUnsubscribeModal, setIsOpenUnsubscribeModal] = useState<boolean>(false);
-    const [isOpenPromotionPopup, setIsOpenPromotionPopup] = useState<boolean>(false);
     const [isNotFound, setIsNotFound] = useState<boolean>(false);
     const [idItem, setIdItem] = useState<number>(-1);
     const [pageIndex, setPageIndex] = useState<number>(1);
     const navigate = useNavigate();
     const courseDetail: CourseDetailType = useAppSelector((state) => state.courseSlice.courseDetail) ?? {};
+    const courseDetailForTrial: CourseDetailType =
+        useAppSelector((state) => state.courseSlice.courseDetailForTrial) ?? {};
     const ratings: RatingType[] = useAppSelector((state) => state.ratingSlice.ratings) ?? [];
     const totalRatingPage: number = useAppSelector((state) => state.ratingSlice.totalPage) ?? Number(1);
     const [activeTab, setActiveTab] = useState("Description");
     const { duration, lessonCount } = getCourseIncludes(courseDetail);
-    // const orderLesson: orderLesson[] = useAppSelector((state) => state.courseSlice.orderLesson);
     const role: string = useAppSelector((state) => state.courseSlice.role) ?? "Unenrolled";
+    const isAdmin = useAppSelector((state) => state.authSlice.user.is_admin) ?? false;
     const isGetLoadingCourse: boolean = useAppSelector((state) => state.courseSlice.isGetLoading) ?? false;
     const ratingPercent = useAppSelector((state) => state.ratingSlice.ratingPercent) ?? [];
     const hasSalePrice =
@@ -97,12 +110,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
     const handleTogglePopupRating = () => {
         setIsOpenPopupRating(!isOpenPopupRating);
     };
-    const handleToggleUnsubcribeCourse = () => {
-        setIsOpenUnsubscribeModal(!isOpenUnsubscribeModal);
-    };
-    const handleTogglePromotion = () => {
-        setIsOpenPromotionPopup(!isOpenPromotionPopup);
-    };
+
     const handleAfterVote = () => {
         dispatch(courseActions.getCourseDetail(slug as string));
         const values: GetRating = {
@@ -113,9 +121,22 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
         dispatch(ratingActions.getListRatingOfCourseBySlug(values));
         dispatch(ratingActions.getRatingPercentOfCourse(slug as string));
     };
-    const handleAfterPromotion = () => {
-        dispatch(courseActions.getCourseDetail(slug as string));
+
+    // const [videoDialog, setVideoDialog] = useState<React.ReactNode | null>(null);
+    const [showDialog, setShowDialog] = useState(false);
+    const [videoUrl, setVideoUrl] = useState("");
+    const [descriptionVideo, setDescriptionVideo] = useState("");
+
+    const handleShowVideoDialog = (urlVideo: string, descriptionVideo: string) => {
+        setVideoUrl(urlVideo);
+        setDescriptionVideo(descriptionVideo);
+        setShowDialog(true);
     };
+
+    const handleCloseDialog = () => {
+        setShowDialog(false);
+    };
+
     useEffect(() => {
         // const newZoomValue = 0.6; // Đặt giá trị mong muốn
 
@@ -130,14 +151,22 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
         });
     }, [dispatch, slug, isNotFound]);
     useEffect(() => {
-        // const newZoomValue = 0.6; // Đặt giá trị mong muốn
-
-        // // Kiểm tra nếu trình duyệt hỗ trợ thuộc tính zoom
-        // if ('zoom' in document.documentElement.style) {
-        //   document.documentElement.style.zoom = `${newZoomValue}`;
-        // }  
+        dispatch(courseActions.getCourseDetailForTrialLesson(slug as string)).then((response) => {
+            if (response.payload && response.payload.status_code !== 200) {
+                setIsNotFound(true);
+            }
+        });
+    }, [dispatch, slug, isNotFound]);
+    useEffect(() => {
         if (courseDetail.course_id && isLogin) {
-            dispatch(courseActions.getRightOfCourse(courseDetail.course_id));
+            dispatch(courseActions.getRightOfCourse(courseDetail.course_id)).then((res) => {
+                if (res.payload && res.payload.data) {
+                    if (res.payload.data.role === constants.util.ROLE_ENROLLED) {
+                        console.log(role);
+                        dispatch(progressActions.getProgressByCourseSlug(slug as string));
+                    }
+                }
+            });
             dispatch(ratingActions.getUserRating(courseDetail.course_id));
         }
     }, [dispatch, courseDetail.course_id, isLogin]);
@@ -169,8 +198,34 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
             dispatch(ratingActions.getListRatingOfCourseBySlug(values));
         }
     };
-    if (isNotFound) return <NotFound />;
+    // const [openDialog, ] = useState(false);
 
+    // const handleOpenDialog = () => {
+    //     setOpenDialog(true);
+    // };
+
+    // const handleCloseDialog = () => {
+    //     setOpenDialog(false);
+    // };
+    const [isHovered, setIsHovered] = useState(false);
+
+    if (isNotFound) return <NotFound />;
+    // Hàm tiện ích để lấy các bài giảng chung
+    function getCommonLectures(apiData1: any, apiData2: any) {
+        const lectures1 = apiData1.sections.flatMap((section: any) => section.lecture);
+        const lectures2 = apiData2.sections.flatMap((section: any) => section.lecture);
+
+        const lectureMap = new Map();
+        lectures1.forEach((lecture: any) => {
+            lectureMap.set(lecture.lecture_id, lecture);
+        });
+
+        const commonLectures = lectures2.filter((lecture: any) => lectureMap.has(lecture.lecture_id));
+        // console.log("Common lecture: ", commonLectures);
+
+        return commonLectures;
+    }
+    const commonLectures = getCommonLectures(courseDetail, courseDetailForTrial);
     return (
         <>
             {isOpenPopupRating && (
@@ -181,61 +236,81 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                 />
             )}
             {isOpenDeleteModal && <DeleteModal handleDelete={handleDeleteCourse} handleCancel={handleCancelModal} />}
-            {isOpenUnsubscribeModal && (
-                <UnsubscribeModal handleCancel={handleToggleUnsubcribeCourse} course_id={courseDetail.course_id} />
-            )}
-            {isOpenPromotionPopup && (
-                <PopupPromotion
-                    handleAfterPromotion={handleAfterPromotion}
-                    handleCancel={handleTogglePromotion}
-                    course={courseDetail}
-                />
-            )}
-            <Navbar />
+
             {isGetLoadingCourse && <Spin />}
             <div className="container mx-auto mt-[100px] laptop:mt-0">
+                {role === constants.util.ROLE_AUTHOR && (
+                    <>
+                        <a
+                            href={`/lecturer/course/edit/${courseDetail.course_id}`}
+                            className="flex gap-1 items-center hover:text-blue-400 trasition-all duration-300"
+                        >
+                            <ArrowLeftOnRectangleIcon className="w-5 h-5" />
+                            <p className="text-lg"> Quay lại chỉnh sửa</p>
+                        </a>
+                        <div className="w-[230px] h-px bg-gray-300"></div>
+                    </>
+                )}
+                {isAdmin && (
+                    <Link to={`/admin/course/${slug}`}>
+                        <div className="flex gap-1 items-center hover:text-blue-400 trasition-all duration-300">
+                            <ArrowLeftOnRectangleIcon className="w-5 h-5" />
+                            <p className="text-lg"> Quay lại quản lý</p>
+                        </div>
+                    </Link>
+                )}
                 <div className="min-h-screen h-full px-4 tablet:px-[60px]">
                     <div className="mt-4 container mx-auto p-4">
-                        <div className="flex flex-col gap-4 laptop:flex-row shadow-xl bg-lightblue/10 rounded-lg">
-                            <div className=" flex-1 w-full laptop:max-w-[600px] max-h-[400px] bg-gray-600 rounded-lg">
-                                <img
-                                    src={courseDetail.thumbnail}
-                                    alt={courseDetail.title}
-                                    className="h-[300px] w-full m-auto rounded-lg tablet:h-[400px] object-contain"
-                                />
+                        <div className="flex flex-col gap-4 laptop:flex-row items-center rounded-lg ">
+                            <div className="flex justify-center items-center w-full h-full">
+                                <div className=" flex-1 w-full laptop:max-w-[600px] max-h-[400px] bg-gray-600 rounded-lg relative">
+                                    <div className="overflow-hidden">
+                                        <img
+                                            src={courseDetail.thumbnail}
+                                            alt="Thumbnail"
+                                            className={`h-[300px] w-full m-auto rounded-lg tablet:h-[400px] object-contain transition-transform ${isHovered ? "scale-110" : ""}`}
+                                            // style={{maxHeight: "380px", marginTop: "10px" }}
+                                            onMouseEnter={() => setIsHovered(true)}
+                                            onMouseLeave={() => setIsHovered(false)}
+                                        />
+                                    </div>
+
+                                    <Dialog>
+                                        <DialogTrigger>
+                                            <div className="flex items-center justify-center absolute top-0 left-0 w-full h-full">
+                                                <PlayCircleIcon
+                                                    className={`text-white w-28 h-28 transition-transform ${
+                                                        isHovered ? "" : "scale-110"
+                                                    }`}
+                                                    onMouseEnter={() => setIsHovered(true)}
+                                                    onMouseLeave={() => setIsHovered(false)}
+                                                />
+                                            </div>
+                                        </DialogTrigger>
+                                        <DialogContent className={"lg:max-w-screen-lg overflow-y-scroll max-h-screen"}>
+                                            <DialogTitle className={"text-center"}>
+                                                Đây là đoạn video giới thiệu cho khóa học này
+                                            </DialogTitle>
+                                            <VideoPlayerForTrailerTrial source={courseDetail.url_trailer} />
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
                             </div>
                             <div className=" flex-1 object-right flex flex-col gap-4 px-3 pb-3 laptop:pt-3">
                                 <div className="flex-1">
                                     <div className="flex justify-between">
-                                        <h2 className="text-2xl laptop:text-3xl font-bold text-title mb-3 tablet:w-[300px] xl:w-[600px]">
+                                        <h2 className="text-2xl laptop:text-3xl font-bold text-title mb-3 tablet:w-[300px] xl:w-[600px] title-card-content ">
                                             {courseDetail.title}
                                         </h2>
-                                        {isLogin && role === constants.util.ROLE_AUTHOR && (
-                                            <AuthorDropdown
-                                                handleTogglePromotion={handleTogglePromotion}
-                                                handleDelete={() => {
-                                                    setIsOpenDeleteModal(!isOpenDeleteModal);
-                                                    setIdItem(courseDetail.course_id as number);
-                                                }}
-                                                courseDetail={courseDetail}
-                                            />
+                                        {isLogin && !isAdmin && role !== constants.util.ROLE_AUTHOR && (
+                                            <UserToolDropdown courseDetail={courseDetail} isLecture={false} />
                                         )}
                                     </div>
-                                    <p className="text-xl laptop:text-2xl font-medium italic mb-3">
-                                        {courseDetail.summary}
-                                    </p>
-                                    <div className=" mb-3">
-                                        <span className="text-xl laptop:text-l font-bold">Tác giả: </span>
-                                        <Link
-                                            to={`/profile/${courseDetail.author?.user_id}`}
-                                            className="text-xl laptop:text-l underline font-medium text-blue-600"
-                                        >
-                                            {courseDetail.author?.first_name}
-                                            <span> {courseDetail.author?.last_name} </span>
-                                        </Link>
+                                    <div className="summary-card-content mb-3">
+                                        <p className="text-xl laptop:text-2xl font-normal ">{courseDetail.summary}</p>
                                     </div>
-                                    <div className="flex items-center l font-medium mb-3">
-                                        <span className="text-xl laptop:text-l font-bold mr-2">Đánh giá:</span>
+
+                                    <div className="flex items-center l font-normal mb-3">
                                         <p className="font-bold text-xl ml-2  text-[#EAB308]">
                                             {courseDetail.average_rating}
                                         </p>
@@ -246,7 +321,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                         />
                                         <a
                                             href="#Rating"
-                                            className="text-m  ml-2 hover:cursor-pointer underline text-lightblue"
+                                            className="text-m  ml-2 hover:cursor-pointer hover:text-blue-700 text-blue-500 transition-all duration-300"
                                             onClick={() => {
                                                 const button = document.getElementById("Rating");
                                                 button?.click();
@@ -267,7 +342,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                     {hasSalePrice ? (
                                         <div className="text-xl font-bold laptop:text-l mb-3">
                                             Giá:
-                                            <span className=" font-extrabold font-OpenSans text-lightblue ">
+                                            <span className=" font-extrabold font-OpenSans text-blue-500 ">
                                                 {" "}
                                                 {courseDetail.sale_price?.toLocaleString()}đ{" "}
                                             </span>{" "}
@@ -275,9 +350,9 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                                 {" "}
                                                 {courseDetail.price?.toLocaleString()}đ{" "}
                                             </span>{" "}
-                                            <span className=" font-extrabold font-OpenSans ml-2 text-lightblue ">
+                                            <span className=" font-extrabold font-OpenSans ml-2 text-blue-500 ">
                                                 {" "}
-                                                {dayRemains} days left
+                                                Trong vòng {dayRemains}
                                             </span>{" "}
                                         </div>
                                     ) : (
@@ -289,11 +364,24 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                             </span>{" "}
                                         </div>
                                     )}
+                                    <div className=" mb-3 text-xl laptop:text-base font-n">
+                                        <span className="">Được tạo bởi </span>
+                                        <Link
+                                            to={
+                                                role === constants.util.ROLE_AUTHOR
+                                                    ? "/my-profile"
+                                                    : `/profile/${courseDetail.author?.user_id}`
+                                            }
+                                            className=" text-blue-500 hover:text-blue-700 transition-all duration-300"
+                                        >
+                                            {courseDetail.author?.first_name}
+                                            <span> {courseDetail.author?.last_name} </span>
+                                        </Link>
+                                    </div>
                                 </div>
                                 <div className="flex-1 flex items-end gap-2 flex-wrap">
-                                    {isLogin && role === constants.util.ROLE_AUTHOR && (
+                                    {isLogin && (role === constants.util.ROLE_AUTHOR || isAdmin) && (
                                         <AuthorButton
-                                            handleTogglePromotion={handleTogglePromotion}
                                             handleDelete={() => {
                                                 setIsOpenDeleteModal(!isOpenDeleteModal);
                                                 setIdItem(courseDetail.course_id as number);
@@ -302,12 +390,9 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                         />
                                     )}
                                     {isLogin && role === constants.util.ROLE_ENROLLED && (
-                                        <SubscribeUserButton
-                                            handleToggleUnsubscribeCourse={handleToggleUnsubcribeCourse}
-                                            courseDetail={courseDetail}
-                                        />
+                                        <SubscribeUserButton courseDetail={courseDetail} />
                                     )}
-                                    {(!isLogin || role === constants.util.ROLE_USER) && (
+                                    {(!isLogin || role === constants.util.ROLE_USER) && !isAdmin && (
                                         <GuestButton isLogin={isLogin} course_id={courseDetail.course_id} />
                                     )}
                                 </div>
@@ -338,7 +423,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                         className={activeTab === "Study" ? "text-gray-900" : ""}
                                         placeholder={undefined}
                                     >
-                                        Nội dung bài học
+                                        Chuẩn đầu ra
                                     </Tab>
 
                                     <Tab
@@ -351,15 +436,26 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                     >
                                         Đánh giá
                                     </Tab>
+                                    {/* {(!isLogin || (isLogin && role !== constants.util.ROLE_ENROLLED && role !== constants.util.ROLE_AUTHOR)) && (
+                                        <Tab
+                                            key={"Trial"}
+                                            value={"Trial"}
+                                            onClick={() => setActiveTab("Trial")}
+                                            className={activeTab === "Trial" ? "text-gray-900" : ""}
+                                        >
+                                            Học thử
+                                        </Tab>
+                                    )} */}
                                 </TabsHeader>
+                                <div className="h-px w-full bg-gray-300"></div>
                                 <TabsBody placeholder={undefined}>
                                     <TabPanel key="Study" value="Study">
                                         <div className="w-1/2">
                                             {courseDetail.study &&
                                                 courseDetail.study.length > 0 &&
-                                                courseDetail.study.map((study: any) => {
+                                                courseDetail.study.map((study: any, index: any) => {
                                                     return (
-                                                        <div className="flex gap-1 items-start shrink-0">
+                                                        <div key={index} className="flex gap-1 items-start shrink-0">
                                                             <CheckIcon className="w-6 h-6 shrink-0" />
                                                             <p className="text-xl">{study}</p>
                                                         </div>
@@ -375,15 +471,19 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                                     <ul className="list-disc">
                                                         {courseDetail.requirement &&
                                                             courseDetail.requirement.length > 0 &&
-                                                            courseDetail.requirement.map((req: any) => {
-                                                                return <li className="ml-5">{req}</li>;
+                                                            courseDetail.requirement.map((req: any, index: any) => {
+                                                                return (
+                                                                    <li key={index} className="ml-5">
+                                                                        {req}
+                                                                    </li>
+                                                                );
                                                             })}
                                                     </ul>
                                                 </div>
-                                                <div className="my-4 description-course">
+                                                <div className="my-4 description-course ql-snow">
                                                     <h2 className=" tablet:text-2xl font-bold mb-3">Mô tả</h2>
                                                     <div
-                                                        className=""
+                                                        className="ql-editor"
                                                         dangerouslySetInnerHTML={{ __html: courseDetail.description }}
                                                     ></div>
                                                 </div>
@@ -400,18 +500,37 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                                         ))}
                                                     {courseDetail.sections?.map((section: Section, index: number) => {
                                                         return (
-                                                            <Accordion
-                                                                // orderLesson={orderLesson}
-                                                                disable={true}
-                                                                key={index}
-                                                                isDisplayBtn={false}
-                                                                section={section}
-                                                                redirectToWatchVideo={
-                                                                    isLogin && !(role === constants.util.ROLE_USER)
-                                                                }
-                                                            />
+                                                            <div key={index}>
+                                                                <AccordionSection
+                                                                    key={section.id * index}
+                                                                    isDisplayEdit={false}
+                                                                    isDisplayProgress={
+                                                                        role === constants.util.ROLE_ENROLLED
+                                                                    }
+                                                                    section={section}
+                                                                    redirectToWatchVideo={
+                                                                        isLogin && !(role === constants.util.ROLE_USER)
+                                                                    }
+                                                                    handleShowVideoDialog={handleShowVideoDialog}
+                                                                    commonLectures={commonLectures}
+                                                                />
+                                                            </div>
                                                         );
                                                     })}
+                                                    {showDialog && (
+                                                        <Dialog open={showDialog} onOpenChange={handleCloseDialog}>
+                                                            <DialogContent
+                                                                className={
+                                                                    "lg:max-w-screen-lg overflow-y-scroll max-h-screen"
+                                                                }
+                                                            >
+                                                                <DialogTitle className="text-center">
+                                                                    {descriptionVideo.replace(/<[^>]+>/g, "")}
+                                                                </DialogTitle>
+                                                                <VideoPlayerForTrailerTrial source={videoUrl} />
+                                                            </DialogContent>
+                                                        </Dialog>
+                                                    )}
                                                 </div>
                                             </div>
                                             <div className="w-1/2 ">
@@ -492,6 +611,59 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                             )}
                                         </div>
                                     </TabPanel>
+                                    {/* <TabPanel key="Trial" value="Trial">
+                                        <div className="w-full flex gap-10">
+                                            <div className="w-1/2">
+                                                <div className="table-of-content my-4">
+                                                    <h2 className="text-xl tablet:text-2xl font-bold mb-3">
+                                                        Bạn có thể học thử khóa học này dưới đây
+                                                    </h2>
+                                                    <span className="w-[60px] h-1 bg-black block mb-4"></span>
+                                                    {!courseDetailForTrial.sections ||
+                                                        (courseDetailForTrial.sections.every(
+                                                            (section) =>
+                                                                section.lecture !== undefined &&
+                                                                section.lecture.length === 0,
+                                                        ) && (
+                                                            <p className="mt-4 text-xl text-center text-lightblue font-bold">
+                                                                Khóa học này chưa có nội dung để học thử
+                                                            </p>
+                                                        ))}
+                                                    {courseDetailForTrial.sections?.map(
+                                                        (section: Section, index: number) => (
+                                                            <div key={index}>
+                                                                <AccordionSectionForTrial
+                                                                    key={section.id * index}
+                                                                    isDisplayEdit={false}
+                                                                    isDisplayProgress={
+                                                                        role === constants.util.ROLE_ENROLLED
+                                                                    }
+                                                                    section={section}
+                                                                    // redirectToWatchVideo={isLogin}
+                                                                    handleShowVideoDialog={handleShowVideoDialog}
+                                                                />
+                                                            </div>
+                                                        ),
+                                                    )}
+                                                    {showDialog && isLogin && (
+                                                        <Dialog open={showDialog} onOpenChange={handleCloseDialog}>
+                                                            <DialogContent
+                                                                className={
+                                                                    "lg:max-w-screen-lg overflow-y-scroll max-h-screen"
+                                                                }
+                                                            >
+                                                                <DialogTitle className="text-center">
+                                                                    {descriptionVideo.replace(/<[^>]+>/g, "")}
+                                                                </DialogTitle>
+                                                                <VideoPlayerForTrailerTrial source={videoUrl} />
+                                                            </DialogContent>
+                                                        </Dialog>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="w-1/2 "></div>
+                                        </div>
+                                    </TabPanel> */}
                                 </TabsBody>
                             </Tabs>
                         </div>

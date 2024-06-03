@@ -9,7 +9,7 @@ import { updateProfileValidationSchema } from "../../validations/user";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 // import PopUpChangeAvatar from "./PopUpChangeAvatar";
-import { Navbar, TextEditor } from "../../components";
+import { TextEditor } from "../../components";
 import { DefaultAvatar } from "../../assets/images";
 
 const MyProfile: React.FC = () => {
@@ -113,7 +113,6 @@ const MyProfile: React.FC = () => {
 
     return (
         <>
-            <Navbar />
             <div className="container mx-auto mt-[100px] laptop:mt-0">
                 <div className="px-4 tablet:px-[60px]">
                     <h1 className="text-center text-[32px] py-4 font-bold text-title text-lightblue">TRANG CỦA TÔI</h1>
@@ -142,8 +141,8 @@ const MyProfile: React.FC = () => {
                                                         selectedFile
                                                             ? URL.createObjectURL(selectedFile)
                                                             : user.url_avatar
-                                                            ? user.url_avatar
-                                                            : DefaultAvatar
+                                                              ? user.url_avatar
+                                                              : DefaultAvatar
                                                     }
                                                     alt="Avatar"
                                                     className="max-w-xs max-h-80 min-h-full min-w-full border-4 rounded-lg"
