@@ -145,5 +145,56 @@ const error = {
 
     //Invoice
     ERROR_INVOICE_NOT_FOUND: "Invoice not found",
+
+    //Event
+    ERROR_EVENT_NOT_FOUND: "Event is finished or not found",
+    ERROR_EVENT_IN_BETWEEN: "There is another event in this period of time,",
+    ERROR_EXIST_ACTIVE_EVENT: "There was an actived event before so cannot create another event",
+
+    // History Spin
+    ERROR_HISTORY_SPIN_NOT_FOUND: "This user doesn't have history spin for this event before",
+
+    //Comment
+    ERROR_COMMENT_NOT_FOUND: "Comment is not found",
+    //Reply
+    ERROR_REPLY_NOT_FOUND: "Reply not found",
+    //Like
+    ERROR_LIKE_ONCE_TIME: "You just like once time",
+    ERROR_LIKE_NOT_FOUND: "Reaction like not found",
+    // Dislike
+    ERROR_DISLIKE_ONCE_TIME: "You just dislike once time",
+    ERROR_DISLIKE_NOT_FOUND: "Reaction dislike not found",
+
+    // Coupon
+    ERROR_COUPON_NOT_FOUND: "Coupon for event not found",
+
+    //blog
+    ERROR_BLOG_NOT_FOUND: "Blog not found",
+    ERROR_BLOG_TITLE_REQUIRED: "Blog's title is required",
+    ERROR_BLOG_TITLE_STRING: "Blog's title must be string",
+    ERROR_BLOG_TITLE_TOO_LONG: "Blog's title is too long",
+    ERROR_BLOG_CONTENT_REQUIRED: "Blog's content is required",
+    ERROR_BLOG_CONTENT_STRING: "Blog's content must be string",
+    ERROR_CREATE_BLOG_FAILED: "Create blog failed",
+    ERROR_GET_BLOG_FAILED: "Get blog failed",
+    ERROR_BLOG_ALREADY_EXISTS: "Blog's title already exist",
+
+    ERROR_BLOG_ID_NUMBER: "Blog id must be an integer",
+    ERROR_BLOG_ID_REQUIRED: "Blog id is required",
+    ERROR_TITLE_BLOG_STRING: "Title must be string",
+    ERROR_TITLE_BLOG_REQUIRED: "Title is required",
+    ERROR_TITLE_BLOG_MAX: "Title must be under 50 chars",
+    ERROR_CONTENT_BLOG_STRING: "Content must be string",
+    ERROR_CONTENT_BLOG_REQUIRED: "Content is required",
+    ERROR_CONTENT_BLOG_MAX: "Content must be under 1000 chars",
+    ERROR_CONTENT_BLOG_SHORT: "Content must be up 100 chars",
+    ERROR_BLOG_CATEGORIES_REQUIRED: "Blog's categories is required",
+    ERROR_IS_PUBLISHED_BOOLEAN: "Is Published must be boolean",
+
+    // comment blog
+    ERROR_DUPLICATE_BETWEEN_COMMENTBLOGID_REPLYBLOGID: "Duplicate between comment id and parent_id",
+    ERROR_COMMENT_BLOG_NOT_FOUND: "Comment for blog not found",
+    ERROR_REACTION_ONCE_TIME: "Reaction just once time",
+
 };
 export default error;
