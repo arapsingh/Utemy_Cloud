@@ -60,6 +60,7 @@ model Certificate{
   recipient User? @relation(fields: [recipient_id], references: [id], onDelete: SetNull)
   course_id Int?
   course Course? @relation(fields: [course_id], references: [id], onDelete: SetNull)
+  @@map(name: "certificate")
 }
 
 model Category {
