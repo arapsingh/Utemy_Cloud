@@ -52,6 +52,7 @@ export function Home() {
                 value: "+55%",
                 label: "than last week",
             },
+            placeholder: {undefined}
         },
         {
             color: "green",
@@ -63,6 +64,8 @@ export function Home() {
                 value: "+3%",
                 label: "than last month",
             },
+            placeholder: {undefined}
+
         },
         {
             color: "red",
@@ -74,6 +77,7 @@ export function Home() {
                 value: "+5%",
                 label: "than yesterday",
             },
+            placeholder: {undefined}
         },
         {
             color: "blue-gray",
@@ -85,6 +89,8 @@ export function Home() {
                 value: "+5%",
                 label: "than yesterday",
             },
+            placeholder: {undefined}
+
         },
     ];
 
@@ -99,6 +105,7 @@ export function Home() {
                 ? ratingPercent.map((rating) => `${rating.title} sao`)
                 : "1 sao-2 sao-3 sao-4 sao-5 sao".split("-"),
         footer: "Cập nhật ngay bây giờ",
+        placeholder: {undefined}
     };
     const statisticLineData = {
         color: "white",
@@ -109,6 +116,7 @@ export function Home() {
         data: moneyByMonth.map((month) => month.total_money_month),
         categories: moneyByMonth.map((month) => month.month_label),
         footer: "Cập nhật ngay bây giờ",
+        placeholder: {undefined}
     };
     const statisticsChartsData = [
         {
@@ -120,6 +128,8 @@ export function Home() {
             data: categoryCourse.map((category) => category.course_count),
             categories: categoryCourse.map((category) => category.title),
             footer: "Cập nhật ngay bây giờ",
+            placeholder: {undefined}
+
         },
         {
             color: "white",
@@ -130,6 +140,8 @@ export function Home() {
             data: categoryEnrolled.map((category) => category.total_enrolled),
             categories: categoryEnrolled.map((category) => category.title),
             footer: "Cập nhật ngay bây giờ",
+            placeholder: {undefined}
+
         },
         {
             color: "white",
@@ -140,6 +152,8 @@ export function Home() {
             data: categoryMoney.map((category) => category.total_money_from_category),
             categories: categoryMoney.map((category) => category.category_title),
             footer: "Cập nhật ngay bây giờ",
+            placeholder: {undefined}
+
         },
     ];
     return (
@@ -153,6 +167,7 @@ export function Home() {
                             title={title}
                             value={rest.value}
                             icon={icon}
+                            placeholder={undefined}
                             // icon={React.createElement(icon, {
                             //     className: "w-6 h-6 text-white",
                             // })}
@@ -176,6 +191,8 @@ export function Home() {
                                     &nbsp;{props.footer}
                                 </Typography>
                             }
+                            placeholder= {undefined}
+
                         />
                     );
                 })}
@@ -190,6 +207,7 @@ export function Home() {
                             &nbsp;{statisticDonutData.footer}
                         </Typography>
                     }
+                    
                 />
                 <StatisticLineChart
                     key={statisticLineData.title}
