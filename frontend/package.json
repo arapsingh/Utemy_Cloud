@@ -85,7 +85,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "set NODE_ENV=production && npm run install-types && react-scripts build",
-    "install-types": "npm install @types/react@18.2.19 --save-dev && npm install @types/react-dom@18.2.7 --save-dev && npm install @types/react-router-dom@5.3.3 --save-dev && npm i @material-tailwind/react@2.1.8 && npm i typescript@4.9.5 && npm i react@18.2.0 && npm i react-dom@18.2.0 && npm i react-route-dom@6.15.0",
+    "install-types": "npm install @types/react@18.2.19 --save-dev && npm install @types/react-dom@18.2.7 --save-dev && npm install @types/react-router-dom@5.3.3 --save-dev && npm i @material-tailwind/react@2.1.8 && npm i typescript@4.9.5 && npm i react@18.2.0 && npm i react-dom@18.2.0 && npm i react-router-dom@6.15.0",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
