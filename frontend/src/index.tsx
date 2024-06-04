@@ -6,6 +6,7 @@ import store from "./redux/store";
 import "./style/global.css";
 import katex from "katex";
 import "katex/dist/katex.min.css";
+
 window.katex = katex;
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
