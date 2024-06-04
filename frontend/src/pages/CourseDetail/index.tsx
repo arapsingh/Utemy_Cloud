@@ -405,8 +405,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ isLogin }) => {
                                     indicatorProps={{
                                         className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                     }}
-                                    placeholder={undefined}
-                                >
+                                    placeholder={undefined}                             >
                                     <Tab
                                         key={"Description"}
                                         value={"Description"}
