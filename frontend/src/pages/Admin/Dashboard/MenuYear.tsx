@@ -1,4 +1,4 @@
-import { Menu, MenuHandler, MenuList, MenuItem, Button,ThemeProvider} from "@material-tailwind/react";
+import { Menu, MenuHandler, MenuList, MenuItem, Button } from "@material-tailwind/react";
 import { useState } from "react";
 import { useAppDispatch } from "../../../hooks/hooks";
 import { statisticActions } from "../../../redux/slices";
@@ -18,7 +18,6 @@ const MenuCustomAnimation = () => {
         }, 0);
     };
     return (
-        <ThemeProvider>
         <Menu
             animate={{
                 mount: { y: 0 },
@@ -36,8 +35,6 @@ const MenuCustomAnimation = () => {
                 ))}
             </MenuList>
         </Menu>
-        </ThemeProvider>
-
     );
 };
 export default MenuCustomAnimation;
