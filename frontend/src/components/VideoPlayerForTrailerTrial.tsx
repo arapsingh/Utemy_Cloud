@@ -14,7 +14,7 @@ export const VideoJS: React.FC<VideoJSType> = (props) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const updateQuality = (newQuality: any) => {
-        if (Hls.isSupported()) {
+        if (window.hls && window.hls.levels) {
             window.hls.levels.forEach((level: any, levelIndex: any) => {
                 if (level.height === newQuality) {
                     window.hls.currentLevel = levelIndex;
@@ -60,6 +60,7 @@ export const VideoJS: React.FC<VideoJSType> = (props) => {
                     new Plyr(videoElement, defaultOptions);
                 });
             } else {
+                const availableQualities = [360, 720];
                 // Initialize Plyr for Azure Blob Storage URL
                 const defaultOptions: Plyr.Options = {
                     controls: [
@@ -78,6 +79,12 @@ export const VideoJS: React.FC<VideoJSType> = (props) => {
                         "airplay",
                         "fullscreen",
                     ],
+                    quality: {
+                        default: availableQualities[availableQualities.length - 1],
+                        options: availableQualities,
+                        forced: true,
+                        onChange: (event) => updateQuality(event),
+                    },
                 };
                 new Plyr(videoElement, defaultOptions);
             }
