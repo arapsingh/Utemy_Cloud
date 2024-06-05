@@ -87,7 +87,7 @@ const createMainM3U8 = async (
     //tạo file main và ghi nội dung vào file main
     fs.writeFileSync(outputMainM3U8, mainM3U8Content);
     //trả về url của video là path tơi file main
-    const urlVideo = configs.general.PATH_TO_PUBLIC_FOLDER_VIDEOS + `//${uuid}//main.m3u8`;
+    const urlVideo = configs.general.PATH_TO_PUBLIC_FOLDER_VIDEOS + `\\${uuid}\\main.m3u8`;
     return urlVideo;
 };
 const destroyedVideoIfFailed = async (filePath: string): Promise<boolean> => {
