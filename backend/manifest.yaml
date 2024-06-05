@@ -4,7 +4,7 @@ applications:
     random-route: false
     path: C:\TieuLuanChuyenNganh\Utemy_Cloud\backend
     memory: 2048M
-    disk_quota: 10240M
+    disk_quota: 5120M
     buildpacks:
       - nodejs_buildpack
     routes:
