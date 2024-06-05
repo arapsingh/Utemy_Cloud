@@ -72,8 +72,8 @@ export const VideoJS: React.FC<VideoJSType> = (props) => {
         if (isAzureBlobStorageUrl(props.source)) {
             return (
                 <video className="w-full h-[480px]" ref={videoRef} controls>
-                    <source src={props.source} type="video/mp4" />
-                    Your browser does not support the video tag.
+                    {/* <source src={props.source} type="video/mp4" />
+                    Your browser does not support the video tag. */}
                 </video>
             );
         } else {
