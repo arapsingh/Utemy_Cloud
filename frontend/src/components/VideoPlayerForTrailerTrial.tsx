@@ -25,32 +25,31 @@ export const VideoJS: React.FC<VideoJSType> = (props) => {
 
     useEffect(() => {
         const videoElement = videoRef.current;
-        console.log("url storage blog:", AZURE_BLOB_STORAGE_URL);
         if (videoElement) {
-            if (Hls.isSupported()) {
+            if (Hls.isSupported() && !isAzureBlobStorageUrl(props.source)) {
                 const hls = new Hls();
                 hls.loadSource(props.source);
-                hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+                hls.attachMedia(videoElement);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
                     window.hls = hls;
                     const availableQualities = hls.levels.map((l) => l.height);
                     const defaultOptions: Plyr.Options = {
                         controls: [
-                            "restart", // Restart playback
-                            "rewind", // Rewind by the seek time (default 10 seconds)
-                            "play", // Play/pause playback
-                            "fast-forward", // Fast forward by the seek time (default 10 seconds)
-                            "progress", // The progress bar and scrubber for playback and buffering
-                            "current-time", // The current time of playback
-                            "duration", // The full duration of the media
-                            "mute", // Toggle mute
-                            "volume", // Volume control
-                            "captions", // Toggle captions
-                            "settings", // Settings menu
-                            "pip", // Picture-in-picture (currently Safari only)
-                            "airplay", // Airplay (currently Safari only)
-                            "fullscreen", // Toggle fullscreen
+                            "restart",
+                            "rewind",
+                            "play",
+                            "fast-forward",
+                            "progress",
+                            "current-time",
+                            "duration",
+                            "mute",
+                            "volume",
+                            "captions",
+                            "settings",
+                            "pip",
+                            "airplay",
+                            "fullscreen",
                         ],
-
                         quality: {
                             default: availableQualities[availableQualities.length - 1],
                             options: availableQualities,
@@ -60,28 +59,49 @@ export const VideoJS: React.FC<VideoJSType> = (props) => {
                     };
                     new Plyr(videoElement, defaultOptions);
                 });
-
-                hls.attachMedia(videoElement);
+            } else {
+                // Initialize Plyr for Azure Blob Storage URL
+                const defaultOptions: Plyr.Options = {
+                    controls: [
+                        "restart",
+                        "rewind",
+                        "play",
+                        "fast-forward",
+                        "progress",
+                        "current-time",
+                        "duration",
+                        "mute",
+                        "volume",
+                        "captions",
+                        "settings",
+                        "pip",
+                        "airplay",
+                        "fullscreen",
+                    ],
+                };
+                new Plyr(videoElement, defaultOptions);
             }
         }
     }, [props.source]);
+
     const isAzureBlobStorageUrl = (url: string): boolean => {
         return url.startsWith(AZURE_BLOB_STORAGE_URL);
     };
+
     const renderVideoElement = () => {
-        if (isAzureBlobStorageUrl(props.source)) {
-            return (
-                <video className="w-full h-[480px]" ref={videoRef} controls>
-                    {/* <source src={props.source} type="video/mp4" />
-                    Your browser does not support the video tag. */}
-                </video>
-            );
-        } else {
-            return <video className="w-full h-[480px]" ref={videoRef} controls></video>;
-        }
+        return (
+            <video className="w-full h-[480px]" ref={videoRef} controls>
+                <source src={props.source} type={isAzureBlobStorageUrl(props.source) ? "video/mp4" : "application/x-mpegURL"} />
+                Your browser does not support the video tag.
+            </video>
+        );
     };
 
-    return <div className="w-full flex-1 shrink-0 text-white">{renderVideoElement()}</div>;
+    return (
+        <div className="w-full flex-1 shrink-0 text-white">
+            {renderVideoElement()}
+        </div>
+    );
 };
 
 export default VideoJS;
