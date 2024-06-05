@@ -4,7 +4,7 @@ import "plyr/dist/plyr.css";
 import "plyr/dist/plyr.min.mjs";
 import React, { useEffect, useRef } from "react";
 
-const AZURE_BLOB_STORAGE_URL = process.env.AZURE_BLOB_STORAGE_URL || "";
+const AZURE_BLOB_STORAGE_URL = process.env.AZURE_BLOB_STORAGE_URL || "https://consolelake.blob.core.windows.net/users/";
 
 type VideoJSType = {
     source: string;
