@@ -19,7 +19,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 
 interface WheelData {
     option?: string;
-    coupon?: any; // Thêm trường coupon vào đây
+    coupon?: any; 
     optionSize?: number; // Optional
 
 }
@@ -32,7 +32,7 @@ const HuntCoupon = () => {
     useEffect(() => {
         handleGetAllEventCouponByEventId();
         dispatch(eventActions.getActiveEvent());
-    }, []);
+    }, []); // Chỉ gọi hàm này khi component được render lần đầu
     const eventForSpin = useAppSelector((state) => state.eventSlice.eventForSpin);
 
     const handleGetAllEventCouponByEventId = () => {

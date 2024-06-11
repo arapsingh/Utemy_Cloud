@@ -3,21 +3,19 @@ import { couponActions } from "../../redux/slices";
 import { AppDispatch } from "@/redux/store";
 import React, { useEffect, useState } from "react";
 import { Wheel } from "react-custom-roulette";
-// import { WheelData } from 'react-custom-roulette/dist/components/Wheel/types'; // Import WheelData type
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 
 // Define props interface
 interface Props {
     discounts: WheelData[]; // Define props type
-    onSpinResult: (result: WheelData | null) => void; // Define prop for handling spin result, accepts null as well
+    onSpinResult: (result: WheelData | null) => void; 
 }
 interface WheelData {
     option?: string;
     coupon?: any; // Thêm trường coupon vào đây
     optionSize?: number; // Optional
 
-    // Các trường khác...
 }
 
 const LuckyWheel = ({ discounts, onSpinResult }: Props) => {

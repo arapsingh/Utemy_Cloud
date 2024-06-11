@@ -29,3 +29,5 @@ applications:
       VNP_API: "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction"
       VNP_RETURN_URL: "https://utemyvietnam.vercel.app/checkout/vnpay_return"
       CERTIFIER_ID: "cfp_Hy47WvgtTlnS72HLBaboRvApffI8iYEW3QTK"
+      OPENAI_API_KEY : "59cadad899ea4b84880981aa7575a2d8"
+      OPENAI_ENDPOINT : "https://utemyvietnam.openai.azure.com"
