@@ -3,7 +3,6 @@ import Plyr from "plyr";
 import "plyr/dist/plyr.css";
 import "plyr/dist/plyr.min.mjs";
 import React, { useEffect, useRef } from "react";
-
 const AZURE_BLOB_STORAGE_URL = process.env.AZURE_BLOB_STORAGE_URL || "https://consolelake.blob.core.windows.net/users/";
 
 type VideoJSType = {
@@ -14,7 +13,7 @@ export const VideoJS: React.FC<VideoJSType> = (props) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const updateQuality = (newQuality: any) => {
-        if (window.hls && window.hls.levels) {
+        if (Hls.isSupported()) {
             window.hls.levels.forEach((level: any, levelIndex: any) => {
                 if (level.height === newQuality) {
                     window.hls.currentLevel = levelIndex;
@@ -22,7 +21,7 @@ export const VideoJS: React.FC<VideoJSType> = (props) => {
             });
         }
     };
-
+    
     useEffect(() => {
         const videoElement = videoRef.current;
         if (videoElement) {
@@ -60,7 +59,6 @@ export const VideoJS: React.FC<VideoJSType> = (props) => {
                     new Plyr(videoElement, defaultOptions);
                 });
             } else {
-                const availableQualities = [360, 720];
                 // Initialize Plyr for Azure Blob Storage URL
                 const defaultOptions: Plyr.Options = {
                     controls: [
@@ -79,12 +77,6 @@ export const VideoJS: React.FC<VideoJSType> = (props) => {
                         "airplay",
                         "fullscreen",
                     ],
-                    quality: {
-                        default: availableQualities[availableQualities.length - 1],
-                        options: availableQualities,
-                        forced: true,
-                        onChange: (event) => updateQuality(event),
-                    },
                 };
                 new Plyr(videoElement, defaultOptions);
             }

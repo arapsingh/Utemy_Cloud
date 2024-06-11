@@ -17,7 +17,7 @@
     "engines": {
         "node": "18.19.1",
         "npm": "10.3.0"
-      },
+    },
     "keywords": [],
     "author": "",
     "license": "ISC",
@@ -48,6 +48,7 @@
     },
     "dependencies": {
         "-": "^0.0.1",
+        "@azure/storage-blob": "^12.23.0",
         "@ffmpeg-installer/ffmpeg": "^1.1.0",
         "@ffprobe-installer/ffprobe": "^2.1.1",
         "@prisma/client": "^4.16.2",
