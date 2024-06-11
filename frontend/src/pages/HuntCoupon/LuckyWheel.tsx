@@ -24,24 +24,11 @@ const LuckyWheel = ({ discounts, onSpinResult }: Props) => {
     const [mustSpin, setMustSpin] = useState(false);
     const [prizeNumber, setPrizeNumber] = useState(0);
     const [numberOfTurn, setNumberOfTurn] = useState(Number);
-    // const goodLuckOption = 'Chúc bạn may mắn lần sau'; // Option text for "Good luck" message
     const wheelDataWithGoodLuckMessage: WheelData[] = [
         ...discounts,
-        // { option: 'Chúc bạn may mắn lần sau' , style: { fontSize: 12 } }
     ];
     const dispatch = useDispatch<AppDispatch>();
     const eventForSpin = useAppSelector((state) => state.eventSlice.eventForSpin);
-    // const eventCPRatio = useAppSelector((state) => state.couponSlice.eventCPRatio);
-
-    // Hàm để lấy màu ngẫu nhiên
-    // const getRandomColor = () => {
-    //   const letters = '0123456789ABCDEF';
-    //   let color = '#';
-    //   for (let i = 0; i < 6; i++) {
-    //     color += letters[Math.floor(Math.random() * 16)];
-    //   }
-    //   return color;
-    // };
     const getColor = () => {
         const colors = [
             "#ff5722",
@@ -62,10 +49,8 @@ const LuckyWheel = ({ discounts, onSpinResult }: Props) => {
             
         ];
 
-        // Chọn một số ngẫu nhiên trong khoảng từ 0 đến độ dài của mảng màu
         const randomIndex = Math.floor(Math.random() * colors.length);
 
-        // Trả về màu ở vị trí ngẫu nhiên được chọn từ mảng màu
         return colors[randomIndex];
     };
     useEffect(() => {

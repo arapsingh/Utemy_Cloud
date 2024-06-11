@@ -40,20 +40,26 @@
 
 // export default Navbar;
 
-import React, {   useState } from "react";
+import React, {   useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import { eventActions } from "../../redux/slices";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 // import toast from 'react-hot-toast';
 import { XCircleIcon } from "@heroicons/react/24/outline";
+import { eventActions } from "../../redux/slices";
 
 const Navbar = () => {
     // const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const [isVisible, setIsVisible] = useState(true);
     // const [, setIsEventActive] = useState(true);
     const isLoggedIn = useAppSelector((state) => state.authSlice.isLogin); // Assuming there's an auth slice with isLoggedIn state
     const ev = useAppSelector((state) => state.eventSlice.eventForSpin);
+    useEffect(() => {
+        dispatch(eventActions.getActiveEvent());
+        console.log(ev);
+    }, [dispatch]);
     // useEffect(() => {
     //     dispatch(eventActions.getActiveEvent()).then((response) => {
     //         if (response.payload.status_code === 200) {
@@ -64,7 +70,6 @@ const Navbar = () => {
     //     });
     // }, []);
     console.log("ev: ",ev);
-
     const handleLegendClick = () => {
         if (!isLoggedIn) {
             navigate("/login");

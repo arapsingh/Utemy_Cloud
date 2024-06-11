@@ -14,7 +14,7 @@ const Feedback: React.FC = () => {
     //   document.documentElement.style.zoom = `${newZoomValue}`;
     // }  
     const [feedbackContent, setFeedbackContent] = useState<string>("");
-    const [ratingValue, setRatingValue] = useState(5); // Default rating value
+    const [ratingValue, setRatingValue] = useState(5);
 
     const dispatch = useAppDispatch();
     const isLogin = useAppSelector((state) => state.authSlice.isLogin);
@@ -40,13 +40,20 @@ const Feedback: React.FC = () => {
             }
 
             // Gọi hàm Redux để gửi feedback
-            dispatch(feedbackActions.createMyFeedback({ content: feedbackContent, score: ratingValue }));
+            dispatch(feedbackActions.createMyFeedback({ content: feedbackContent, score: ratingValue })).then((res) => {
+                if (res.payload) {
+                    if (res.payload.status_code === 200) {
+                        setFeedbackContent("");
+                        setRatingValue(5);
+                        toast.success(res.payload.message);
+                    } else {
+                        toast.error(res.payload.message);
+                        return;
+                    }
+                }
+            });
 
             // Sau khi gửi feedback, bạn có thể chuyển người dùng đến trang chính hoặc hiển thị một thông báo thành công.
-            console.log("Feedback submitted successfully");
-            setFeedbackContent("");
-            setRatingValue(5);
-            toast.success("Submit successfully!");
         } catch (error) {
             // Xử lý lỗi nếu có
             console.error("Error submitting feedback:", error);
@@ -143,11 +150,7 @@ const Feedback: React.FC = () => {
                                 <li className="flex items-center gap-2">
                                     <GlobeAsiaAustraliaIcon className="w-4 h-4" />
                                     Website:{" "}
-                                    <a
-                                        href="https://utemy.vercel.app/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
+                                    <a href="https://utemy.vercel.app/" target="_blank" rel="noopener noreferrer">
                                         utemy.com
                                     </a>
                                 </li>

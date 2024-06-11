@@ -75,6 +75,8 @@ const Signup: FC = () => {
                                             <Field
                                                 type="text"
                                                 name="first_name"
+                                                id="first_name"
+                                                autoComplete="true"
                                                 className={`${
                                                     formik.errors.first_name && formik.touched.first_name
                                                         ? "border-error"
@@ -94,6 +96,8 @@ const Signup: FC = () => {
                                             <Field
                                                 type="text"
                                                 name="last_name"
+                                                id="last_name"
+                                                autoComplete="true"
                                                 className={`${
                                                     formik.errors.last_name && formik.touched.last_name
                                                         ? "border-error"
@@ -114,6 +118,8 @@ const Signup: FC = () => {
                                         <Field
                                             type="text"
                                             name="email"
+                                            id="email"
+                                            autoComplete="true"
                                             className={`${
                                                 formik.errors.email && formik.touched.email ? "border-error" : ""
                                             } px-2 py-4 rounded-lg border-[1px] outline-none w-full`}
@@ -131,6 +137,7 @@ const Signup: FC = () => {
                                         <Field
                                             type="password"
                                             name="password"
+                                            id="password"
                                             className={`${
                                                 formik.errors.password && formik.touched.password ? "border-error" : ""
                                             } px-2 py-4 rounded-lg border-[1px] outline-none w-full`}
@@ -148,6 +155,7 @@ const Signup: FC = () => {
                                         <Field
                                             type="password"
                                             name="confirm_password"
+                                            id="confirm_password"
                                             className={`${
                                                 formik.errors.confirm_password && formik.touched.confirm_password
                                                     ? "border-error"

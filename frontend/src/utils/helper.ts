@@ -60,23 +60,23 @@ export const convertStringDate = (date: string) => {
 
 export const eveluateList = [
     {
-        title: "5 stars",
+        title: "5 sao",
         value: 5,
     },
     {
-        title: "4 stars",
+        title: "4 sao",
         value: 4,
     },
     {
-        title: "3 stars",
+        title: "3 sao",
         value: 3,
     },
     {
-        title: "2 stars",
+        title: "2 sao",
         value: 2,
     },
     {
-        title: "1 star",
+        title: "1 sao",
         value: 1,
     },
 ];
@@ -84,15 +84,15 @@ export const eveluateList = [
 export const sortingBy = [
     {
         value: "newest",
-        title: "Newest",
+        title: "Mới nhất",
     },
     {
         value: "oldest",
-        title: "Oldest",
+        title: "Cũ nhất",
     },
-    { value: "attendees", title: "Most Attendees" },
-    { value: "ascprice", title: "Price: Lowest to Highest" },
-    { value: "descprice", title: "Price: Highest to Lowest" },
+    { value: "attendees", title: "Nhiều người tham gia nhất" },
+    { value: "ascprice", title: "Giá: Thấp đến cao" },
+    { value: "descprice", title: "Giá: Cao đến thấp" },
 ];
 export const calDayRemains = (date: string) => {
     const target = +new Date(date);

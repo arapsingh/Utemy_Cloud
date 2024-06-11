@@ -54,7 +54,6 @@ export function Sidebar() {
                                     selected === "dashboard" ? " border-lightblue  " : "border-[#2C2F31]"
                                 } `}
                                 onClick={() => handleClick("dashboard")}
-                                placeholder={undefined}
                             >
                                 <ChartBarIcon className="w-6 h-6 shrink-0 text-white" />
                                 <p className={`text-white text-md ${hovered ? "block" : "hidden"} truncate `}>

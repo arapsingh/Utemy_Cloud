@@ -339,7 +339,7 @@ const EditCourse: React.FC = () => {
                                             ) : (
                                                 sectionOfCourse.map((section, index) => (
                                                     <AccordionSection
-                                                        key={index}
+                                                        key={section.id}
                                                         section={section}
                                                         handleDeleteSection={handleDeleteSection}
                                                         handleDisplayEditModal={handleDisplayEditModal}

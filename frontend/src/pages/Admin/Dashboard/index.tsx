@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { componentActions, statisticActions } from "../../../redux/slices";
-import { Typography } from "@material-tailwind/react";
 import { BanknotesIcon, UsersIcon, BookOpenIcon, DocumentCheckIcon } from "@heroicons/react/24/outline";
 import StatisticsCard from "../../../components/Card/StatisticsCard";
 import { ClockIcon } from "@heroicons/react/24/solid";
@@ -43,7 +42,7 @@ export function Home() {
 
     const statisticsCardsData = [
         {
-            color: "gray",
+            color: "violet",
             icon: BanknotesIcon,
             title: "Tổng tiền",
             value: `${totalMoney?.toLocaleString() || 0}đ`,
@@ -54,7 +53,7 @@ export function Home() {
             },
         },
         {
-            color: "green",
+            color: "gray",
             icon: UsersIcon,
             title: "Người dùng",
             value: totalUser || 0,
@@ -76,7 +75,7 @@ export function Home() {
             },
         },
         {
-            color: "blue-gray",
+            color: "blue",
             icon: DocumentCheckIcon,
             title: "Giao dịch",
             value: totalInvoice || 0,
@@ -167,14 +166,10 @@ export function Home() {
                             key={props.title}
                             {...props}
                             footer={
-                                <Typography
-                                    variant="small"
-                                    className="flex items-center font-normal text-blue-gray-600"
-                                    placeholder={undefined}
-                                >
+                                <p className="flex items-center text-sm font-normal text-blue-gray-600">
                                     <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400" />
                                     &nbsp;{props.footer}
-                                </Typography>
+                                </p>
                             }
                         />
                     );
@@ -185,10 +180,10 @@ export function Home() {
                     key={statisticDonutData.title}
                     {...statisticDonutData}
                     footer={
-                        <Typography variant="small" className="flex items-center font-normal text-blue-gray-600" placeholder={undefined}>
+                        <p className="flex text-sm items-center font-normal text-blue-gray-600">
                             <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400" />
                             &nbsp;{statisticDonutData.footer}
-                        </Typography>
+                        </p>
                     }
                 />
                 <StatisticLineChart
@@ -196,18 +191,12 @@ export function Home() {
                     {...statisticLineData}
                     footer={
                         <div className="flex justify-between">
-                            <Typography variant="small" className="flex items-center font-normal text-blue-gray-600" placeholder={undefined}>
+                            <p className="flex text-sm items-center font-normal text-blue-gray-600">
                                 <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400" />
                                 &nbsp;{statisticLineData.footer}
-                            </Typography>
+                            </p>
                             <div className="flex gap-2">
-                                <Typography
-                                    variant="small"
-                                    className="flex items-center font-normal text-blue-gray-600"
-                                    placeholder={undefined}
-                                >
-                                    Năm
-                                </Typography>
+                                <p className="flex text-sm items-center font-normal text-blue-gray-600">Năm</p>
                                 <MenuCustomAnimation />
                             </div>
                         </div>

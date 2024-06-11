@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Spin, Carousel as CarouselUtemy } from "../../components";
 import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
-import { categoryActions, courseActions, userActions } from "../../redux/slices";
+import { categoryActions, courseActions, eventActions, userActions } from "../../redux/slices";
 import { Course as CourseType } from "../../types/course";
 import { EnrolledAuthor } from "../../types/user";
 import CategoryCard from "./CategoryCard";
@@ -41,6 +41,7 @@ const Home: React.FC = () => {
         dispatch(courseActions.getTop10Sale());
         dispatch(userActions.getTop10AuthorByEnrolled());
         dispatch(categoryActions.get5Categories());
+        dispatch(eventActions.getActiveEvent());
         // dispatch(eventActions.getActiveEvent());
     }, [dispatch]);
     // useEffect(() => {
@@ -51,7 +52,7 @@ const Home: React.FC = () => {
         <>
             {isGetLoading && <Spin />}
 
-            <div className="flex justify-center my-2 rounded-md">
+            <div className="flex justify-center container my-2 rounded-md">
                 <CarouselUtemy />
             </div>
             <div className="w-full h-fill bg-background_2 ">
@@ -60,16 +61,16 @@ const Home: React.FC = () => {
                 </div>
             </div>
             <div className="container mx-auto">
-                <div className="my-4 px-4">
+                <div className="my-4 px-4 w-full">
                     <h2 className="text-xl tablet:text-4xl font-bold mb-3">
                         Khóa học <span className="text-lightblue"> nổi tiếng </span>
                     </h2>
                     <span className="w-[60px] h-1 bg-black block"></span>
-                    <div className="mt-3 flex shrink-0 gap-3 py-2">
+                    <div className="mt-5 flex shrink-0 gap-3 py-2">
                         <CarouselCourse courses={top10Enrolled} type="enrolled" />
                     </div>
                 </div>
-                <div className="my-4 px-4">
+                <div className="my-4 px-4 w-full">
                     <h2 className="text-xl tablet:text-4xl font-bold mb-3">
                         Được <span className="text-lightblue">đánh giá cao</span>{" "}
                     </h2>
@@ -89,7 +90,7 @@ const Home: React.FC = () => {
                         </div>
                     </div>
                 )}
-                <div className="my-4 px-4">
+                <div className="my-4 px-4 w-full">
                     <h2 className="text-xl tablet:text-4xl font-bold mb-3">
                         Danh mục <span className="text-lightblue">hàng đầu</span>{" "}
                     </h2>
@@ -119,7 +120,7 @@ const Home: React.FC = () => {
                             <CarouselContent className="">
                                 {top10AuthorEnrolled.map((user, index) => {
                                     return (
-                                        <CarouselItem className="w-full basis-1/2 ">
+                                        <CarouselItem key={index} className="w-full basis-1/2 ">
                                             <LecturerCard key={index} lecturer={user} />
                                         </CarouselItem>
                                     );

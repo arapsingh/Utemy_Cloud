@@ -1321,7 +1321,9 @@ const getListRatingOfCourse = async (req: Request): Promise<ResponseBase> => {
             });
 
             const totalRecord = await configs.db.rating.count({
-                where: baseFilter,
+                where: {
+                    course_id: isFoundCourse.id,
+                },
             });
             const ratingListData: Rating[] = [];
             ratingList.map((item) => {
@@ -1473,50 +1475,51 @@ const getTop10SalesCourses = async (req: Request): Promise<ResponseBase> => {
     try {
         const top10SalesCourses: any = await configs.db.$queryRaw`
         SELECT 
-                Course.id AS course_id,
-                Course.title,
-                Course.summary,
-                Course.thumbnail,
-                Course.number_of_rating,
-                Course.average_rating,
-                Course.number_of_enrolled,
-                User.id AS user_id,
-                User.first_name,
-                User.last_name,
-                Course.slug,
-                Course.study,
-                Course.updated_at,
-                Course.price,
-                Course.sale_price,
-                Course.sale_until,
+                course.id AS course_id,
+                course.title,
+                course.summary,
+                course.thumbnail,
+                course.number_of_rating,
+                course.average_rating,
+                course.number_of_enrolled,
+                user.id AS user_id,
+                user.first_name,
+                user.last_name,
+                course.slug,
+                course.study,
+                course.updated_at,
+                course.price,
+                course.sale_price,
+                course.sale_until,
                 JSON_OBJECT(
-                    'user_id', User.id,
-                    'first_name', User.first_name,
-                    'last_name', User.last_name
+                    'user_id', user.id,
+                    'first_name', user.first_name,
+                    'last_name', user.last_name
                 ) AS author,
                 JSON_ARRAYAGG(
                     JSON_OBJECT(
-                        'category_id', Category.id,
-                        'title', Category.title,
-                        'url_image', Category.url_image
+                        'category_id', category.id,
+                        'title', category.title,
+                        'url_image', category.url_image
                     )
                 ) AS categories
             FROM 
-                Course
+                course
             JOIN 
-                User ON Course.author_id = User.id
+                user ON course.author_id = user.id
             LEFT JOIN 
-                courses_categories ON courses_categories.course_id = Course.id
+                courses_categories ON courses_categories.course_id = course.id
             LEFT JOIN 
-                Category ON Category.id = courses_categories.category_id
+                category ON category.id = courses_categories.category_id
             WHERE 
-                Course.is_delete = false
-                AND Course.status = true
-                AND Course.price - Course.sale_price > 0
+                course.is_delete = false
+                AND course.status = true
+                AND course.price - course.sale_price > 0
+                AND course.sale_until >= now()
             GROUP BY 
-                Course.id
+                course.id
             ORDER BY 
-                Course.price - Course.sale_price  DESC
+                course.price - course.sale_price  DESC
             LIMIT 10;
         `;
         if (top10SalesCourses.length === 0) {
@@ -1526,6 +1529,7 @@ const getTop10SalesCourses = async (req: Request): Promise<ResponseBase> => {
         return new ResponseSuccess(200, constants.success.SUCCESS_GET_DATA, true, top10SalesCourses);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
+            console.log(error);
             return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
         }
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
@@ -2094,6 +2098,101 @@ const setDoneCourse = async (req: IRequestWithId): Promise<ResponseBase> => {
         return new ResponseError(500, JSON.stringify(error), false);
     }
 };
+const getCourseByAuthorId = async (req: Request): Promise<ResponseBase> => {
+    try {
+        const { id } = req.params;
+        const pageIndex = Number(req.query.page_index) || 1;
+        const searchItem = req.query.search_item ? req.query.search_item.toString() : "";
+        const pageSize = 6;
+        const user_id = parseInt(id);
+        const user = await db.user.findFirst({
+            where: {
+                id: user_id,
+                is_verify: true,
+                is_deleted: false,
+            },
+            select: {
+                first_name: true,
+                last_name: true,
+                id: true,
+                courses: {
+                    where: {
+                        is_delete: false,
+                        status: true,
+                        title: {
+                            contains: searchItem,
+                        },
+                    },
+                    include: {
+                        course_categories: {
+                            select: {
+                                Category: {
+                                    select: {
+                                        id: true,
+                                        title: true,
+                                        url_image: true,
+                                        description: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    orderBy: {
+                        updated_at: "desc",
+                    },
+                    take: pageSize,
+                    skip: (pageIndex - 1) * pageSize,
+                },
+            },
+        });
+        console.log(user);
+        if (!user) return new ResponseError(404, constants.error.ERROR_USER_NOT_FOUND, false);
+
+        const courses: OutstandingCourse[] = [];
+
+        user.courses.map((course) => {
+            const data: OutstandingCourse = {
+                course_id: course.id,
+                thumbnail: course.thumbnail,
+                title: course.title,
+                slug: course.slug,
+                number_of_enrolled: course.number_of_enrolled,
+                number_of_rating: course.number_of_rating,
+                categories: course.course_categories.map((cate) => (cate as any).Category),
+                author: {
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    user_id: user.id,
+                },
+                created_at: course.created_at,
+                updated_at: course.updated_at,
+                average_rating: course.average_rating,
+                status: course.status,
+            };
+            courses.push(data);
+        });
+        const totalRecord = await configs.db.course.count({
+            where: {
+                is_delete: false,
+                status: true,
+                author_id: user.id,
+            },
+        });
+        const totalPage = Math.ceil(user.courses.length / 6);
+
+        const data = {
+            total_record: totalRecord,
+            total_page: totalPage,
+            courses: courses,
+        };
+        return new ResponseSuccess(200, constants.success.SUCCESS_REQUEST, true, data);
+    } catch (error) {
+        if (error instanceof PrismaClientKnownRequestError) {
+            return new ResponseError(400, constants.error.ERROR_BAD_REQUEST, false);
+        }
+        return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
+    }
+};
 const CourseServices = {
     getRightOfCourse,
     createCourse,
@@ -2126,6 +2225,7 @@ const CourseServices = {
     deleteFinalTest,
     setDoneCourse,
     getFinalTestByCourseId,
+    getCourseByAuthorId,
 };
 
 export default CourseServices;

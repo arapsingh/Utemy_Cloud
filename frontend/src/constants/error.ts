@@ -57,7 +57,7 @@ const error = {
     //description
     ERROR_DESCRIPTION_STRING: "Description must be string",
     ERROR_DESCRIPTION_REQUIRED: "Description is required",
-    ERROR_DESCRIPTION_TOO_MAX: "Description is too long",
+    ERROR_DESCRIPTION_TOO_MAX: "Description is too long, 200 chars only",
     ERROR_DESCRIPTION_TOO_SHORT: "Description is too short",
 
     //course
@@ -121,7 +121,7 @@ const error = {
     ERROR_PASS_PERCENT_REQUIRED: "Pass percent required",
     ERROR_IS_TIME_LIMIT_REQUIRED: "Time limit option required",
     ERROR_QUIZ_GROUP_ID_REQUIRED: "Quiz is required",
-    ERROR_TITLE_MAX: "Title must be under 50 chars",
+    ERROR_TITLE_MAX: "Title must be under 100 chars",
     ERROR_CATEGORY_ALREADY_EXISTS: "Category is already existed",
 
     //promotion
@@ -163,5 +163,8 @@ const error = {
 
     //
     ERROR_QUESTION_REQUIRED: "Question is required",
+
+    //report
+    ERROR_REPORT_CONTENT_REQUIRED: "Content is required",
 };
 export default error;

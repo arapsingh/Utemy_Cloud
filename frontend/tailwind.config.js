@@ -120,7 +120,7 @@ module.exports = {
             blob: "blob 7s infinite",
         },
     },
-    plugins: [require("daisyui"), require("tailwindcss-animate"), require('@material-tailwind/react')],
+    plugins: [require("daisyui"), require("tailwindcss-animate")],
     daisyui: {
         themes: [
             {

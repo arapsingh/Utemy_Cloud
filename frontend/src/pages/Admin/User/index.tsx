@@ -1,15 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-    Card,
-    CardHeader,
-    CardBody,
-    Typography,
-    Avatar,
-    Menu,
-    MenuHandler,
-    MenuList,
-    MenuItem,
-} from "@material-tailwind/react";
 import { DefaultAvatar as Logo } from "../../../assets/images";
 import { Pagination } from "../../../components";
 import SearchIcon from "../../../assets/icons/SeacrchIcon";
@@ -138,85 +127,77 @@ const UserAdmin = () => {
                 <PopupEditUser handleCancelEditUser={handleCancelEditUserPopup} editUser={editUser} />
             )}
             <div className="mt-12 mb-8 flex flex-col gap-12 bg-background_2 min-h-screen">
-                <Card placeholder={undefined}>
-                    <CardHeader
-                        variant="gradient"
-                        color="gray"
-                        className="mb-8 p-6 flex justify-center w-full self-center"
-                        placeholder={undefined}
-                    >
-                        <div className="flex items-center justify-center gap-3 text-start w-2/3">
-                            <Menu>
-                                <MenuHandler placeholder={undefined}>
-                                    <button className="bg-black min-w-[80px] text-white hover:text-gray-200 text-sm text-center px-4 py-1 rounded-sm">
-                                        {role}
-                                    </button>
-                                </MenuHandler>
-                                <MenuList placeholder={undefined}>
-                                    <MenuItem
-                                        id="All"
-                                        className="text-black hover:bg-gray-400"
-                                        onClick={() => setRole("All")}
-                                        placeholder={undefined}
-                                    >
-                                        Tất cả
-                                    </MenuItem>
-                                    <MenuItem
-                                        id="Admin"
-                                        className="text-black  hover:bg-gray-400"
-                                        onClick={() => setRole("Admin")}
-                                        placeholder={undefined}
-                                    >
-                                        Admin
-                                    </MenuItem>
-                                    <MenuItem
-                                        id="User"
-                                        className="text-black  hover:bg-gray-400"
-                                        onClick={() => setRole("User")}
-                                        placeholder={undefined}
-                                    >
-                                        User
-                                    </MenuItem>
-                                </MenuList>
-                            </Menu>
-                            <div className="w-1/2">
-                                <div className="relative">
-                                    <input
-                                        ref={inputRef}
-                                        type="text"
-                                        placeholder="Search user..."
-                                        className="rounded py-2 px-10 w-full border-[1px] text-gray-700 border-black"
-                                        value={userInput}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                            setUserInput(e.target.value)
-                                        }
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter") handleKeyWordSearch();
-                                        }}
-                                    />
-                                    <div className="cursor-pointer absolute bottom-12" onClick={handleKeyWordSearch}>
-                                        <SearchIcon />
-                                    </div>
+                <div className=" p-6 flex justify-center w-full self-center">
+                    <div className="flex items-center justify-center gap-3 text-start w-2/3">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <button className="bg-black min-w-[80px] text-white hover:text-gray-200 text-sm text-center px-4 py-1 rounded-sm">
+                                    {role}
+                                </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem
+                                    id="All"
+                                    className="text-black hover:bg-gray-400 cursor-pointer flex items-center justify-center"
+                                    onClick={() => setRole("All")}
+                                >
+                                    <p>Tất cả</p>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    id="Admin"
+                                    className="text-black hover:bg-gray-400 cursor-pointer flex items-center justify-center"
+                                    onClick={() => setRole("Admin")}
+                                >
+                                    <p>Admin</p>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    id="User"
+                                    className="text-black hover:bg-gray-400 cursor-pointer flex items-center justify-center"
+                                    onClick={() => setRole("User")}
+                                >
+                                    <p>User</p>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        <div className="w-1/2">
+                            <div className="relative">
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    id="search-user"
+                                    placeholder="Search user..."
+                                    className="rounded py-2 px-10 w-full border-[1px] text-gray-700 border-black"
+                                    value={userInput}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserInput(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") handleKeyWordSearch();
+                                    }}
+                                />
+                                <div className="cursor-pointer absolute bottom-12" onClick={handleKeyWordSearch}>
+                                    <SearchIcon />
                                 </div>
                             </div>
-                            <div className="ml-2 gap-2 flex">
-                                <button
-                                    onClick={() => handleKeyWordSearch()}
-                                    className="btn btn-sm btn-info text-white text-sm hover:bg-lightblue/80 font-w mb-1"
-                                >
-                                    Tìm kiếm
-                                </button>{" "}
-                                <button
-                                    onClick={() => handleReset()}
-                                    className="text-sm btn-sm btn btn-outline font-w "
-                                >
-                                    Làm mới
-                                </button>{" "}
-                            </div>
                         </div>
-                    </CardHeader>
+                        <div className="ml-2 gap-2 flex">
+                            <button
+                                onClick={() => handleKeyWordSearch()}
+                                className="btn btn-sm btn-info text-white text-sm hover:bg-lightblue/80 font-w mb-1"
+                            >
+                                Tìm kiếm
+                            </button>{" "}
+                            <button onClick={() => handleReset()} className="text-sm btn-sm btn btn-outline font-w ">
+                                Làm mới
+                            </button>{" "}
+                        </div>
+                    </div>
+                </div>
 
-                    <CardBody className="overflow-x-scroll px-0 pt-0 pb-2 " placeholder={undefined}>
+                <div className="overflow-x-scroll px-0 pt-0 pb-2 ">
+                    {users.length === 0 ? (
+                        <p className="text-center">
+                            Không tìm thấy user với từ khoá <span className="italic">"{searchItem}"</span>
+                        </p>
+                    ) : (
                         <Table className="border">
                             <TableCaption>Danh sách tài khoản</TableCaption>
                             <TableHeader>
@@ -224,6 +205,7 @@ const UserAdmin = () => {
                                     {["Người dùng", "Loại tài khoản", "Trạng thái", "Ngày tạo", "Hành động"].map(
                                         (header, index) => (
                                             <TableHead
+                                                key={index}
                                                 className={`border ${index === 0 ? "text-left" : index === 4 ? "text-right" : "text-center"}`}
                                             >
                                                 {header}
@@ -234,36 +216,29 @@ const UserAdmin = () => {
                             </TableHeader>
                             <TableBody>
                                 {users.map((user, index) => {
-                                    const className = ` py-3 px-5 `;
-                                    console.log(className);
                                     const date = user.created_at?.toString().split(" ");
                                     const id = user.user_id as number;
                                     return (
-                                        <TableRow>
+                                        <TableRow key={index}>
                                             <TableCell className="font-medium border">
                                                 <Link to={`/admin/user-profile/${user.user_id}`}>
                                                     <div className="flex items-center gap-4">
-                                                        <Avatar
+                                                        <img
                                                             src={user.url_avatar || Logo}
                                                             alt={user.user_id?.toString()}
-                                                            size="xs"
-                                                            variant="rounded"
-                                                            placeholder={undefined}
+                                                            className="w-8 h-8 rounded-full"
                                                         />
                                                         <div>
-                                                            <Typography
-                                                                variant="small"
-                                                                color="blue-gray"
-                                                                className={`font-semibold ${
+                                                            <p
+                                                                className={`font-semibold text-sm${
                                                                     user.user_id === currentId ? "text-lightblue" : ""
                                                                 }`}
-                                                                placeholder={undefined}
                                                             >
                                                                 {user.first_name} {user.last_name}
-                                                            </Typography>
-                                                            <Typography className="text-xs font-normal text-blue-gray-500" placeholder={undefined}>
+                                                            </p>
+                                                            <p className="text-xs font-normal text-blue-gray-500">
                                                                 {user.email}
-                                                            </Typography>
+                                                            </p>
                                                         </div>
                                                     </div>
                                                 </Link>
@@ -303,33 +278,28 @@ const UserAdmin = () => {
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="start">
                                                             <DropdownMenuItem>
-                                                                <Typography
-                                                                    as="text"
+                                                                <p
                                                                     onClick={() => handleOpenEditUserPopup(user)}
                                                                     className="text-xs font-semibold hover:underline hover:cursor-pointer text-blue-gray-600"
                                                                 >
                                                                     Chỉnh sửa
-                                                                </Typography>
+                                                                </p>
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem>
                                                                 {user.is_delete ? (
-                                                                    <Typography
-                                                                        as="text"
+                                                                    <p
                                                                         onClick={() => handleOpenActiveModal(id)}
                                                                         className="text-xs text-green-700 font-semibold hover:underline hover:cursor-pointer "
-                                                                        placeholder={undefined}
                                                                     >
                                                                         Khôi phục
-                                                                    </Typography>
+                                                                    </p>
                                                                 ) : (
-                                                                    <Typography
-                                                                        as="text"
+                                                                    <p
                                                                         onClick={() => handleOpenDeleteModal(id)}
                                                                         className="text-xs text-red-700 font-semibold hover:underline hover:cursor-pointer "
-                                                                        placeholder={undefined}
                                                                     >
                                                                         Xóa
-                                                                    </Typography>
+                                                                    </p>
                                                                 )}
                                                             </DropdownMenuItem>
                                                         </DropdownMenuContent>
@@ -341,17 +311,18 @@ const UserAdmin = () => {
                                 })}
                             </TableBody>
                         </Table>
-                        {totalPage > 1 && (
-                            <div className="flex justify-center my-4 ">
-                                <Pagination
-                                    handleChangePageIndex={handleChangePageIndex}
-                                    totalPage={totalPage}
-                                    currentPage={pageIndex}
-                                />
-                            </div>
-                        )}
-                    </CardBody>
-                </Card>
+                    )}
+
+                    {totalPage > 1 && (
+                        <div className="flex justify-center my-4 ">
+                            <Pagination
+                                handleChangePageIndex={handleChangePageIndex}
+                                totalPage={totalPage}
+                                currentPage={pageIndex}
+                            />
+                        </div>
+                    )}
+                </div>
             </div>
         </>
     );
