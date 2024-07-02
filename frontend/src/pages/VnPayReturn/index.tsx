@@ -46,8 +46,11 @@ const VnPayReturn = () => {
     delete vnp_Params["vnp_SecureHash"];
     delete vnp_Params["vnp_SecureHashType"];
     const secretKey = process.env.REACT_APP_SECRET_HASH;
+    const keys = Object.keys(vnp_Params);
+    console.log("this is key:",keys); // Kiểm tra đầu vào trước khi sắp xếp
     const sortedKeys = _.sortBy(Object.keys(vnp_Params));
-    const sortedObj = sortedKeys.reduce((acc: any, key) => {
+    console.log(sortedKeys);
+    const sortedObj = sortedKeys.reduce((acc: any, key: string | number) => {
         acc[key] = vnp_Params[key];
         return acc;
     }, {});

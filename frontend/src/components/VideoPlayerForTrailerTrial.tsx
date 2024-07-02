@@ -3,7 +3,7 @@ import Plyr from "plyr";
 import "plyr/dist/plyr.css";
 import "plyr/dist/plyr.min.mjs";
 import React, { useEffect, useRef } from "react";
-const AZURE_BLOB_STORAGE_URL = process.env.AZURE_BLOB_STORAGE_URL || "";
+const AZURE_BLOB_STORAGE_URL = process.env.REACT_APP_AZURE_BLOB_STORAGE_URL || "";
 
 type VideoJSType = {
     source: string;
@@ -11,7 +11,7 @@ type VideoJSType = {
 
 export const VideoJS: React.FC<VideoJSType> = (props) => {
     const videoRef = useRef<HTMLVideoElement>(null);
-
+    console.log(process.env.REACT_APP_AZURE_BLOB_STORAGE_URL)
     const updateQuality = (newQuality: any) => {
         if (Hls.isSupported()) {
             window.hls.levels.forEach((level: any, levelIndex: any) => {

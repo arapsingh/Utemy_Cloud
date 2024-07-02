@@ -1,14 +1,13 @@
 ---
 applications:
   - name: backend
-    random-route: false
-    path: C:\TieuLuanChuyenNganh\Utemy_Cloud\backend
+    random-route: true
+    path: C:\Users\pc\TieuLuanChuyenNganh\Utemy_Cloud\backend
     memory: 2048M
     disk_quota: 5120M
     buildpacks:
       - nodejs_buildpack
-    routes:
-      - route: utemyvietnam.cfapps.ap21.hana.ondemand.com
+    
     env:
       DATABASE_URL: "mysql://u5830kuajujv9ndq:fcA7qkiMbiH47bx2QFP@bcqcsfr7bacjolixzuj6-mysql.services.clever-cloud.com:20933/bcqcsfr7bacjolixzuj6"
       DOMAIN_NAME: "https://utemyvietnam.vercel.app"
