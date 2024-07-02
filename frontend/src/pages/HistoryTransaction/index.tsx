@@ -42,7 +42,6 @@ const HistoryTransaction = () => {
                     invoice_id: 0,
                 }),
             );
-            console.log("from:", fromDate);
         }
     }, [dispatch, pageIndex, searchMode, fromDate, toDate]);
 
@@ -73,7 +72,6 @@ const HistoryTransaction = () => {
                     // Lưu kết quả tìm kiếm vào state
                     const data = response.payload?.data;
                     // const dataArray = data ? [data] : [];
-                    console.log("data:", data);
                     setSearchResult(data ? [data] : []);
                 })
                 .catch((error) => {

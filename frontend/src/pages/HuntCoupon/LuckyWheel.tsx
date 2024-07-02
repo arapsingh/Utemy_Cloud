@@ -9,22 +9,19 @@ import { useDispatch } from "react-redux";
 // Define props interface
 interface Props {
     discounts: WheelData[]; // Define props type
-    onSpinResult: (result: WheelData | null) => void; 
+    onSpinResult: (result: WheelData | null) => void;
 }
 interface WheelData {
     option?: string;
     coupon?: any; // Thêm trường coupon vào đây
     optionSize?: number; // Optional
-
 }
 
 const LuckyWheel = ({ discounts, onSpinResult }: Props) => {
     const [mustSpin, setMustSpin] = useState(false);
     const [prizeNumber, setPrizeNumber] = useState(0);
     const [numberOfTurn, setNumberOfTurn] = useState(Number);
-    const wheelDataWithGoodLuckMessage: WheelData[] = [
-        ...discounts,
-    ];
+    const wheelDataWithGoodLuckMessage: WheelData[] = [...discounts];
     const dispatch = useDispatch<AppDispatch>();
     const eventForSpin = useAppSelector((state) => state.eventSlice.eventForSpin);
     const getColor = () => {
@@ -33,18 +30,17 @@ const LuckyWheel = ({ discounts, onSpinResult }: Props) => {
             "#f44336",
             "#e91e63",
             "#9c27b0",
-            
+
             "#2196f3",
             "#03a9f4",
             "#00bcd4",
-            
+
             "#4caf50",
             "#8bc34a",
             "#cddc39",
             "#ffeb3b",
             "#ffc107",
             "#ff9800",
-            
         ];
 
         const randomIndex = Math.floor(Math.random() * colors.length);
@@ -81,7 +77,6 @@ const LuckyWheel = ({ discounts, onSpinResult }: Props) => {
                 onSpinResult(null);
                 // Generate a random prize number
                 const ratios = discounts.map((discount) => {
-                    // console.log("discounts:",discounts);
                     if (discount && discount.coupon && discount.coupon.ratio && discount.coupon.ratio.ratio) {
                         return discount.coupon.ratio.ratio;
                     } else {
@@ -93,7 +88,6 @@ const LuckyWheel = ({ discounts, onSpinResult }: Props) => {
                 const sumOfValidRatios = validRatios.reduce((total, ratio) => total + ratio, 0);
                 // Thêm giá trị mới vào mảng validRatios
                 validRatios.push(parseFloat(Number(1 - sumOfValidRatios).toFixed(2)));
-                console.log("Ratios:", validRatios);
                 // const newPrizeNumber = Math.floor(Math.random() * wheelDataWithGoodLuckMessage.length);
                 if (validRatios.length > 1) {
                     const newPrizeNumber = generateRandomPrize(validRatios, wheelDataWithGoodLuckMessage);

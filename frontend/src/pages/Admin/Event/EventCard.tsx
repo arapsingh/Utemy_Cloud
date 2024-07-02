@@ -39,6 +39,7 @@ const formatDate = (dateString: any) => {
 };
 
 const EventCard: React.FC<EventCardProps> = (props) => {
+    const isLoading = useAppSelector((state) => state.couponSlice.isLoading);
     const [isUpdateRatioDialogOpen, setIsUpdateRatioDialogOpen] = useState(false);
     const [selectedCouponId, setSelectedCouponId] = useState(Number);
     const [ratioValue, setRatioValue] = useState("");
@@ -55,7 +56,6 @@ const EventCard: React.FC<EventCardProps> = (props) => {
     };
     const handleResetRatio = (couponId: any) => {
         // Logic to reset ratio
-        console.log(`Resetting ratio for coupon with ID: ${couponId}`);
 
         // Sao chép mảng tempRates để không làm thay đổi trực tiếp mảng gốc
         const updatedTempRates = { ...tempRates };
@@ -80,7 +80,6 @@ const EventCard: React.FC<EventCardProps> = (props) => {
                 [selectedCouponId]: ratioValue,
             });
             // Logic to save the new ratio
-            console.log(`Saving new ratio for coupon with ID: ${selectedCouponId}, Ratio: ${ratioValue}`);
             setIsUpdateRatioDialogOpen(false);
             setRatioValue("");
         }
@@ -118,7 +117,6 @@ const EventCard: React.FC<EventCardProps> = (props) => {
         setIsOpenDeleteModel(true);
     };
     const saveAllRates = () => {
-        console.log("Saving rates:", tempRates);
         if (Object.keys(tempRates).length < rowCount)
             toast.error("Hãy nhập tỉ lệ cho tất cả các coupon có trong sự kiện này!!!");
         else {
@@ -172,16 +170,7 @@ const EventCard: React.FC<EventCardProps> = (props) => {
             }
         }
     };
-    // const [errorInputRatio, setErrorInputRatio] = useState(""); // Trạng thái lưu trữ thông báo lỗi
-    // // Hàm kiểm tra và cập nhật trạng thái lỗi
-    // const validateInput = (value: string) => {
-    //     if (Number(value) < 1 || Number(value) > 99) {
-    //         setErrorInputRatio("Giá trị phải nằm trong khoảng từ 1 đến 99");
-    //         console.log(errorInputRatio)
-    //     } else {
-    //         setErrorInputRatio("");
-    //     }
-    // };
+
     const totalTempRate = Object.values(tempRates).reduce((acc: number, cur: any) => acc + Number(cur), 0);
     const totalRatio = props.event.coupons.reduce((accumulator, coupon) => {
         // Lấy giá trị của mỗi coupon
@@ -421,7 +410,9 @@ const EventCard: React.FC<EventCardProps> = (props) => {
                                                                         >
                                                                             Hủy
                                                                         </Button>
-                                                                        <Button onClick={handleSaveRatio}>Lưu</Button>
+                                                                        <Button onClick={handleSaveRatio} disabled={isLoading}>
+                                                                            {isLoading ? <span className="loading loading-spinner"></span> : ""}
+                                                                        {isLoading ? "Loading..." : "Lưu"}</Button>
                                                                     </DialogFooter>
                                                                 </DialogContent>
                                                             </Dialog>
@@ -472,8 +463,9 @@ const EventCard: React.FC<EventCardProps> = (props) => {
                                             </div>
                                         </div>
                                         <DialogFooter>
-                                            <Button type="submit" onClick={deleteAllRates}>
-                                                Xóa tất cả tỉ lệ
+                                            <Button type="submit" onClick={deleteAllRates}disabled={isLoading}>
+                                                                            {isLoading ? <span className="loading loading-spinner"></span> : ""}
+                                                                        {isLoading ? "Loading..." : "Xóa tất cả tỉ lệ"}
                                             </Button>
                                             {isOpenDeleteModel && (
                                                 <DeleteModal
@@ -481,11 +473,13 @@ const EventCard: React.FC<EventCardProps> = (props) => {
                                                     handleDelete={handleDeleteAllRates}
                                                 />
                                             )}
-                                            <Button type="submit" onClick={() => setTempRates({})}>
-                                                Đặt lại tỉ lệ tạm
+                                            <Button type="submit" onClick={() => setTempRates({})}disabled={isLoading}>
+                                                                            {isLoading ? <span className="loading loading-spinner"></span> : ""}
+                                                                        {isLoading ? "Loading..." : "Đặt lại tỉ lệ tạm"}
                                             </Button>
-                                            <Button type="submit" onClick={saveAllRates}>
-                                                Lưu
+                                            <Button type="submit" onClick={saveAllRates}disabled={isLoading}>
+                                                                            {isLoading ? <span className="loading loading-spinner"></span> : ""}
+                                                                        {isLoading ? "Loading..." : "Lưu"}
                                             </Button>
                                         </DialogFooter>
                                     </DialogContent>

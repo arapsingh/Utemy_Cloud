@@ -75,14 +75,12 @@ const Navbar = () => {
             navigate("/login");
             return;
         }
-        if (ev)
-            {
-                console.log("ev: ",ev);
-                navigate("/hunt-coupon");
-            } else {
-                // toast.error("Sự kiện đã kết thúc!");
-                setIsVisible(false);
-            }
+        if (ev) {
+            navigate("/hunt-coupon");
+        } else {
+            // toast.error("Sự kiện đã kết thúc!");
+            setIsVisible(false);
+        }
     };
     const handleCloseClick = () => {
         setIsVisible(false);
@@ -116,7 +114,7 @@ const Navbar = () => {
                         fontSize: "20px",
                         fontWeight: "bold",
                         textAlign: "center",
-                        color: 'white'
+                        color: "white",
                     }}
                     onClick={handleLegendClick}
                 >
