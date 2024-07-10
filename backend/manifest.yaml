@@ -1,32 +1,34 @@
 ---
 applications:
-  - name: backend
-    random-route: true
-    path: C:\Users\pc\TieuLuanChuyenNganh\Utemy_Cloud\backend
-    memory: 1024M
-    disk_quota: 2048M
-    buildpacks:
-      - nodejs_buildpack
-    
-    env:
-      DATABASE_URL: "mysql://uujubn5xvphkxlmk:8oo1U6cvfPUZjcsvNJm@byqellhoqk3ckkkakral-mysql.services.clever-cloud.com:20537/byqellhoqk3ckkkakral"
-      DOMAIN_NAME: "https://utemyvietnam.vercel.app"
-      BACKEND_DOMAIN_NAME: "https:\\\\utemyvietnam.cfapps.ap21.hana.ondemand.com"
-      TOKEN_ACCESS_EXPIRED_TIME: "15m"
-      TOKEN_REFRESH_EXPIRED_TIME: "10d"
-      PUBLIC_URL: "https://utemyvietnam.cfapps.ap21.hana.ondemand.com"
-      PUBLIC_API_URL: "https://utemyvietnam.cfapps.ap21.hana.ondemand.com/api"
-      JWT_SECRET_KEY: "Utemy"
-      HASH_SALT: "10"
-      EMAIL_SERVER: "utemyvietnam@gmail.com"
-      PASSWORD_SERVER: "xmxfhgajalgcxxtk"
-      PAGE_SIZE: 10
-      TZ: "Asia/Ho_Chi_Minh"
-      VNP_TMN_CODE: "R82FFIOK"
-      VNP_HASH_SECRET: "Y2U4VNSVOQL2ULMSPKQVGNR0MKTONWKD"      
-      VNP_URL: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
-      VNP_API: "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction"
-      VNP_RETURN_URL: "https://utemyvietnam.vercel.app/checkout/vnpay_return"
-      CERTIFIER_ID: "cfp_Hy47WvgtTlnS72HLBaboRvApffI8iYEW3QTK"
-      OPENAI_API_KEY : "59cadad899ea4b84880981aa7575a2d8"
-      OPENAI_ENDPOINT : "https://utemyvietnam.openai.azure.com"
+    - name: backend
+      random-route: false
+      path: C:\Users\pc\TieuLuanChuyenNganh\Utemy_Cloud\backend
+      memory: 1024M
+      disk_quota: 2048M
+      buildpacks:
+          - nodejs_buildpack
+      routes:
+          - route: utemyvietnam.cfapps.ap21.hana.ondemand.com
+
+      env:
+          DATABASE_URL: "mysql://uujubn5xvphkxlmk:8oo1U6cvfPUZjcsvNJm@byqellhoqk3ckkkakral-mysql.services.clever-cloud.com:20537/byqellhoqk3ckkkakral"
+          DOMAIN_NAME: "https://utemyvietnam.vercel.app"
+          BACKEND_DOMAIN_NAME: "https:\\\\utemyvietnam.cfapps.ap21.hana.ondemand.com"
+          TOKEN_ACCESS_EXPIRED_TIME: "15m"
+          TOKEN_REFRESH_EXPIRED_TIME: "10d"
+          PUBLIC_URL: "https://utemyvietnam.cfapps.ap21.hana.ondemand.com"
+          PUBLIC_API_URL: "https://utemyvietnam.cfapps.ap21.hana.ondemand.com/api"
+          JWT_SECRET_KEY: "Utemy"
+          HASH_SALT: "10"
+          EMAIL_SERVER: "utemyvietnam@gmail.com"
+          PASSWORD_SERVER: "xmxfhgajalgcxxtk"
+          PAGE_SIZE: 10
+          TZ: "Asia/Ho_Chi_Minh"
+          VNP_TMN_CODE: "R82FFIOK"
+          VNP_HASH_SECRET: "Y2U4VNSVOQL2ULMSPKQVGNR0MKTONWKD"
+          VNP_URL: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
+          VNP_API: "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction"
+          VNP_RETURN_URL: "https://utemyvietnam.vercel.app/checkout/vnpay_return"
+          CERTIFIER_ID: "cfp_Hy47WvgtTlnS72HLBaboRvApffI8iYEW3QTK"
+          OPENAI_API_KEY: "59cadad899ea4b84880981aa7575a2d8"
+          OPENAI_ENDPOINT: "https://utemyvietnam.openai.azure.com"
