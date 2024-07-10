@@ -87,7 +87,7 @@ const checkValidateComment = async (req: IRequestWithId): Promise<ResponseBase> 
                 "Bình luận của bạn đã bị chặn do chứa nội dung không phù hợp, vui lòng kiểm tra lại!!",
                 false,
                 {
-                    isValid: false,
+                    isValid: error,
                 },
             );
         }

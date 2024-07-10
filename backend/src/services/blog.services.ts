@@ -136,6 +136,7 @@ const updateBlog = async (req: IRequestWithId): Promise<ResponseBase> => {
             }
         }
     } catch (error) {
+        console.log(error);
         return new ResponseError(500, constants.error.ERROR_INTERNAL_SERVER, false);
     }
 };
@@ -607,7 +608,7 @@ const getNewestBlogWithPagination = async (req: IRequestWithId): Promise<Respons
                 },
             },
             orderBy: {
-                updated_at: "desc",
+                created_at: "desc",
             },
         });
         if (!getListBlogs) return new ResponseError(404, constants.error.ERROR_BLOG_NOT_FOUND, false);
