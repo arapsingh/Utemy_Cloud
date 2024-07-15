@@ -4,4 +4,4 @@ package-lock.json
 .env
 
 /public
-/manifest.yaml
+manifest.yaml
