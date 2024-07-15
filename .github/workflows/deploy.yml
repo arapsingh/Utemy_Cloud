@@ -1,7 +1,7 @@
 name: Deploy Utemy BE to Cloud Foundry (by Nhan)
 on:
   push:
-    branches: [phuoc_branch8]
+    branches: [deploy]
 jobs:
   deploy:
     runs-on: ubuntu-latest
