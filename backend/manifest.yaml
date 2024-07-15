@@ -1,0 +1,39 @@
+---
+applications:
+    - name: backend
+      random-route: false
+      path: C:\Users\pc\TieuLuanChuyenNganh\Utemy_Cloud\backend
+      memory: 1024M
+      disk_quota: 2048M
+      buildpacks:
+          - nodejs_buildpack
+      routes:
+          - route: "${{ secrets.ROUTE }}"
+
+      env:
+        DATABASE_URL: "${{ secrets.DATABASE_URL }}"
+        DOMAIN_NAME: "${{ secrets.DOMAIN_NAME }}"
+        BACKEND_DOMAIN_NAME: "${{ secrets.BACKEND_DOMAIN_NAME }}"
+        TOKEN_ACCESS_EXPIRED_TIME: "${{ secrets.TOKEN_ACCESS_EXPIRED_TIME }}"
+        TOKEN_REFRESH_EXPIRED_TIME: "${{ secrets.TOKEN_REFRESH_EXPIRED_TIME }}"
+        PUBLIC_URL: "${{ secrets.PUBLIC_URL }}"
+        PUBLIC_API_URL: "${{ secrets.PUBLIC_API_URL }}"
+        JWT_SECRET_KEY: "${{ secrets.JWT_SECRET_KEY }}"
+        HASH_SALT: "${{ secrets.HASH_SALT }}"
+        EMAIL_SERVER: "${{ secrets.EMAIL_SERVER }}"
+        PASSWORD_SERVER: "${{ secrets.PASSWORD_SERVER }}"
+        PAGE_SIZE: "${{ secrets.PAGE_SIZE }}"
+        TZ: "${{ secrets.TZ }}"
+        VNP_TMN_CODE: "${{ secrets.VNP_TMN_CODE }}"
+        VNP_HASH_SECRET: "${{ secrets.VNP_HASH_SECRET }}"
+        VNP_URL: "${{ secrets.VNP_URL }}"
+        VNP_API: "${{ secrets.VNP_API }}"
+        VNP_RETURN_URL: "${{ secrets.VNP_RETURN_URL }}"
+        CERTIFIER_ID: "${{ secrets.CERTIFIER_ID }}"
+        OPENAI_API_KEY: "${{ secrets.OPENAI_API_KEY }}"
+        OPENAI_ENDPOINT: "${{ secrets.OPENAI_ENDPOINT }}"
+        AZURE_SEARCH_ENDPOINT: "${{ secrets.AZURE_SEARCH_ENDPOINT }}"
+        AZURE_SEARCH_INDEX: "${{ secrets.AZURE_SEARCH_INDEX }}"
+        AZURE_SEARCH_API_KEY: "${{ secrets.AZURE_SEARCH_API_KEY }}"
+        AZURE_OPENAI_DEPLOYMENT_ID: "${{ secrets.AZURE_OPENAI_DEPLOYMENT_ID }}"
+        AZURE_SEARCH_DEPLOYMENT: "${{ secrets.AZURE_SEARCH_DEPLOYMENT }}"
