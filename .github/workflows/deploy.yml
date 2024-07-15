@@ -19,4 +19,32 @@ jobs:
           cf push -f manifest.yaml
       - name: View logs
         run: cf logs backend --recent
+      - name: Set environment variables
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+          echo "DOMAIN_NAME=${{ secrets.DOMAIN_NAME }}" >> $GITHUB_ENV
+          echo "BACKEND_DOMAIN_NAME=${{ secrets.BACKEND_DOMAIN_NAME }}" >> $GITHUB_ENV
+          echo "TOKEN_ACCESS_EXPIRED_TIME=${{ secrets.TOKEN_ACCESS_EXPIRED_TIME }}" >> $GITHUB_ENV
+          echo "TOKEN_REFRESH_EXPIRED_TIME=${{ secrets.TOKEN_REFRESH_EXPIRED_TIME }}" >> $GITHUB_ENV
+          echo "PUBLIC_URL=${{ secrets.PUBLIC_URL }}" >> $GITHUB_ENV
+          echo "PUBLIC_API_URL=${{ secrets.PUBLIC_API_URL }}" >> $GITHUB_ENV
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
+          echo "HASH_SALT=${{ secrets.HASH_SALT }}" >> $GITHUB_ENV
+          echo "EMAIL_SERVER=${{ secrets.EMAIL_SERVER }}" >> $GITHUB_ENV
+          echo "PASSWORD_SERVER=${{ secrets.PASSWORD_SERVER }}" >> $GITHUB_ENV
+          echo "PAGE_SIZE=${{ secrets.PAGE_SIZE }}" >> $GITHUB_ENV
+          echo "TZ=${{ secrets.TZ }}" >> $GITHUB_ENV
+          echo "VNP_TMN_CODE=${{ secrets.VNP_TMN_CODE }}" >> $GITHUB_ENV
+          echo "VNP_HASH_SECRET=${{ secrets.VNP_HASH_SECRET }}" >> $GITHUB_ENV
+          echo "VNP_URL=${{ secrets.VNP_URL }}" >> $GITHUB_ENV
+          echo "VNP_API=${{ secrets.VNP_API }}" >> $GITHUB_ENV
+          echo "VNP_RETURN_URL=${{ secrets.VNP_RETURN_URL }}" >> $GITHUB_ENV
+          echo "CERTIFIER_ID=${{ secrets.CERTIFIER_ID }}" >> $GITHUB_ENV
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
+          echo "OPENAI_ENDPOINT=${{ secrets.OPENAI_ENDPOINT }}" >> $GITHUB_ENV
+          echo "AZURE_SEARCH_ENDPOINT=${{ secrets.AZURE_SEARCH_ENDPOINT }}" >> $GITHUB_ENV
+          echo "AZURE_SEARCH_INDEX=${{ secrets.AZURE_SEARCH_INDEX }}" >> $GITHUB_ENV
+          echo "AZURE_SEARCH_API_KEY=${{ secrets.AZURE_SEARCH_API_KEY }}" >> $GITHUB_ENV
+          echo "AZURE_OPENAI_DEPLOYMENT_ID=${{ secrets.AZURE_OPENAI_DEPLOYMENT_ID }}" >> $GITHUB_ENV
+          echo "AZURE_SEARCH_DEPLOYMENT=${{ secrets.AZURE_SEARCH_DEPLOYMENT }}" >> $GITHUB_ENV
 
