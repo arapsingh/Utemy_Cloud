@@ -1,0 +1,12 @@
+---
+applications:
+    - name: backend
+      random-route: false
+      path: C:\Users\pc\TieuLuanChuyenNganh\Utemy_Cloud\backend
+      memory: 1024M
+      disk_quota: 2048M
+      buildpacks:
+          - nodejs_buildpack
+      routes:
+          - route: utemyvietnam.cfapps.ap21.hana.ondemand.com
+
