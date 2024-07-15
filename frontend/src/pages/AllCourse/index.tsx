@@ -87,10 +87,13 @@ const AllCourses: React.FC = () => {
         //   document.documentElement.style.zoom = `${newZoomValue}`;
         // }  
         setCategoryChecked(categoryQuery);
-
+        if (categoryQuery.length === 0) return;
         const query: SearchAllCourses = {
             pageIndex: 1,
             category: categoryQuery,
+            keyword: keyword,
+            sortBy: sortBy,
+            rating: evaluate,
         };
         dispatch(courseActions.getAllCourses(query));
     }, [JSON.stringify(categoryQuery)]);
