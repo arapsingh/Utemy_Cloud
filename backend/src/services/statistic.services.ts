@@ -1233,7 +1233,7 @@ const statCourseForAdminByIncome = async (req: IRequestWithId): Promise<Response
         SELECT 
             COUNT(DISTINCT c.id) AS total_record
         FROM 
-            Course c
+            course c
         LEFT JOIN 
             invoice_detail id ON c.id = id.course_id
         WHERE
@@ -1246,7 +1246,7 @@ const statCourseForAdminByIncome = async (req: IRequestWithId): Promise<Response
             c.id AS course_id, 
             COALESCE(SUM(id.paid_price), 0) AS total_income_this_course
         FROM 
-            Course c
+            course c
         LEFT JOIN 
             invoice_detail id ON c.id = id.course_id
         GROUP BY 
@@ -1356,7 +1356,7 @@ const statCourseForAdminByReport = async (req: IRequestWithId): Promise<Response
         SELECT 
             COUNT(DISTINCT c.id) AS total_record
         FROM 
-            Course c
+            course c
         LEFT JOIN 
             invoice_detail id ON c.id = id.course_id
         WHERE
@@ -1369,9 +1369,9 @@ const statCourseForAdminByReport = async (req: IRequestWithId): Promise<Response
             c.id AS course_id, 
             COALESCE(COUNT(r.id), 0) AS total_report_this_count
         FROM 
-            Course c
+            course c
         LEFT JOIN 
-            Report r ON c.id = r.course_id
+            report r ON c.id = r.course_id
         WHERE
             c.status = 1 AND c.is_delete = 0
         GROUP BY 
@@ -1484,9 +1484,9 @@ const statLecturerForAdminByEnrolled = async (req: IRequestWithId): Promise<Resp
             SELECT 
                 COUNT(DISTINCT u.id) AS total_record
             FROM 
-                User u
+                user u
             LEFT JOIN 
-                Course c ON u.id = c.author_id
+                course c ON u.id = c.author_id
             WHERE 
                 u.is_deleted = 0 && u.is_admin = 0
         `;
@@ -1502,9 +1502,9 @@ const statLecturerForAdminByEnrolled = async (req: IRequestWithId): Promise<Resp
                 u.url_avatar,
                 COALESCE(SUM(c.number_of_enrolled), 0) AS total_enrolled
             FROM 
-                User u
+                user u
             LEFT JOIN 
-                Course c ON u.id = c.author_id
+                course c ON u.id = c.author_id
             WHERE 
                 u.is_deleted = 0 && u.is_admin = 0
             GROUP BY 
@@ -1564,7 +1564,7 @@ const statLecturerForAdminByAvgAvgRating = async (req: IRequestWithId): Promise<
             SELECT 
                 COUNT(DISTINCT u.id) AS total_record
             FROM 
-                User u
+                user u
             WHERE 
                 u.is_deleted = 0 && u.is_admin = 0;
         `;
@@ -1579,9 +1579,9 @@ const statLecturerForAdminByAvgAvgRating = async (req: IRequestWithId): Promise<
                 u.url_avatar,
                 COALESCE(ROUND(AVG(c.average_rating), 1), 0) AS avg_avg_rating
             FROM 
-                User u
+                user u
             LEFT JOIN 
-                Course c ON u.id = c.author_id
+                course c ON u.id = c.author_id
             WHERE 
                 u.is_deleted = 0 && u.is_admin = 0
             GROUP BY 
@@ -1648,9 +1648,9 @@ const statLecturerForAdminByIncome = async (req: IRequestWithId): Promise<Respon
             SELECT 
                 COUNT(DISTINCT u.id) AS total_record
             FROM 
-                User u
+                user u
             LEFT JOIN 
-                Course c ON u.id = c.author_id
+                course c ON u.id = c.author_id
             WHERE 
                 u.is_deleted = 0 && u.is_admin = 0
         `;
@@ -1665,9 +1665,9 @@ const statLecturerForAdminByIncome = async (req: IRequestWithId): Promise<Respon
                 u.url_avatar,
                 COALESCE(SUM(id.paid_price), 0) AS total_income
             FROM 
-                User u
+                user u
             LEFT JOIN 
-                Course c ON u.id = c.author_id
+                course c ON u.id = c.author_id
             LEFT JOIN 
                 invoice_detail id ON c.id = id.course_id
             WHERE 
@@ -1737,9 +1737,9 @@ const statLecturerForAdminByReport = async (req: IRequestWithId): Promise<Respon
             SELECT 
                 COUNT(DISTINCT u.id) AS total_record
             FROM 
-                User u
+                user u
             LEFT JOIN 
-                Course c ON u.id = c.author_id
+                course c ON u.id = c.author_id
             WHERE 
                 u.is_deleted = 0 && u.is_admin = 0
         `;
@@ -1755,11 +1755,11 @@ const statLecturerForAdminByReport = async (req: IRequestWithId): Promise<Respon
                 u.url_avatar,
                 COALESCE(COUNT(r.id), 0) AS total_report_count
             FROM 
-                User u
+                user u
             LEFT JOIN 
-                Course c ON u.id = c.author_id
+                course c ON u.id = c.author_id
             LEFT JOIN 
-                Report r ON c.id = r.course_id
+                report r ON c.id = r.course_id
             WHERE 
                 u.is_deleted = 0 && u.is_admin = 0
             GROUP BY 
