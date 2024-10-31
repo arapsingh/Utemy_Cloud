@@ -1,4 +1,4 @@
-name: Deploy Utemy BE to Cloud Foundry (by Nhan)
+name: Deploy Utemy BE to Cloud Foundry (by Phuoc)
 on:
   push:
     branches: [deploy]
